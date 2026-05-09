@@ -6,32 +6,14 @@ import KanbanPreview from '../graphics/KanbanPreview';
 import ResumeMatchWidget from '../graphics/ResumeMatchWidget';
 import AnalyticsWidget from '../graphics/AnalyticsWidget';
 import { Pin, Sparkles, ArrowRight, Play } from 'lucide-react';
+import {
+  staggerContainer,
+  fadeInUpGentle,
+  zoomInEntrance,
+  getFloatingTransition,
+} from '../../utils/animations';
 
 export default function HeroSection() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        damping: 18,
-        stiffness: 100,
-      },
-    },
-  };
-
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       <DotGridBackground />
@@ -39,16 +21,15 @@ export default function HeroSection() {
       {/* Floating Widgets — hidden on mobile */}
       {/* Sticky note — top left */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
-        animate={{ opacity: 1, scale: 1, rotate: -3 }}
-        transition={{ type: 'spring', damping: 15, stiffness: 80, delay: 0.6 }}
+        initial="hidden"
+        animate="visible"
+        variants={zoomInEntrance(0.6, 80, 15)}
         whileHover={{ scale: 1.05, rotate: -1 }}
         className="hidden lg:block absolute top-24 left-8 xl:left-16 z-10 cursor-grab active:cursor-grabbing"
         aria-hidden="true"
       >
         <motion.div
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          animate={getFloatingTransition(-6, 6, 0)}
           className="bg-[#FEF9C3] rounded-xl shadow-[var(--shadow-float)] p-4 max-w-[190px] border border-[#FEF08A]"
         >
           <div className="flex items-start gap-1.5 text-[11px] font-medium text-[#92400E] italic leading-snug">
@@ -60,16 +41,15 @@ export default function HeroSection() {
 
       {/* Resume Match — top right */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.8 }}
+        initial="hidden"
+        animate="visible"
+        variants={zoomInEntrance(0.8, 80, 18)}
         whileHover={{ scale: 1.03 }}
         className="hidden lg:block absolute top-16 right-8 xl:right-16 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+          animate={getFloatingTransition(-8, 7, 0.5)}
           className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[200px]"
         >
           <ResumeMatchWidget compact />
@@ -78,16 +58,15 @@ export default function HeroSection() {
 
       {/* Kanban — bottom left */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.7 }}
+        initial="hidden"
+        animate="visible"
+        variants={zoomInEntrance(0.7, 80, 18)}
         whileHover={{ scale: 1.02 }}
         className="hidden lg:block absolute bottom-20 left-8 xl:left-12 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
-          animate={{ y: [0, -7, 0] }}
-          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+          animate={getFloatingTransition(-7, 6.5, 0.2)}
           className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[260px]"
         >
           <KanbanPreview compact />
@@ -96,16 +75,15 @@ export default function HeroSection() {
 
       {/* Analytics — bottom right */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.9 }}
+        initial="hidden"
+        animate="visible"
+        variants={zoomInEntrance(0.9, 80, 18)}
         whileHover={{ scale: 1.03 }}
         className="hidden lg:block absolute bottom-16 right-8 xl:right-12 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 5.8, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+          animate={getFloatingTransition(-6, 5.8, 0.4)}
           className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[180px]"
         >
           <AnalyticsWidget compact />
@@ -115,12 +93,12 @@ export default function HeroSection() {
       {/* Hero content */}
       <div className="section-container relative z-20 py-20 md:py-32 text-center">
         <motion.div
-          variants={containerVariants}
+          variants={staggerContainer(0.15, 0.1)}
           initial="hidden"
           animate="visible"
           className="max-w-3xl mx-auto"
         >
-          <motion.div variants={itemVariants} className="flex justify-center">
+          <motion.div variants={fadeInUpGentle} className="flex justify-center">
             <Badge className="flex items-center gap-1.5 px-4 py-1.5 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[var(--accent-cyan)] fill-[var(--accent-cyan)]/20 animate-pulse" />
               Introducing JobTrack AI

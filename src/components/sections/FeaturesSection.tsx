@@ -6,6 +6,7 @@ import KanbanPreview from '../graphics/KanbanPreview';
 import ResumeMatchWidget from '../graphics/ResumeMatchWidget';
 import AnalyticsWidget from '../graphics/AnalyticsWidget';
 import { AlertTriangle, Bot, User, Sparkles, Send } from 'lucide-react';
+import { staggerContainer, fadeInUp } from '../../utils/animations';
 
 function FollowUpPreview() {
   const jobs = [
@@ -109,29 +110,6 @@ function OutreachPreview() {
 export default function FeaturesSection() {
   const ref = useReveal();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 35 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        damping: 20,
-        stiffness: 80,
-      },
-    },
-  };
-
   return (
     <section id="features" className="section-gap bg-white">
       <div ref={ref} className="section-container reveal">
@@ -142,14 +120,14 @@ export default function FeaturesSection() {
         />
 
         <motion.div
-          variants={containerVariants}
+          variants={staggerContainer(0.12)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           className="grid gap-6"
           style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
         >
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="Kanban Job Board"
               caption="Drag-and-drop job cards across stages at a glance."
@@ -158,7 +136,7 @@ export default function FeaturesSection() {
             </FeatureCard>
           </motion.div>
 
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="AI Resume Matcher"
               caption="Upload your PDF. Get an instant match score and rewrite suggestions."
@@ -167,7 +145,7 @@ export default function FeaturesSection() {
             </FeatureCard>
           </motion.div>
 
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="Analytics Dashboard"
               caption="Know your numbers. Spot trends before they become problems."
@@ -176,7 +154,7 @@ export default function FeaturesSection() {
             </FeatureCard>
           </motion.div>
 
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="Follow-up Reminders"
               caption="Auto-highlights stale applications so no opportunity slips away."
@@ -185,7 +163,7 @@ export default function FeaturesSection() {
             </FeatureCard>
           </motion.div>
 
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="AI Interview Practice"
               caption="Practice specific mock interview questions customized for the target role with instant AI feedback."
@@ -194,7 +172,7 @@ export default function FeaturesSection() {
             </FeatureCard>
           </motion.div>
 
-          <motion.div variants={cardVariants}>
+          <motion.div variants={fadeInUp}>
             <FeatureCard
               title="Smart Outreach Co-Pilot"
               caption="Draft hyper-personalized networking cover letters and messages directed at recruiters in seconds."
