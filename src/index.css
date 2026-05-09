@@ -70,7 +70,7 @@ body {
 }
 
 .section-gap {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding-block: clamp(3rem, 6vw, 5rem);
 }
 
 .feature-grid {

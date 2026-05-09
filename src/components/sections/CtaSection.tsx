@@ -36,11 +36,11 @@ export default function CtaSection() {
       <div ref={ref} className="section-container relative z-10 text-center reveal">
         <h2
           className="font-display font-extrabold text-[var(--text-heading)]"
-          style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', lineHeight: 1.15 }}
+          style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.15 }}
         >
           Ready to take control of your job search?
         </h2>
-        <p className="mt-5 text-lg text-[var(--text-body)] max-w-xl mx-auto leading-relaxed">
+        <p className="mt-4 text-base md:text-lg text-[var(--text-body)] max-w-xl mx-auto leading-relaxed">
           Join thousands of job seekers who track smarter, match better, and land faster.
         </p>
 

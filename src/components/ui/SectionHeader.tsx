@@ -19,7 +19,7 @@ export default function SectionHeader({
   return (
     <div
       className={cn(
-        'mb-12',
+        'mb-10',
         align === 'center' && 'text-center',
         className
       )}
@@ -27,12 +27,12 @@ export default function SectionHeader({
       <Badge className="mb-4">{badge}</Badge>
       <h2
         className="font-display font-bold text-[var(--text-heading)] mt-4"
-        style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', lineHeight: 1.15 }}
+        style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.15 }}
       >
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-lg text-[var(--text-body)] max-w-2xl mx-auto leading-relaxed">
+        <p className="mt-4 text-base md:text-lg text-[var(--text-body)] max-w-2xl mx-auto leading-relaxed">
           {subtitle}
         </p>
       )}

@@ -15,7 +15,7 @@ import {
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[82vh] flex items-center overflow-hidden">
       <DotGridBackground />
 
       {/* Floating Widgets — hidden on mobile */}
@@ -25,7 +25,7 @@ export default function HeroSection() {
         animate="visible"
         variants={zoomInEntrance(0.6, 80, 15)}
         whileHover={{ scale: 1.05, rotate: -1 }}
-        className="hidden lg:block absolute top-24 left-8 xl:left-16 z-10 cursor-grab active:cursor-grabbing"
+        className="hidden lg:block absolute top-20 left-6 xl:left-12 z-10 cursor-grab active:cursor-grabbing"
         aria-hidden="true"
       >
         <motion.div
@@ -45,7 +45,7 @@ export default function HeroSection() {
         animate="visible"
         variants={zoomInEntrance(0.8, 80, 18)}
         whileHover={{ scale: 1.03 }}
-        className="hidden lg:block absolute top-16 right-8 xl:right-16 z-10 cursor-pointer"
+        className="hidden lg:block absolute top-12 right-6 xl:right-12 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
@@ -62,7 +62,7 @@ export default function HeroSection() {
         animate="visible"
         variants={zoomInEntrance(0.7, 80, 18)}
         whileHover={{ scale: 1.02 }}
-        className="hidden lg:block absolute bottom-20 left-8 xl:left-12 z-10 cursor-pointer"
+        className="hidden lg:block absolute bottom-16 left-6 xl:left-10 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
@@ -79,7 +79,7 @@ export default function HeroSection() {
         animate="visible"
         variants={zoomInEntrance(0.9, 80, 18)}
         whileHover={{ scale: 1.03 }}
-        className="hidden lg:block absolute bottom-16 right-8 xl:right-12 z-10 cursor-pointer"
+        className="hidden lg:block absolute bottom-12 right-6 xl:right-10 z-10 cursor-pointer"
         aria-hidden="true"
       >
         <motion.div
@@ -91,7 +91,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Hero content */}
-      <div className="section-container relative z-20 py-20 md:py-32 text-center">
+      <div className="section-container relative z-20 py-12 md:py-20 text-center">
         <motion.div
           variants={staggerContainer(0.15, 0.1)}
           initial="hidden"
@@ -107,8 +107,8 @@ export default function HeroSection() {
 
           <motion.h1
             variants={fadeInUpGentle}
-            className="font-display font-extrabold text-[var(--text-heading)] mt-8"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', lineHeight: 1.05 }}
+            className="font-display font-extrabold text-[var(--text-heading)] mt-6"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', lineHeight: 1.05 }}
           >
             Land your dream job,
             <br />
@@ -117,15 +117,15 @@ export default function HeroSection() {
 
           <motion.p
             variants={fadeInUpGentle}
-            className="font-display font-extrabold text-[var(--accent-cyan)] mt-2"
-            style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', lineHeight: 1.3 }}
+            className="font-display font-extrabold text-[var(--accent-cyan)] mt-1.5"
+            style={{ fontSize: 'clamp(1rem, 2vw, 1.3rem)', lineHeight: 1.3 }}
           >
             AI-powered tracking & matching
           </motion.p>
 
           <motion.p
             variants={fadeInUpGentle}
-            className="mt-6 text-lg md:text-xl text-[var(--text-body)] max-w-xl mx-auto leading-relaxed"
+            className="mt-4 text-base md:text-lg text-[var(--text-body)] max-w-xl mx-auto leading-relaxed"
           >
             Organize every application. Match your resume to any job.
             <br className="hidden sm:block" />
@@ -134,7 +134,7 @@ export default function HeroSection() {
 
           <motion.div
             variants={fadeInUpGentle}
-            className="flex flex-wrap items-center justify-center gap-4 mt-10"
+            className="flex flex-wrap items-center justify-center gap-4 mt-8"
           >
             <Button variant="primary" size="lg" className="group shadow-md hover:shadow-lg transition-all duration-200">
               Get free demo
@@ -147,7 +147,7 @@ export default function HeroSection() {
           </motion.div>
 
           {/* Social proof */}
-          <motion.div variants={fadeInUpGentle} className="mt-14">
+          <motion.div variants={fadeInUpGentle} className="mt-10">
             <div className="flex items-center justify-center gap-2 mb-3">
               <div className="flex -space-x-2">
                 {['#2563EB', '#06B6D4', '#FACC15', '#22C55E', '#8B5CF6'].map((color, i) => (
