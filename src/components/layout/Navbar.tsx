@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const links = ['Features', 'Solutions', 'Resources', 'Pricing'];
+  const links = ['Solutions', 'Features', 'Integrations', 'Pricing'];
 
   return (
     <nav
@@ -45,10 +45,12 @@ export default function Navbar() {
           <Button variant="ghost" size="sm">
             Sign In
           </Button>
-          <Button variant="primary" size="sm" className="group">
-            Get Demo
-            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Button>
+          <a href="#cta" className="inline-block">
+            <Button variant="primary" size="sm" className="group">
+              Get Demo
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Button>
+          </a>
         </div>
 
         {/* Mobile hamburger */}
@@ -89,10 +91,12 @@ export default function Navbar() {
             <Button variant="ghost" size="md" className="w-full">
               Sign In
             </Button>
-            <Button variant="primary" size="md" className="w-full group">
-              Get Demo
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <a href="#cta" className="block w-full" onClick={() => setMobileOpen(false)}>
+              <Button variant="primary" size="md" className="w-full group">
+                Get Demo
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
           </div>
         </div>
       )}

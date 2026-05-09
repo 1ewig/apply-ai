@@ -15,14 +15,14 @@ export default function CtaSection() {
   const ref = useReveal();
 
   return (
-    <section className="relative overflow-hidden bg-[#0F172A]" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
+    <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white border-t border-slate-100" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
       {/* Floating icons — hidden on mobile */}
       {floatingIcons.map((fi, i) => {
         const Icon = fi.icon;
         return (
           <div
             key={i}
-            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-white/[0.08] backdrop-blur border border-white/[0.05] rounded-xl items-center justify-center`}
+            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100/80 rounded-xl items-center justify-center`}
             aria-hidden="true"
           >
             <Icon className="w-5 h-5" style={{ color: fi.color }} />
@@ -31,16 +31,16 @@ export default function CtaSection() {
       })}
 
       {/* Gradient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(37, 99, 235, 0.15)' }} aria-hidden="true" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full blur-3xl pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(99, 102, 241, 0.05) 100%)' }} aria-hidden="true" />
 
       <div ref={ref} className="section-container relative z-10 text-center reveal">
         <h2
-          className="font-display font-bold text-white"
+          className="font-display font-extrabold text-[var(--text-heading)]"
           style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', lineHeight: 1.15 }}
         >
           Ready to take control of your job search?
         </h2>
-        <p className="mt-5 text-lg text-white/60 max-w-xl mx-auto leading-relaxed">
+        <p className="mt-5 text-lg text-[var(--text-body)] max-w-xl mx-auto leading-relaxed">
           Join thousands of job seekers who track smarter, match better, and land faster.
         </p>
 
@@ -48,12 +48,12 @@ export default function CtaSection() {
           <Button
             variant="primary"
             size="lg"
-            className="bg-white text-[var(--accent)] hover:bg-white/90 group"
+            className="group shadow-md hover:shadow-lg transition-all duration-200"
           >
             Get started free
-            <ArrowRight className="w-4 h-4 text-[var(--accent)] transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>
-          <Button variant="white-outline" size="lg">
+          <Button variant="outline" size="lg" className="group shadow-sm hover:shadow-md transition-all duration-200">
             See how it works
           </Button>
         </div>
