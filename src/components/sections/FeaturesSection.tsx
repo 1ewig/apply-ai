@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useReveal } from '@/hooks/useReveal';
 import SectionHeader from '../ui/SectionHeader';
 import FeatureCard from '../ui/FeatureCard';
@@ -108,6 +109,29 @@ function OutreachPreview() {
 export default function FeaturesSection() {
   const ref = useReveal();
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 35 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        damping: 20,
+        stiffness: 80,
+      },
+    },
+  };
+
   return (
     <section id="features" className="section-gap bg-white">
       <div ref={ref} className="section-container reveal">
@@ -117,52 +141,68 @@ export default function FeaturesSection() {
           subtitle="Forget juggling spreadsheets and sticky notes."
         />
 
-        <div
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
           className="grid gap-6"
           style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
         >
-          <FeatureCard
-            title="Kanban Job Board"
-            caption="Drag-and-drop job cards across stages at a glance."
-          >
-            <KanbanPreview compact />
-          </FeatureCard>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="Kanban Job Board"
+              caption="Drag-and-drop job cards across stages at a glance."
+            >
+              <KanbanPreview compact />
+            </FeatureCard>
+          </motion.div>
 
-          <FeatureCard
-            title="AI Resume Matcher"
-            caption="Upload your PDF. Get an instant match score and rewrite suggestions."
-          >
-            <ResumeMatchWidget compact />
-          </FeatureCard>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="AI Resume Matcher"
+              caption="Upload your PDF. Get an instant match score and rewrite suggestions."
+            >
+              <ResumeMatchWidget compact />
+            </FeatureCard>
+          </motion.div>
 
-          <FeatureCard
-            title="Analytics Dashboard"
-            caption="Know your numbers. Spot trends before they become problems."
-          >
-            <AnalyticsWidget compact />
-          </FeatureCard>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="Analytics Dashboard"
+              caption="Know your numbers. Spot trends before they become problems."
+            >
+              <AnalyticsWidget compact />
+            </FeatureCard>
+          </motion.div>
 
-          <FeatureCard
-            title="Follow-up Reminders"
-            caption="Auto-highlights stale applications so no opportunity slips away."
-          >
-            <FollowUpPreview />
-          </FeatureCard>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="Follow-up Reminders"
+              caption="Auto-highlights stale applications so no opportunity slips away."
+            >
+              <FollowUpPreview />
+            </FeatureCard>
+          </motion.div>
 
-          <FeatureCard
-            title="AI Interview Practice"
-            caption="Practice specific mock interview questions customized for the target role with instant AI feedback."
-          >
-            <InterviewPrepPreview />
-          </FeatureCard>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="AI Interview Practice"
+              caption="Practice specific mock interview questions customized for the target role with instant AI feedback."
+            >
+              <InterviewPrepPreview />
+            </FeatureCard>
+          </motion.div>
 
-          <FeatureCard
-            title="Smart Outreach Co-Pilot"
-            caption="Draft hyper-personalized networking cover letters and messages directed at recruiters in seconds."
-          >
-            <OutreachPreview />
-          </FeatureCard>
-        </div>
+          <motion.div variants={cardVariants}>
+            <FeatureCard
+              title="Smart Outreach Co-Pilot"
+              caption="Draft hyper-personalized networking cover letters and messages directed at recruiters in seconds."
+            >
+              <OutreachPreview />
+            </FeatureCard>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

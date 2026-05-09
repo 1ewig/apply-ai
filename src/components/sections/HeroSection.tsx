@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
 import DotGridBackground from '../graphics/DotGridBackground';
@@ -7,99 +8,168 @@ import AnalyticsWidget from '../graphics/AnalyticsWidget';
 import { Pin, Sparkles, ArrowRight, Play } from 'lucide-react';
 
 export default function HeroSection() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        damping: 18,
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       <DotGridBackground />
 
       {/* Floating Widgets — hidden on mobile */}
       {/* Sticky note — top left */}
-      <div
-        className="hidden lg:block absolute top-24 left-8 xl:left-16 animate-float delay-100 z-10"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
+        animate={{ opacity: 1, scale: 1, rotate: -3 }}
+        transition={{ type: 'spring', damping: 15, stiffness: 80, delay: 0.6 }}
+        whileHover={{ scale: 1.05, rotate: -1 }}
+        className="hidden lg:block absolute top-24 left-8 xl:left-16 z-10 cursor-grab active:cursor-grabbing"
         aria-hidden="true"
       >
-        <div className="bg-[#FEF9C3] rounded-xl shadow-[var(--shadow-float)] p-4 max-w-[190px] rotate-[-3deg] border border-[#FEF08A]">
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="bg-[#FEF9C3] rounded-xl shadow-[var(--shadow-float)] p-4 max-w-[190px] border border-[#FEF08A]"
+        >
           <div className="flex items-start gap-1.5 text-[11px] font-medium text-[#92400E] italic leading-snug">
             <Pin className="w-3.5 h-3.5 rotate-45 shrink-0 fill-[#92400E] text-[#92400E]" />
             <span>Follow up with Stripe by Friday</span>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Resume Match — top right */}
-      <div
-        className="hidden lg:block absolute top-16 right-8 xl:right-16 animate-float delay-300 z-10"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.8 }}
+        whileHover={{ scale: 1.03 }}
+        className="hidden lg:block absolute top-16 right-8 xl:right-16 z-10 cursor-pointer"
         aria-hidden="true"
       >
-        <div className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[200px]">
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[200px]"
+        >
           <ResumeMatchWidget compact />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Kanban — bottom left */}
-      <div
-        className="hidden lg:block absolute bottom-20 left-8 xl:left-12 animate-float delay-200 z-10"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.7 }}
+        whileHover={{ scale: 1.02 }}
+        className="hidden lg:block absolute bottom-20 left-8 xl:left-12 z-10 cursor-pointer"
         aria-hidden="true"
       >
-        <div className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[260px]">
+        <motion.div
+          animate={{ y: [0, -7, 0] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[260px]"
+        >
           <KanbanPreview compact />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Analytics — bottom right */}
-      <div
-        className="hidden lg:block absolute bottom-16 right-8 xl:right-12 animate-float delay-400 z-10"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', damping: 18, stiffness: 80, delay: 0.9 }}
+        whileHover={{ scale: 1.03 }}
+        className="hidden lg:block absolute bottom-16 right-8 xl:right-12 z-10 cursor-pointer"
         aria-hidden="true"
       >
-        <div className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[180px]">
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 5.8, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[180px]"
+        >
           <AnalyticsWidget compact />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Hero content */}
       <div className="section-container relative z-20 py-20 md:py-32 text-center">
-        <div className="max-w-3xl mx-auto">
-          <div className="animate-fade-up flex justify-center">
-            <Badge className="flex items-center gap-1.5 px-4 py-1.5">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-3xl mx-auto"
+        >
+          <motion.div variants={itemVariants} className="flex justify-center">
+            <Badge className="flex items-center gap-1.5 px-4 py-1.5 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[var(--accent-cyan)] fill-[var(--accent-cyan)]/20 animate-pulse" />
               Introducing JobTrack AI
             </Badge>
-          </div>
+          </motion.div>
 
-          <h1
-            className="font-display font-extrabold text-[var(--text-heading)] mt-8 animate-fade-up delay-100"
+          <motion.h1
+            variants={itemVariants}
+            className="font-display font-extrabold text-[var(--text-heading)] mt-8"
             style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', lineHeight: 1.05 }}
           >
             Land your dream job,
             <br />
             <span className="text-[var(--accent-cyan)]">faster.</span>
-          </h1>
+          </motion.h1>
 
-          <p
-            className="font-display font-extrabold text-[var(--accent-cyan)] mt-2 animate-fade-up delay-100"
+          <motion.p
+            variants={itemVariants}
+            className="font-display font-extrabold text-[var(--accent-cyan)] mt-2"
             style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', lineHeight: 1.3 }}
           >
             AI-powered tracking & matching
-          </p>
+          </motion.p>
 
-          <p className="mt-6 text-lg md:text-xl text-[var(--text-body)] max-w-xl mx-auto leading-relaxed animate-fade-up delay-200">
+          <motion.p
+            variants={itemVariants}
+            className="mt-6 text-lg md:text-xl text-[var(--text-body)] max-w-xl mx-auto leading-relaxed"
+          >
             Organize every application. Match your resume to any job.
             <br className="hidden sm:block" />
             Get AI-driven insights — all in one place.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-10 animate-fade-up delay-300">
-            <Button variant="primary" size="lg" className="group">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-wrap items-center justify-center gap-4 mt-10"
+          >
+            <Button variant="primary" size="lg" className="group shadow-md hover:shadow-lg transition-all duration-200">
               Get free demo
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="outline" size="lg" className="group">
+            <Button variant="outline" size="lg" className="group shadow-sm hover:shadow-md transition-all duration-200">
               <Play className="w-4 h-4 fill-current transition-transform group-hover:scale-110" />
               Watch demo
             </Button>
-          </div>
+          </motion.div>
 
           {/* Social proof */}
-          <div className="mt-14 animate-fade-up delay-400">
+          <motion.div variants={itemVariants} className="mt-14">
             <div className="flex items-center justify-center gap-2 mb-3">
               <div className="flex -space-x-2">
                 {['#2563EB', '#06B6D4', '#FACC15', '#22C55E', '#8B5CF6'].map((color, i) => (
@@ -123,8 +193,8 @@ export default function HeroSection() {
             <p className="text-sm text-[var(--text-muted)]">
               Trusted by <span className="font-medium text-[var(--text-heading)]">2,400+</span> job seekers worldwide
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
