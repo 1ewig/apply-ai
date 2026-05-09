@@ -1,4 +1,4 @@
-import { Variants } from 'framer-motion';
+import { Variants, TargetAndTransition } from 'framer-motion';
 
 /**
  * Returns variants for a container that staggers its animated children.
@@ -72,7 +72,7 @@ export const zoomInEntrance = (delay = 0, stiffness = 80, damping = 18): Variant
  * @param duration Loop duration in seconds
  * @param delay Loop delay in seconds to desynchronize elements
  */
-export const getFloatingTransition = (yOffset = -6, duration = 6, delay = 0) => ({
+export const getFloatingTransition = (yOffset = -6, duration = 6, delay = 0): TargetAndTransition => ({
   y: [0, yOffset, 0],
   transition: {
     duration,

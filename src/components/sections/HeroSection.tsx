@@ -106,7 +106,7 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.h1
-            variants={itemVariants}
+            variants={fadeInUpGentle}
             className="font-display font-extrabold text-[var(--text-heading)] mt-8"
             style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', lineHeight: 1.05 }}
           >
@@ -116,7 +116,7 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.p
-            variants={itemVariants}
+            variants={fadeInUpGentle}
             className="font-display font-extrabold text-[var(--accent-cyan)] mt-2"
             style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', lineHeight: 1.3 }}
           >
@@ -124,7 +124,7 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.p
-            variants={itemVariants}
+            variants={fadeInUpGentle}
             className="mt-6 text-lg md:text-xl text-[var(--text-body)] max-w-xl mx-auto leading-relaxed"
           >
             Organize every application. Match your resume to any job.
@@ -133,7 +133,7 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.div
-            variants={itemVariants}
+            variants={fadeInUpGentle}
             className="flex flex-wrap items-center justify-center gap-4 mt-10"
           >
             <Button variant="primary" size="lg" className="group shadow-md hover:shadow-lg transition-all duration-200">
@@ -147,7 +147,7 @@ export default function HeroSection() {
           </motion.div>
 
           {/* Social proof */}
-          <motion.div variants={itemVariants} className="mt-14">
+          <motion.div variants={fadeInUpGentle} className="mt-14">
             <div className="flex items-center justify-center gap-2 mb-3">
               <div className="flex -space-x-2">
                 {['#2563EB', '#06B6D4', '#FACC15', '#22C55E', '#8B5CF6'].map((color, i) => (
