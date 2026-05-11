@@ -3,7 +3,7 @@
 > **Next-Generation, AI-Powered Career Search & Application Tracker.** 
 > A premium, high-fidelity marketing landing page engineered with React 19, Tailwind CSS v4, and decoupled Framer Motion spring physics.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo_Available-06B6D4?style=for-the-badge&logo=vercel&logoColor=white)](https://github.com/1ewig/apply-ai)
+[![Live Demo](https://img.shields.io/badge/Live-Demo_Available-06B6D4?style=for-the-badge&logo=vercel&logoColor=white)](https://apply-ai-iota-three.vercel.app/)
 [![React Version](https://img.shields.io/badge/React-19.2.6-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind Version](https://img.shields.io/badge/Tailwind_CSS-v4.0-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)

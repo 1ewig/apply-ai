@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://applyai-landing.vercel.app/sitemap.xml
+Sitemap: https://apply-ai-iota-three.vercel.app/sitemap.xml
