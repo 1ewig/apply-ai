@@ -101,7 +101,7 @@ export default function HeroSection() {
           <motion.div variants={fadeInUpGentle} className="flex justify-center">
             <Badge className="flex items-center gap-1.5 px-4 py-1.5 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[var(--accent-cyan)] fill-[var(--accent-cyan)]/20 animate-pulse" />
-              Introducing JobTrack AI
+              Introducing ApplyAI
             </Badge>
           </motion.div>
 

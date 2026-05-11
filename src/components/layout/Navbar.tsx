@@ -23,7 +23,7 @@ export default function Navbar() {
             <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
           </div>
           <span className="font-display font-bold text-lg text-[var(--text-heading)]">
-            JobTrack <span className="text-[var(--accent)]">AI</span>
+            ApplyAI
           </span>
         </a>
 

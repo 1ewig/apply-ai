@@ -54,14 +54,14 @@ export default function Footer() {
                 <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
               </div>
               <span className="font-display font-bold text-lg text-[var(--text-heading)]">
-                JobTrack <span className="text-[var(--accent)]">AI</span>
+                ApplyAI
               </span>
             </a>
             <p className="text-sm text-[var(--text-muted)] mb-4">
               Track smarter. Land faster.
             </p>
             <p className="text-xs text-[var(--text-muted)]">
-              © {new Date().getFullYear()} JobTrack AI. All rights reserved.
+              © {new Date().getFullYear()} ApplyAI. All rights reserved.
             </p>
           </div>
 

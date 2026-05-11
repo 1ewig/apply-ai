@@ -1,4 +1,4 @@
-# JobTrack AI 🚀
+# ApplyAI 🚀
 
 > **Next-Generation, AI-Powered Career Search & Application Tracker.** 
 > A premium, high-fidelity marketing landing page engineered with React 19, Tailwind CSS v4, and decoupled Framer Motion spring physics.
