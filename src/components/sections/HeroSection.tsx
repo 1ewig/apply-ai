@@ -150,15 +150,21 @@ export default function HeroSection() {
           <motion.div variants={fadeInUpGentle} className="mt-10">
             <div className="flex items-center justify-center gap-2 mb-3">
               <div className="flex -space-x-2">
-                {['#2563EB', '#06B6D4', '#FACC15', '#22C55E', '#8B5CF6'].map((color, i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-[10px] font-bold"
-                    style={{ background: color }}
-                  >
-                    {['MT', 'PK', 'JL', 'AR', 'DF'][i]}
-                  </div>
-                ))}
+                {['#2563EB', '#06B6D4', '#FACC15', '#22C55E', '#8B5CF6'].map((color, i) => {
+                  const isLightBg = color === '#06B6D4' || color === '#FACC15' || color === '#22C55E';
+                  return (
+                    <div
+                      key={i}
+                      className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold"
+                      style={{ 
+                        background: color, 
+                        color: isLightBg ? '#0F172A' : '#FFFFFF' 
+                      }}
+                    >
+                      {['MT', 'PK', 'JL', 'AR', 'DF'][i]}
+                    </div>
+                  );
+                })}
               </div>
               <div className="flex gap-0.5 ml-2">
                 {[...Array(5)].map((_, i) => (
