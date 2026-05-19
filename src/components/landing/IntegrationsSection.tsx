@@ -1,5 +1,5 @@
 import { useReveal } from '@/hooks/useReveal';
-import SectionHeader from './ui/SectionHeader';
+import SectionHeader from './SectionHeader';
 import Card from '../ui/Card';
 import {
   Mail,

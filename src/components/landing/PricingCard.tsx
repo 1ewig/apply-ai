@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import Button from '../../ui/Button';
+import Button from '../ui/Button';
 import { LucideIcon } from 'lucide-react';
 
 interface PricingCardProps {

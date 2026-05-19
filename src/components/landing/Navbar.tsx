@@ -43,7 +43,7 @@ export default function Navbar({
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.reload(); // Quick way to go home or use callback
+                window.location.reload();
               }}
               className="nav-link text-sm font-medium text-[var(--text-body)] hover:text-[var(--text-heading)] transition-colors duration-200"
             >

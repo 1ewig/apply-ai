@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/landing/Navbar";
 import HeroSection from "../components/landing/HeroSection";
 import SolutionsSection from "../components/landing/SolutionsSection";
 import FeaturesSection from "../components/landing/FeaturesSection";
@@ -8,7 +8,7 @@ import IntegrationsSection from "../components/landing/IntegrationsSection";
 import TestimonialsSection from "../components/landing/TestimonialsSection";
 import PricingSection from "../components/landing/PricingSection";
 import CtaSection from "../components/landing/CtaSection";
-import Footer from "../components/layout/Footer";
+import Footer from "../components/landing/Footer";
 
 export default function LandingPage() {
   return (

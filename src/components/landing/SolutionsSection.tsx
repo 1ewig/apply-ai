@@ -1,7 +1,7 @@
 import { useReveal } from '@/hooks/useReveal';
-import SectionHeader from './ui/SectionHeader';
+import SectionHeader from './SectionHeader';
 import Card from '../ui/Card';
-import KanbanPreview from './graphics/KanbanPreview';
+import KanbanPreview from './KanbanPreview';
 import { Kanban, Bot, BarChart3 } from 'lucide-react';
 
 const solutions = [

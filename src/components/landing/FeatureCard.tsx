@@ -1,9 +1,9 @@
-import Card from '../../ui/Card';
+import Card from '../ui/Card';
 
 interface FeatureCardProps {
   title: string;
   caption: string;
-  children: React.ReactNode; // The preview graphic
+  children: React.ReactNode;
 }
 
 export default function FeatureCard({ title, caption, children }: FeatureCardProps) {
