@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://apply-ai-iota-three.vercel.app/sitemap.xml

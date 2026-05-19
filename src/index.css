@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-accent: #2563EB;
+  --color-accent-cyan: #06B6D4;
+  --color-accent-yellow: #FACC15;
+  --color-page: #F3F4F6;
+  --color-surface: #FFFFFF;
+  --color-heading: #0F172A;
+  --color-body: #475569;
+  --color-muted: #5E6E82;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.07);
+  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.12);
+
+  --animate-fade-up: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: floatY 4s ease-in-out infinite;
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-10px); }
+  }
+}
+
+/* --- Tokens --- */
+:root {
+  --bg-page: #F3F4F6;
+  --bg-surface: #FFFFFF;
+  --accent: #2563EB;
+  --accent-cyan: #06B6D4;
+  --accent-yellow: #FACC15;
+  --text-heading: #0F172A;
+  --text-body: #475569;
+  --text-muted: #5E6E82;
+  --border: rgba(0, 0, 0, 0.07);
+  --radius-card: 16px;
+  --radius-pill: 999px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.07);
+  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Custom Scrollbar --- */
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.25); /* Cyan at 25% opacity for a subtle, high-end theme touch */
+  border-radius: var(--radius-pill);
+  border: 2.5px solid var(--bg-page); /* Creates a beautiful padding/floating look */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan); /* Bright cyan on hover */
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 182, 212, 0.3) var(--bg-page);
+}
+
+
+/* --- Layout Primitives --- */
+.section-container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 4rem);
+}
+
+.section-gap {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+/* --- Animations --- */
+.animate-fade-up {
+  animation: fadeUp 0.5s var(--easing) both;
+}
+
+.animate-float {
+  animation: floatY 4s ease-in-out infinite;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s var(--easing), transform 0.55s var(--easing);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+  .animate-fade-up {
+    animation-duration: 0.01ms !important;
+  }
+  .reveal {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Nav underline slide */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s var(--easing);
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Responsive overrides */
+@media (max-width: 1024px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .testimonial-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
