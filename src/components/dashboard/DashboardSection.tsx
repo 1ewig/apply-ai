@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { useStore, JobApplication, Resume } from '../../hooks/useStore';
 import Sidebar from './Sidebar';
 import ApplicationsBoard from './ApplicationsBoard';
@@ -20,18 +22,45 @@ const LOADING_PHASES = [
 ];
 
 export default function DashboardSection({ onBack }: { onBack: () => void }) {
-  const {
-    jobs,
-    resumes,
-    activeTab,
-    setActiveTab,
-    addJob,
-    updateJob,
-    deleteJob,
-    addResume,
-    updateResume,
-    deleteResume,
-  } = useStore();
+  const { activeTab, setActiveTab } = useStore();
+
+  // Convex Reactive Queries
+  const jobsRaw = useQuery(api.applications.list) || [];
+  const jobs = jobsRaw.map((j) => ({ ...j, id: j._id })) as JobApplication[];
+
+  const resumesRaw = useQuery(api.resumes.list) || [];
+  const resumes = resumesRaw.map((r) => ({ ...r, id: r._id })) as Resume[];
+
+  // Convex Mutations
+  const convexAddJob = useMutation(api.applications.add);
+  const convexUpdateJob = useMutation(api.applications.update);
+  const convexDeleteJob = useMutation(api.applications.remove);
+
+  const convexAddResume = useMutation(api.resumes.add);
+  const convexUpdateResume = useMutation(api.resumes.update);
+  const convexDeleteResume = useMutation(api.resumes.remove);
+
+  // Wrapper actions matching original Zustand interfaces
+  const updateJob = (id: any, updates: Partial<JobApplication>) => {
+    convexUpdateJob({ id, ...updates }).catch(err => console.error("Error updating job:", err));
+  };
+  const deleteJob = (id: any) => {
+    convexDeleteJob({ id }).catch(err => console.error("Error deleting job:", err));
+  };
+
+  const addResume = (resume: Omit<Resume, 'id' | 'updatedAt'>) => {
+    convexAddResume({
+      name: resume.name,
+      content: resume.content,
+      isDefault: resume.isDefault,
+    }).catch(err => console.error("Error adding resume:", err));
+  };
+  const updateResume = (id: any, updates: Partial<Resume>) => {
+    convexUpdateResume({ id, ...updates }).catch(err => console.error("Error updating resume:", err));
+  };
+  const deleteResume = (id: any) => {
+    convexDeleteResume({ id }).catch(err => console.error("Error deleting resume:", err));
+  };
 
   // Navigation / Local view state
   const [viewingAnalysisJobId, setViewingAnalysisJobId] = useState<string | null>(null);
@@ -127,7 +156,7 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
     }
   };
 
-  const handleAddJobSubmit = (jobData: {
+  const handleAddJobSubmit = async (jobData: {
     company: string;
     role: string;
     status: JobApplication['status'];
@@ -136,28 +165,28 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
     selectedResumeId: string;
     analyzeImmediately: boolean;
   }) => {
-    // Add job to store
-    addJob({
-      company: jobData.company,
-      role: jobData.role,
-      status: jobData.status,
-      url: jobData.url,
-      jobDescription: jobData.jobDescription,
-      resumeUsed: jobData.selectedResumeId,
-    });
-    
-    // Trigger immediate match if requested
-    if (jobData.analyzeImmediately && jobData.jobDescription) {
-      const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
-      if (selectedResume) {
-        setTimeout(() => {
-          const stateJobs = useStore.getState().jobs;
-          const createdJob = stateJobs[stateJobs.length - 1];
-          if (createdJob) {
-            handleCompare(createdJob.id, selectedResume.content, jobData.jobDescription);
-          }
-        }, 50);
+    try {
+      // Add job to Convex and await the generated database ID!
+      const createdJobId = await convexAddJob({
+        company: jobData.company,
+        role: jobData.role,
+        status: jobData.status,
+        dateApplied: new Date().toLocaleDateString(),
+        url: jobData.url || "",
+        jobDescription: jobData.jobDescription || "",
+        resumeUsed: jobData.selectedResumeId || "",
+      });
+      
+      // Trigger immediate match if requested
+      if (jobData.analyzeImmediately && jobData.jobDescription) {
+        const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
+        if (selectedResume) {
+          handleCompare(createdJobId, selectedResume.content, jobData.jobDescription);
+        }
       }
+    } catch (err) {
+      console.error("Error creating job application:", err);
+      setError("Failed to create job application in database.");
     }
 
     setIsAddJobOpen(false);
