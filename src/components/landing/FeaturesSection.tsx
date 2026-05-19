@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useReveal } from '@/hooks/useReveal';
+import { useReveal } from '@/utils/useReveal';
 import SectionHeader from './SectionHeader';
 import FeatureCard from './FeatureCard';
 import KanbanPreview from './KanbanPreview';

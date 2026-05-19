@@ -1,4 +1,4 @@
-import { useReveal } from '@/hooks/useReveal';
+import { useReveal } from '@/utils/useReveal';
 import Link from 'next/link';
 import Button from '../ui/Button';
 import { Calendar, Clock, CheckCircle2, BarChart3, Sparkles, Target, ArrowRight } from 'lucide-react';

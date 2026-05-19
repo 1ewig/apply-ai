@@ -1,4 +1,4 @@
-import { useReveal } from '@/hooks/useReveal';
+import { useReveal } from '@/utils/useReveal';
 import SectionHeader from './SectionHeader';
 import PricingCard from './PricingCard';
 import { Zap } from 'lucide-react';
