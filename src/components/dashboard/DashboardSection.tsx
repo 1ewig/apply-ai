@@ -70,19 +70,6 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
-  const [evaluatingJob, setEvaluatingJob] = useState<JobApplication | null>(null);
-
-  // Form states for matching/evaluating an existing job
-  const [evaluateResumeId, setEvaluateResumeId] = useState('');
-  const [evaluateJobDescription, setEvaluateJobDescription] = useState('');
-
-  useEffect(() => {
-    if (evaluatingJob) {
-      const defaultResume = resumes.find(r => r.id === evaluatingJob.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
-      setEvaluateResumeId(defaultResume?.id || '');
-      setEvaluateJobDescription(evaluatingJob.jobDescription || '');
-    }
-  }, [evaluatingJob, resumes]);
 
   const [newResume, setNewResume] = useState({
     name: '',
@@ -164,6 +151,7 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
     url: string;
     jobDescription: string;
     selectedResumeId: string;
+    customResumeContent: string;
     analyzeImmediately: boolean;
   }) => {
     try {
@@ -177,13 +165,13 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
           url: jobData.url || "",
           jobDescription: jobData.jobDescription || "",
           resumeUsed: jobData.selectedResumeId || "",
+          customResumeContent: jobData.customResumeContent || "",
         });
         
-        // Trigger immediate match if requested on edited details
+        // Trigger immediate match if requested on tailored resume content
         if (jobData.analyzeImmediately && jobData.jobDescription) {
-          const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
-          if (selectedResume) {
-            handleCompare(editingJob.id, selectedResume.content, jobData.jobDescription);
+          if (jobData.customResumeContent) {
+            handleCompare(editingJob.id, jobData.customResumeContent, jobData.jobDescription);
           }
         }
       } else {
@@ -196,13 +184,13 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
           url: jobData.url || "",
           jobDescription: jobData.jobDescription || "",
           resumeUsed: jobData.selectedResumeId || "",
+          customResumeContent: jobData.customResumeContent || "",
         });
         
-        // Trigger immediate match if requested
+        // Trigger immediate match if requested on tailored resume content
         if (jobData.analyzeImmediately && jobData.jobDescription) {
-          const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
-          if (selectedResume) {
-            handleCompare(createdJobId, selectedResume.content, jobData.jobDescription);
+          if (jobData.customResumeContent) {
+            handleCompare(createdJobId, jobData.customResumeContent, jobData.jobDescription);
           }
         }
       }
@@ -331,7 +319,10 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
                 setEditingJob(job);
                 setIsAddJobOpen(true);
               }}
-              onMatchClick={(job) => setEvaluatingJob(job)}
+              onMatchClick={(job) => {
+                setEditingJob(job);
+                setIsAddJobOpen(true);
+              }}
               onViewAnalysisClick={(jobId) => setViewingAnalysisJobId(jobId)}
               onUpdateJobStatus={(id, status) => updateJob(id, { status })}
               onDeleteJob={(id) => deleteJob(id)}
@@ -358,88 +349,6 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
         editingJob={editingJob}
         onSubmit={handleAddJobSubmit}
       />
-
-      {/* Edit Job Description / Match triggers from card */}
-      <AnimatePresence>
-        {evaluatingJob && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]"
-            >
-              <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
-                <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
-                  Run AI Comparison for {evaluatingJob.role}
-                </h3>
-                <button
-                  onClick={() => setEvaluatingJob(null)}
-                  className="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
-                <div>
-                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Company & Role</label>
-                  <p className="text-sm font-bold text-[var(--text-heading)]">{evaluatingJob.company} &mdash; {evaluatingJob.role}</p>
-                </div>
-
-                {resumes.length > 0 && (
-                  <div>
-                    <label className="block font-semibold text-[var(--text-heading)] mb-1">Compare Against Resume Template</label>
-                    <select
-                      value={evaluateResumeId}
-                      onChange={(e) => setEvaluateResumeId(e.target.value)}
-                      className="w-full p-2.5 rounded-xl border border-black/10 bg-white focus:outline-none focus:border-[var(--accent)] cursor-pointer"
-                    >
-                      {resumes.map(r => (
-                        <option key={r.id} value={r.id}>
-                          {r.name} {r.isDefault ? '(Active Template)' : ''}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                <div>
-                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Paste Job Description *</label>
-                  <textarea
-                    rows={6}
-                    required
-                    value={evaluateJobDescription}
-                    onChange={(e) => setEvaluateJobDescription(e.target.value)}
-                    placeholder="Paste the target job description requirements here..."
-                    className="w-full p-3 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none"
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2 pt-4 border-t border-[var(--border)]">
-                  <Button variant="outline" size="sm" type="button" onClick={() => setEditingJob(null)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    disabled={!evaluateJobDescription.trim()}
-                    onClick={() => {
-                      const selectedResume = resumes.find(r => r.id === evaluateResumeId) || resumes.find(r => r.isDefault) || resumes[0];
-                      if (selectedResume && editingJob) {
-                        handleCompare(editingJob.id, selectedResume.content, evaluateJobDescription);
-                        setEditingJob(null);
-                      }
-                    }}
-                  >
-                    Start AI Match
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* Add Resume Modal */}
       <AnimatePresence>

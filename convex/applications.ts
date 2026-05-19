@@ -58,6 +58,7 @@ export const add = mutation({
     matchScore: v.optional(v.number()),
     analysisResult: v.optional(comparisonResult),
     resumeUsed: v.optional(v.string()),
+    customResumeContent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -76,6 +77,7 @@ export const add = mutation({
       matchScore: args.matchScore,
       analysisResult: args.analysisResult,
       resumeUsed: args.resumeUsed,
+      customResumeContent: args.customResumeContent,
     });
 
     return newId;
@@ -97,6 +99,7 @@ export const update = mutation({
     matchScore: v.optional(v.number()),
     analysisResult: v.optional(comparisonResult),
     resumeUsed: v.optional(v.string()),
+    customResumeContent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();

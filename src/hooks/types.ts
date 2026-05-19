@@ -29,6 +29,7 @@ export interface JobApplication {
   matchScore?: number;
   analysisResult?: ComparisonResult;
   resumeUsed?: string;
+  customResumeContent?: string;
 }
 
 export interface Resume {

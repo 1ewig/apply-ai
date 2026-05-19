@@ -45,6 +45,7 @@ export default defineSchema({
     matchScore: v.optional(v.number()),
     analysisResult: v.optional(comparisonResult),
     resumeUsed: v.optional(v.string()),
+    customResumeContent: v.optional(v.string()),
   }).index("by_userId", ["userId"]),
 
   resumes: defineTable({
