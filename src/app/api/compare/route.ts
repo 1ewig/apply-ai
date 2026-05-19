@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 
@@ -12,18 +13,23 @@ function cleanJsonString(str: string): string {
 
 export async function POST(request: Request) {
   try {
-    // 1. Authenticate request using API_KEY if configured in the environment
-    const serverApiKey = process.env.API_KEY;
-    if (serverApiKey && serverApiKey.trim() !== "") {
-      const clientApiKey = 
-        request.headers.get("x-api-key") || 
-        request.headers.get("Authorization")?.replace("Bearer ", "");
+    // 1. Authenticate request using Clerk first (Secure cookie check)
+    const { userId } = await auth();
 
-      if (clientApiKey !== serverApiKey) {
-        return NextResponse.json(
-          { error: "Unauthorized: Invalid or missing API Key." },
-          { status: 401 }
-        );
+    // If no Clerk session is active, fall back to API_KEY check for external clients
+    if (!userId) {
+      const serverApiKey = process.env.API_KEY;
+      if (serverApiKey && serverApiKey.trim() !== "") {
+        const clientApiKey = 
+          request.headers.get("x-api-key") || 
+          request.headers.get("Authorization")?.replace("Bearer ", "");
+
+        if (clientApiKey !== serverApiKey) {
+          return NextResponse.json(
+            { error: "Unauthorized: Invalid or missing API Key or Clerk Session." },
+            { status: 401 }
+          );
+        }
       }
     }
 
