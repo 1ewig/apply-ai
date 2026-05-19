@@ -34,7 +34,7 @@ export default function AddApplicationModal({
   const [jobDescription, setJobDescription] = useState('');
   const [selectedResumeId, setSelectedResumeId] = useState('');
   const [customResumeContent, setCustomResumeContent] = useState('');
-  const [analyzeImmediately, setAnalyzeImmediately] = useState(false);
+  const [analyzeImmediately, setAnalyzeImmediately] = useState(true);
 
   // Sync selectedResumeId and fields when resumes/open/editing states change
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function AddApplicationModal({
         setJobDescription(editingJob.jobDescription || '');
         setSelectedResumeId(editingJob.resumeUsed || '');
         setCustomResumeContent(editingJob.customResumeContent || '');
-        setAnalyzeImmediately(false);
+        setAnalyzeImmediately(true);
       } else {
         const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
         if (defaultResume) {
@@ -63,7 +63,7 @@ export default function AddApplicationModal({
         setStatus('wishlist');
         setUrl('');
         setJobDescription('');
-        setAnalyzeImmediately(false);
+        setAnalyzeImmediately(true);
       }
     }
   }, [isOpen, editingJob, resumes]);
