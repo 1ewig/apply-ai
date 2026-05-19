@@ -2,31 +2,31 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
- * Retrieve the current authenticated user's resume.
+ * Retrieve all resumes for the currently authenticated user.
  */
-export const get = query({
+export const list = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      return null;
+      return [];
     }
 
     return await ctx.db
       .query("resumes")
       .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .unique();
+      .collect();
   },
 });
 
 /**
- * Save or update the authenticated user's resume content.
+ * Add a new resume template.
  */
-export const save = mutation({
+export const add = mutation({
   args: {
     name: v.string(),
-    text: v.string(),
-    matchScore: v.optional(v.number()),
+    content: v.string(),
+    isDefault: v.boolean(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -34,26 +34,91 @@ export const save = mutation({
       throw new Error("Unauthorized");
     }
 
-    const existing = await ctx.db
-      .query("resumes")
-      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .unique();
-
-    if (existing === null) {
-      await ctx.db.insert("resumes", {
-        userId: identity.subject,
-        name: args.name,
-        text: args.text,
-        matchScore: args.matchScore,
-        updatedAt: Date.now(),
-      });
-    } else {
-      await ctx.db.patch(existing._id, {
-        name: args.name,
-        text: args.text,
-        matchScore: args.matchScore,
-        updatedAt: Date.now(),
-      });
+    // If this is set to default, unset any existing default resumes
+    if (args.isDefault) {
+      const existing = await ctx.db
+        .query("resumes")
+        .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
+        .collect();
+      for (const res of existing) {
+        if (res.isDefault) {
+          await ctx.db.patch(res._id, { isDefault: false });
+        }
+      }
     }
+
+    const newId = await ctx.db.insert("resumes", {
+      userId: identity.subject,
+      name: args.name,
+      content: args.content,
+      isDefault: args.isDefault,
+      updatedAt: new Date().toLocaleDateString(),
+    });
+
+    return newId;
+  },
+});
+
+/**
+ * Update an existing resume.
+ */
+export const update = mutation({
+  args: {
+    id: v.id("resumes"),
+    name: v.optional(v.string()),
+    content: v.optional(v.string()),
+    isDefault: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    const resume = await ctx.db.get(args.id);
+    if (!resume || resume.userId !== identity.subject) {
+      throw new Error("Unauthorized or resume not found");
+    }
+
+    // If setting to default, unset other defaults
+    if (args.isDefault) {
+      const existing = await ctx.db
+        .query("resumes")
+        .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
+        .collect();
+      for (const res of existing) {
+        if (res.isDefault && res._id !== args.id) {
+          await ctx.db.patch(res._id, { isDefault: false });
+        }
+      }
+    }
+
+    const { id, ...updates } = args;
+    await ctx.db.patch(args.id, {
+      ...updates,
+      updatedAt: new Date().toLocaleDateString(),
+    });
+  },
+});
+
+/**
+ * Delete a resume template.
+ */
+export const remove = mutation({
+  args: {
+    id: v.id("resumes"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    const resume = await ctx.db.get(args.id);
+    if (!resume || resume.userId !== identity.subject) {
+      throw new Error("Unauthorized or resume not found");
+    }
+
+    await ctx.db.delete(args.id);
   },
 });
