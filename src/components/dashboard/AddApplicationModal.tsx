@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
-import { JobApplication, Resume } from '../../hooks/useStore';
+import type { JobApplication, Resume } from '../../hooks/types';
 import { useApplicationForm } from '../../hooks/useApplicationForm';
 
 interface AddApplicationModalProps {

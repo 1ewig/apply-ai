@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
-import { JobApplication, Resume } from '../../hooks/useStore';
+import type { JobApplication, Resume } from '../../hooks/types';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import ScoreRing from './ScoreRing';
 import KeywordCoverage from './KeywordCoverage';

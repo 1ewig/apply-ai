@@ -1,5 +1,5 @@
 import Button from '../ui/Button';
-import { Resume } from '../../hooks/useStore';
+import type { Resume } from '../../hooks/types';
 import { Plus, FileText } from 'lucide-react';
 import ResumeCard from './ResumeCard';
 

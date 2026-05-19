@@ -1,6 +1,6 @@
 import Card from '../ui/Card';
 import Badge from '../ui/Badge';
-import { Resume } from '../../hooks/useStore';
+import type { Resume } from '../../hooks/types';
 import { FileText, Edit, Trash2 } from 'lucide-react';
 
 interface ResumeCardProps {

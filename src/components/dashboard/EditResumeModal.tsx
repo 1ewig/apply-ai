@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
-import { Resume } from '../../hooks/useStore';
+import type { Resume } from '../../hooks/types';
 
 interface EditResumeModalProps {
   resume: Resume | null;

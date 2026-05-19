@@ -1,5 +1,5 @@
 import Button from '../ui/Button';
-import { JobApplication, Resume } from '../../hooks/useStore';
+import type { JobApplication, Resume } from '../../hooks/types';
 import { Plus, Search } from 'lucide-react';
 import JobCard from './JobCard';
 import SearchFilterBar from './SearchFilterBar';
