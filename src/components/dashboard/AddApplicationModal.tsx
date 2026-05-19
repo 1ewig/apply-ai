@@ -7,6 +7,7 @@ interface AddApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
   resumes: Resume[];
+  editingJob?: JobApplication | null;
   onSubmit: (jobData: {
     company: string;
     role: string;
@@ -22,6 +23,7 @@ export default function AddApplicationModal({
   isOpen,
   onClose,
   resumes,
+  editingJob = null,
   onSubmit,
 }: AddApplicationModalProps) {
   const [company, setCompany] = useState('');
@@ -32,22 +34,32 @@ export default function AddApplicationModal({
   const [selectedResumeId, setSelectedResumeId] = useState('');
   const [analyzeImmediately, setAnalyzeImmediately] = useState(false);
 
-  // Sync selectedResumeId with default resume when resumes/open state changes
+  // Sync selectedResumeId and fields when resumes/open/editing states change
   useEffect(() => {
     if (isOpen) {
-      const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
-      if (defaultResume) {
-        setSelectedResumeId(defaultResume.id);
+      if (editingJob) {
+        setCompany(editingJob.company || '');
+        setRole(editingJob.role || '');
+        setStatus(editingJob.status || 'wishlist');
+        setUrl(editingJob.url || '');
+        setJobDescription(editingJob.jobDescription || '');
+        setSelectedResumeId(editingJob.resumeUsed || '');
+        setAnalyzeImmediately(false);
+      } else {
+        const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
+        if (defaultResume) {
+          setSelectedResumeId(defaultResume.id);
+        }
+        // Reset form states
+        setCompany('');
+        setRole('');
+        setStatus('wishlist');
+        setUrl('');
+        setJobDescription('');
+        setAnalyzeImmediately(false);
       }
-      // Reset form states
-      setCompany('');
-      setRole('');
-      setStatus('wishlist');
-      setUrl('');
-      setJobDescription('');
-      setAnalyzeImmediately(false);
     }
-  }, [isOpen, resumes]);
+  }, [isOpen, editingJob, resumes]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +87,11 @@ export default function AddApplicationModal({
           >
             <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
               <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
-                {analyzeImmediately ? 'Start AI Comparison' : 'Add New Job Application'}
+                {editingJob
+                  ? 'Edit Job Application'
+                  : analyzeImmediately
+                  ? 'Start AI Comparison'
+                  : 'Add New Job Application'}
               </h3>
               <button
                 onClick={onClose}
@@ -191,7 +207,11 @@ export default function AddApplicationModal({
                   type="submit"
                   disabled={resumes.length === 0 && analyzeImmediately}
                 >
-                  {analyzeImmediately ? 'Save & Start AI Match' : 'Save Application'}
+                  {editingJob
+                    ? 'Save Changes'
+                    : analyzeImmediately
+                    ? 'Save & Start AI Match'
+                    : 'Save Application'}
                 </Button>
               </div>
             </form>

@@ -70,18 +70,19 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
+  const [evaluatingJob, setEvaluatingJob] = useState<JobApplication | null>(null);
 
   // Form states for matching/evaluating an existing job
   const [evaluateResumeId, setEvaluateResumeId] = useState('');
   const [evaluateJobDescription, setEvaluateJobDescription] = useState('');
 
   useEffect(() => {
-    if (editingJob) {
-      const defaultResume = resumes.find(r => r.id === editingJob.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
+    if (evaluatingJob) {
+      const defaultResume = resumes.find(r => r.id === evaluatingJob.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
       setEvaluateResumeId(defaultResume?.id || '');
-      setEvaluateJobDescription(editingJob.jobDescription || '');
+      setEvaluateJobDescription(evaluatingJob.jobDescription || '');
     }
-  }, [editingJob, resumes]);
+  }, [evaluatingJob, resumes]);
 
   const [newResume, setNewResume] = useState({
     name: '',
@@ -166,30 +167,52 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
     analyzeImmediately: boolean;
   }) => {
     try {
-      // Add job to Convex and await the generated database ID!
-      const createdJobId = await convexAddJob({
-        company: jobData.company,
-        role: jobData.role,
-        status: jobData.status,
-        dateApplied: new Date().toLocaleDateString(),
-        url: jobData.url || "",
-        jobDescription: jobData.jobDescription || "",
-        resumeUsed: jobData.selectedResumeId || "",
-      });
-      
-      // Trigger immediate match if requested
-      if (jobData.analyzeImmediately && jobData.jobDescription) {
-        const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
-        if (selectedResume) {
-          handleCompare(createdJobId, selectedResume.content, jobData.jobDescription);
+      if (editingJob) {
+        // Edit/Update mode!
+        await convexUpdateJob({
+          id: editingJob.id as any,
+          company: jobData.company,
+          role: jobData.role,
+          status: jobData.status,
+          url: jobData.url || "",
+          jobDescription: jobData.jobDescription || "",
+          resumeUsed: jobData.selectedResumeId || "",
+        });
+        
+        // Trigger immediate match if requested on edited details
+        if (jobData.analyzeImmediately && jobData.jobDescription) {
+          const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
+          if (selectedResume) {
+            handleCompare(editingJob.id, selectedResume.content, jobData.jobDescription);
+          }
+        }
+      } else {
+        // Add/Create mode!
+        const createdJobId = await convexAddJob({
+          company: jobData.company,
+          role: jobData.role,
+          status: jobData.status,
+          dateApplied: new Date().toLocaleDateString(),
+          url: jobData.url || "",
+          jobDescription: jobData.jobDescription || "",
+          resumeUsed: jobData.selectedResumeId || "",
+        });
+        
+        // Trigger immediate match if requested
+        if (jobData.analyzeImmediately && jobData.jobDescription) {
+          const selectedResume = resumes.find(r => r.id === jobData.selectedResumeId) || resumes.find(r => r.isDefault) || resumes[0];
+          if (selectedResume) {
+            handleCompare(createdJobId, selectedResume.content, jobData.jobDescription);
+          }
         }
       }
     } catch (err) {
-      console.error("Error creating job application:", err);
-      setError("Failed to create job application in database.");
+      console.error("Error saving job application:", err);
+      setError("Failed to save job application in database.");
     }
 
     setIsAddJobOpen(false);
+    setEditingJob(null);
   };
 
   const submitNewResume = (e: React.FormEvent) => {
@@ -304,7 +327,11 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
               jobs={jobs}
               resumes={resumes}
               onAddJobClick={() => setIsAddJobOpen(true)}
-              onMatchClick={(job) => setEditingJob(job)}
+              onEditJobClick={(job) => {
+                setEditingJob(job);
+                setIsAddJobOpen(true);
+              }}
+              onMatchClick={(job) => setEvaluatingJob(job)}
               onViewAnalysisClick={(jobId) => setViewingAnalysisJobId(jobId)}
               onUpdateJobStatus={(id, status) => updateJob(id, { status })}
               onDeleteJob={(id) => deleteJob(id)}
@@ -323,14 +350,18 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
 
       <AddApplicationModal
         isOpen={isAddJobOpen}
-        onClose={() => setIsAddJobOpen(false)}
+        onClose={() => {
+          setIsAddJobOpen(false);
+          setEditingJob(null);
+        }}
         resumes={resumes}
+        editingJob={editingJob}
         onSubmit={handleAddJobSubmit}
       />
 
       {/* Edit Job Description / Match triggers from card */}
       <AnimatePresence>
-        {editingJob && (
+        {evaluatingJob && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -340,10 +371,10 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
             >
               <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
                 <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
-                  Run AI Comparison for {editingJob.role}
+                  Run AI Comparison for {evaluatingJob.role}
                 </h3>
                 <button
-                  onClick={() => setEditingJob(null)}
+                  onClick={() => setEvaluatingJob(null)}
                   className="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer"
                 >
                   ✕
@@ -353,7 +384,7 @@ export default function DashboardSection({ onBack }: { onBack: () => void }) {
               <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
                 <div>
                   <label className="block font-semibold text-[var(--text-heading)] mb-1">Company & Role</label>
-                  <p className="text-sm font-bold text-[var(--text-heading)]">{editingJob.company} &mdash; {editingJob.role}</p>
+                  <p className="text-sm font-bold text-[var(--text-heading)]">{evaluatingJob.company} &mdash; {evaluatingJob.role}</p>
                 </div>
 
                 {resumes.length > 0 && (

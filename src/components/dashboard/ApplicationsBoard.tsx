@@ -3,12 +3,13 @@ import Card from '../ui/Card';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
 import { JobApplication, Resume } from '../../hooks/useStore';
-import { Sparkles, Plus, Trash2, Play, Search, ExternalLink } from 'lucide-react';
+import { Sparkles, Plus, Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-react';
 
 interface ApplicationsBoardProps {
   jobs: JobApplication[];
   resumes: Resume[];
   onAddJobClick: () => void;
+  onEditJobClick: (job: JobApplication) => void;
   onMatchClick: (job: JobApplication) => void;
   onViewAnalysisClick: (jobId: string) => void;
   onUpdateJobStatus: (id: string, status: JobApplication['status']) => void;
@@ -19,6 +20,7 @@ export default function ApplicationsBoard({
   jobs,
   resumes,
   onAddJobClick,
+  onEditJobClick,
   onMatchClick,
   onViewAnalysisClick,
   onUpdateJobStatus,
@@ -209,13 +211,22 @@ export default function ApplicationsBoard({
                   </select>
                 </div>
 
-                <button
-                  onClick={() => onDeleteJob(job.id)}
-                  className="p-1.5 rounded-lg border border-transparent hover:border-rose-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-                  title="Delete Application"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => onEditJobClick(job)}
+                    className="p-1.5 rounded-lg border border-transparent hover:border-blue-100 hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors cursor-pointer"
+                    title="Edit Application"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => onDeleteJob(job.id)}
+                    className="p-1.5 rounded-lg border border-transparent hover:border-rose-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                    title="Delete Application"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </Card>
           );
