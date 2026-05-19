@@ -36,8 +36,8 @@ export default defineSchema({
 
   applications: defineTable({
     userId: v.string(), // Maps to the user's Clerk user ID
-    company: v.string(),
-    role: v.string(),
+    company: v.optional(v.string()),
+    role: v.optional(v.string()),
     status: v.string(), // "wishlist" | "applied" | "interviewing" | "offer" | "rejected"
     dateApplied: v.string(),
     url: v.optional(v.string()),

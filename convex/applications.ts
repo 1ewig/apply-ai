@@ -49,8 +49,8 @@ export const list = query({
  */
 export const add = mutation({
   args: {
-    company: v.string(),
-    role: v.string(),
+    company: v.optional(v.string()),
+    role: v.optional(v.string()),
     status: v.string(),
     dateApplied: v.string(),
     url: v.optional(v.string()),

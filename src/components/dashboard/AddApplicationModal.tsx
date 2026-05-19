@@ -51,11 +51,10 @@ export default function AddApplicationModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!company || !role) return;
 
     onSubmit({
-      company,
-      role,
+      company: company.trim() || 'Unnamed Company',
+      role: role.trim() || 'Unnamed Role',
       status,
       url,
       jobDescription,
@@ -89,10 +88,9 @@ export default function AddApplicationModal({
             <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Company *</label>
+                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Company (optional)</label>
                   <input
                     type="text"
-                    required
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="e.g. Stripe"
@@ -100,10 +98,9 @@ export default function AddApplicationModal({
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Role / Title *</label>
+                  <label className="block font-semibold text-[var(--text-heading)] mb-1">Role / Title (optional)</label>
                   <input
                     type="text"
-                    required
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="e.g. Senior Frontend Dev"
