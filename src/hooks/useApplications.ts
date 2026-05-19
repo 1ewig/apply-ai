@@ -10,15 +10,15 @@ export function useApplications() {
   const convexUpdateJob = useMutation(api.applications.update);
   const convexDeleteJob = useMutation(api.applications.remove);
 
-  const addJob = (job: Omit<JobApplication, 'id' | 'dateApplied'>) => {
+  const addJob = (job: Omit<JobApplication, 'id'>) => {
     return convexAddJob({ ...job });
   };
 
-  const updateJob = (id: string, updates: Partial<JobApplication>) => {
+  const updateJob = (id: any, updates: Partial<JobApplication>) => {
     return convexUpdateJob({ id, ...updates });
   };
 
-  const deleteJob = (id: string) => {
+  const deleteJob = (id: any) => {
     return convexDeleteJob({ id });
   };
 

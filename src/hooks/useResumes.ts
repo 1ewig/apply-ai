@@ -14,15 +14,15 @@ export function useResumes() {
     return convexAddResume({ ...resume });
   };
 
-  const updateResume = (id: string, updates: Partial<Resume>) => {
+  const updateResume = (id: any, updates: Partial<Resume>) => {
     return convexUpdateResume({ id, ...updates });
   };
 
-  const deleteResume = (id: string) => {
+  const deleteResume = (id: any) => {
     return convexDeleteResume({ id });
   };
 
-  const setDefaultResume = (id: string) => {
+  const setDefaultResume = (id: any) => {
     return convexUpdateResume({ id, isDefault: true });
   };
 
