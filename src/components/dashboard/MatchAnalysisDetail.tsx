@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
 import { JobApplication, Resume } from '../../hooks/useStore';
@@ -16,17 +15,27 @@ import {
 interface MatchAnalysisDetailProps {
   job: JobApplication;
   resumes: Resume[];
+  expandedPrepIndex: number | null;
+  onTogglePrepItem: (index: number) => void;
   onBackClick: () => void;
   onReRunAnalysis: (jobId: string, resumeContent: string, jobDesc: string) => void;
+}
+
+function getScoreStroke(score: number) {
+  if (score >= 85) return '#22C55E';
+  if (score >= 70) return '#2563EB';
+  if (score >= 50) return '#FACC15';
+  return '#EF4444';
 }
 
 export default function MatchAnalysisDetail({
   job,
   resumes,
+  expandedPrepIndex,
+  onTogglePrepItem,
   onBackClick,
   onReRunAnalysis,
 }: MatchAnalysisDetailProps) {
-  const [expandedPrepIndex, setExpandedPrepIndex] = useState<number | null>(null);
 
   if (!job.analysisResult) {
     return (
@@ -40,13 +49,6 @@ export default function MatchAnalysisDetail({
   }
 
   const result = job.analysisResult;
-
-  const getScoreStroke = (score: number) => {
-    if (score >= 85) return '#22C55E';
-    if (score >= 70) return '#2563EB';
-    if (score >= 50) return '#FACC15';
-    return '#EF4444';
-  };
 
   return (
     <motion.div
@@ -268,7 +270,7 @@ export default function MatchAnalysisDetail({
             return (
               <div key={idx} className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
                 <button
-                  onClick={() => setExpandedPrepIndex(isExpanded ? null : idx)}
+                  onClick={() => onTogglePrepItem(idx)}
                   className="w-full px-4 py-3 flex items-center justify-between text-left font-semibold text-xs text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
                 >
                   <span>{prep.question}</span>

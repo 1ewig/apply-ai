@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
 import { JobApplication, Resume } from '../../hooks/useStore';
+import { useApplicationForm } from '../../hooks/useApplicationForm';
 
 interface AddApplicationModalProps {
   isOpen: boolean;
@@ -27,70 +27,18 @@ export default function AddApplicationModal({
   editingJob = null,
   onSubmit,
 }: AddApplicationModalProps) {
-  const [company, setCompany] = useState('');
-  const [role, setRole] = useState('');
-  const [status, setStatus] = useState<JobApplication['status']>('wishlist');
-  const [url, setUrl] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [selectedResumeId, setSelectedResumeId] = useState('');
-  const [customResumeContent, setCustomResumeContent] = useState('');
-  const [analyzeImmediately, setAnalyzeImmediately] = useState(true);
-
-  // Sync selectedResumeId and fields when resumes/open/editing states change
-  useEffect(() => {
-    if (isOpen) {
-      if (editingJob) {
-        setCompany(editingJob.company || '');
-        setRole(editingJob.role || '');
-        setStatus(editingJob.status || 'wishlist');
-        setUrl(editingJob.url || '');
-        setJobDescription(editingJob.jobDescription || '');
-        setSelectedResumeId(editingJob.resumeUsed || '');
-        setCustomResumeContent(editingJob.customResumeContent || '');
-        setAnalyzeImmediately(true);
-      } else {
-        const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
-        if (defaultResume) {
-          setSelectedResumeId(defaultResume.id);
-          setCustomResumeContent(defaultResume.content);
-        } else {
-          setSelectedResumeId('');
-          setCustomResumeContent('');
-        }
-        // Reset form states
-        setCompany('');
-        setRole('');
-        setStatus('wishlist');
-        setUrl('');
-        setJobDescription('');
-        setAnalyzeImmediately(true);
-      }
-    }
-  }, [isOpen, editingJob, resumes]);
-
-  const handleResumeTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const templateId = e.target.value;
-    setSelectedResumeId(templateId);
-    const selectedTemplate = resumes.find(r => r.id === templateId);
-    if (selectedTemplate) {
-      setCustomResumeContent(selectedTemplate.content);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    onSubmit({
-      company: company.trim() || 'Unnamed Company',
-      role: role.trim() || 'Unnamed Role',
-      status,
-      url,
-      jobDescription,
-      selectedResumeId,
-      customResumeContent,
-      analyzeImmediately,
-    });
-  };
+  const {
+    company, setCompany,
+    role, setRole,
+    status, setStatus,
+    url, setUrl,
+    jobDescription, setJobDescription,
+    selectedResumeId,
+    customResumeContent, setCustomResumeContent,
+    analyzeImmediately, setAnalyzeImmediately,
+    handleResumeTemplateChange,
+    handleSubmit,
+  } = useApplicationForm(isOpen, editingJob, resumes, onSubmit, onClose);
 
   return (
     <AnimatePresence>

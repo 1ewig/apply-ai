@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Card from '../ui/Card';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
@@ -7,6 +6,11 @@ import { Sparkles, Plus, Trash2, Play, Search, ExternalLink, Pencil } from 'luci
 
 interface ApplicationsBoardProps {
   jobs: JobApplication[];
+  filteredJobs: JobApplication[];
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
   resumes: Resume[];
   onAddJobClick: () => void;
   onEditJobClick: (job: JobApplication) => void;
@@ -16,8 +20,28 @@ interface ApplicationsBoardProps {
   onDeleteJob: (id: string) => void;
 }
 
+function getStatusBadge(status: JobApplication['status']) {
+  switch (status) {
+    case 'wishlist':
+      return { label: 'Wishlist', className: 'bg-slate-100 text-slate-700 border-slate-200' };
+    case 'applied':
+      return { label: 'Applied', className: 'bg-blue-50 text-blue-700 border-blue-200' };
+    case 'interviewing':
+      return { label: 'Interviewing', className: 'bg-amber-50 text-amber-700 border-amber-200' };
+    case 'offer':
+      return { label: 'Offer Received', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    case 'rejected':
+      return { label: 'Rejected', className: 'bg-rose-50 text-rose-700 border-rose-200' };
+  }
+}
+
 export default function ApplicationsBoard({
   jobs,
+  filteredJobs,
+  searchTerm,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
   resumes,
   onAddJobClick,
   onEditJobClick,
@@ -26,32 +50,6 @@ export default function ApplicationsBoard({
   onUpdateJobStatus,
   onDeleteJob,
 }: ApplicationsBoardProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-
-  const getStatusBadge = (status: JobApplication['status']) => {
-    switch (status) {
-      case 'wishlist':
-        return { label: 'Wishlist', className: 'bg-slate-100 text-slate-700 border-slate-200' };
-      case 'applied':
-        return { label: 'Applied', className: 'bg-blue-50 text-blue-700 border-blue-200' };
-      case 'interviewing':
-        return { label: 'Interviewing', className: 'bg-amber-50 text-amber-700 border-amber-200' };
-      case 'offer':
-        return { label: 'Offer Received', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
-      case 'rejected':
-        return { label: 'Rejected', className: 'bg-rose-50 text-rose-700 border-rose-200' };
-    }
-  };
-
-  // Filter jobs based on search term and status dropdown
-  const filteredJobs = jobs.filter((job) => {
-    const matchesSearch =
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.role.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || job.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
 
   return (
     <div className="space-y-6">
@@ -82,7 +80,7 @@ export default function ApplicationsBoard({
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by company or role name..."
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-black/10 text-xs focus:outline-none focus:border-[var(--accent)] bg-slate-50/50"
           />
@@ -92,7 +90,7 @@ export default function ApplicationsBoard({
         <div className="flex gap-2 items-center">
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => onStatusFilterChange(e.target.value)}
             className="p-2.5 border border-black/10 rounded-xl bg-slate-50/50 text-xs text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
           >
             <option value="all">All Statuses</option>
