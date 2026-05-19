@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import { ArrowRight } from 'lucide-react';
@@ -62,24 +63,38 @@ export default function Navbar({
         </div>
 
         {/* Desktop CTAs */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           {isDashboard ? (
-            <Badge className="text-xs px-2.5 py-1">
-              Active Session
-            </Badge>
+            <>
+              <Badge className="text-xs px-2.5 py-1">
+                Active Session
+              </Badge>
+              <UserButton />
+            </>
           ) : (
             <>
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" onClick={onStartDashboard}>
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/dashboard">
-                <Button variant="primary" size="sm" className="group" onClick={onStartDashboard}>
-                  Launch Dashboard
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
+              <SignedOut>
+                <Link href="/sign-in">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/dashboard">
+                  <Button variant="primary" size="sm" className="group">
+                    Launch Dashboard
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <Link href="/dashboard">
+                  <Button variant="outline" size="sm" className="group">
+                    Go to Dashboard
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+                <UserButton />
+              </SignedIn>
             </>
           )}
         </div>
@@ -119,17 +134,30 @@ export default function Navbar({
             ))}
           </div>
           <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-black/5">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/dashboard">
-              <Button variant="primary" size="md" className="w-full group" onClick={() => setMobileOpen(false)}>
-                Launch Dashboard
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+            <SignedOut>
+              <Link href="/sign-in">
+                <Button variant="ghost" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button variant="primary" size="md" className="w-full group" onClick={() => setMobileOpen(false)}>
+                  Launch Dashboard
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button variant="outline" size="md" className="w-full group mb-2" onClick={() => setMobileOpen(false)}>
+                  Go to Dashboard
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <div className="flex justify-center py-2">
+                <UserButton showName />
+              </div>
+            </SignedIn>
           </div>
         </div>
       )}
