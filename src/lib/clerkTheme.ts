@@ -19,6 +19,11 @@ export const clerkTheme = {
     },
     socialButtonsIconButton: {
       borderRadius: "0.75rem",
+      border: "1px solid rgba(0, 0, 0, 0.07)",
+    },
+    socialButtonsBlockButton: {
+      borderRadius: "0.75rem",
+      border: "1px solid rgba(0, 0, 0, 0.07)",
     },
     headerTitle: {
       fontFamily: '"Bricolage Grotesque", sans-serif',
