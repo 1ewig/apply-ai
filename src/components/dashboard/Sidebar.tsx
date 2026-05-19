@@ -1,4 +1,5 @@
 import { LayoutGrid, FileText, ArrowLeft } from 'lucide-react';
+import { UserButton } from '@clerk/nextjs';
 
 interface SidebarProps {
   activeTab: 'jobs' | 'resumes';
@@ -52,7 +53,10 @@ export default function Sidebar({ activeTab, isViewingAnalysis, onTabChange, onB
       </nav>
 
       {/* Sidebar Footer */}
-      <div className="p-4 border-t border-[var(--border)]">
+      <div className="p-4 border-t border-[var(--border)] space-y-3">
+        <div className="flex items-center justify-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 shadow-sm">
+          <UserButton showName />
+        </div>
         <button
           onClick={onBack}
           className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
