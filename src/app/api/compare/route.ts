@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 import { COMPARE_SYSTEM_PROMPT, buildComparePrompt } from "@/ai/prompts";
+import { comparisonResultSchema } from "@/ai/schemas";
 
 // Helper for cleaning LLM responses that might contain markdown fences
 function cleanJsonString(str: string): string {
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
 
     console.log("Comparison completed successfully inside Next.js.");
     const cleanedText = cleanJsonString(result.text);
-    const parsedData = JSON.parse(cleanedText);
+    const parsedData = comparisonResultSchema.parse(JSON.parse(cleanedText));
     return NextResponse.json(parsedData);
   } catch (err: any) {
     console.error("Comparison route error:", err);

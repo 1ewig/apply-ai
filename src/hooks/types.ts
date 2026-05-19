@@ -1,22 +1,5 @@
-export interface ComparisonResult {
-  score: number;
-  fitLevel: string;
-  summary: string;
-  matchedKeywords: string[];
-  missingKeywords: string[];
-  strengths: string[];
-  gaps: string[];
-  suggestions: {
-    section: string;
-    original: string;
-    suggested: string;
-    rationale: string;
-  }[];
-  interviewPrep: {
-    question: string;
-    strategy: string;
-  }[];
-}
+import type { ComparisonResult } from "../ai/schemas";
+export type { ComparisonResult };
 
 export interface JobApplication {
   id: string;
