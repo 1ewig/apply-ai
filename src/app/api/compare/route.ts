@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { createGroq } from "@ai-sdk/groq";
 import { generateText } from "ai";
+import { COMPARE_SYSTEM_PROMPT, buildComparePrompt } from "@/ai/prompts";
 
 // Helper for cleaning LLM responses that might contain markdown fences
 function cleanJsonString(str: string): string {
@@ -73,46 +74,8 @@ export async function POST(request: Request) {
     const result = await generateText({
       model,
       experimental_responseFormat: { type: "json_object" },
-      system: `You are an expert technical recruiter and resume optimization system.
-Compare the CV/Resume against the Job Description.
-Provide an honest, constructive, and detailed evaluation. Identify all key skills mentioned in the job description, and classify them as matched or missing. Point out specific strengths, gaps, and give concrete suggestions on how to rewrite resume bullet points to improve the match. Also, prepare custom interview questions based on the candidate's gaps.
-
-You MUST respond with a raw JSON object matching this schema structure.
-Do NOT wrap your response in markdown code blocks or backticks (e.g. do NOT use \`\`\` or \`\`\`json). Just return the raw JSON object structure.
-
-Schema:
-{
-  "score": number (0 to 100),
-  "fitLevel": "Excellent Match" | "Strong Match" | "Good Match" | "Fair Match" | "Needs Work",
-  "summary": "detailed summary string",
-  "matchedKeywords": ["keyword1", "keyword2", ...],
-  "missingKeywords": ["keyword3", "keyword4", ...],
-  "strengths": ["strength1", ...],
-  "gaps": ["gap1", ...],
-  "suggestions": [
-    {
-      "section": "Experience" | "Skills" | "Summary" | etc,
-      "original": "original bullet point",
-      "suggested": "suggested updated bullet point",
-      "rationale": "why this change helps"
-    }
-  ],
-  "interviewPrep": [
-    {
-      "question": "interview question",
-      "strategy": "how to answer"
-    }
-  ]
-}`,
-      prompt: `Resume/CV:
-"""
-${resumeText}
-"""
-
-Job Description:
-"""
-${jobDescription}
-"""`,
+      system: COMPARE_SYSTEM_PROMPT,
+      prompt: buildComparePrompt(resumeText, jobDescription),
     } as any);
 
     console.log("Comparison completed successfully inside Next.js.");
