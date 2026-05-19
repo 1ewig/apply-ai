@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Show, UserButton } from "@clerk/nextjs";
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import { ArrowRight } from 'lucide-react';
@@ -73,7 +73,7 @@ export default function Navbar({
             </>
           ) : (
             <>
-              <SignedOut>
+              <Show when="signed-out">
                 <Link href="/sign-in">
                   <Button variant="ghost" size="sm">
                     Sign In
@@ -85,8 +85,8 @@ export default function Navbar({
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </Button>
                 </Link>
-              </SignedOut>
-              <SignedIn>
+              </Show>
+              <Show when="signed-in">
                 <Link href="/dashboard">
                   <Button variant="outline" size="sm" className="group">
                     Go to Dashboard
@@ -94,7 +94,7 @@ export default function Navbar({
                   </Button>
                 </Link>
                 <UserButton />
-              </SignedIn>
+              </Show>
             </>
           )}
         </div>
@@ -134,7 +134,7 @@ export default function Navbar({
             ))}
           </div>
           <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-black/5">
-            <SignedOut>
+            <Show when="signed-out">
               <Link href="/sign-in">
                 <Button variant="ghost" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
                   Sign In
@@ -146,8 +146,8 @@ export default function Navbar({
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <Link href="/dashboard">
                 <Button variant="outline" size="md" className="w-full group mb-2" onClick={() => setMobileOpen(false)}>
                   Go to Dashboard
@@ -157,7 +157,7 @@ export default function Navbar({
               <div className="flex justify-center py-2">
                 <UserButton showName />
               </div>
-            </SignedIn>
+            </Show>
           </div>
         </div>
       )}
