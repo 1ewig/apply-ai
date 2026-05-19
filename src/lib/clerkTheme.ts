@@ -17,10 +17,6 @@ export const clerkTheme = {
       boxShadow: "0 4px 24px rgba(0, 0, 0, 0.07)",
       border: "1px solid rgba(0, 0, 0, 0.07)",
     },
-    socialButtonsIconButton: {
-      borderRadius: "0.75rem",
-      border: "1px solid rgba(0, 0, 0, 0.07)",
-    },
     socialButtonsBlockButton: {
       borderRadius: "0.75rem",
       border: "1px solid rgba(0, 0, 0, 0.07)",
