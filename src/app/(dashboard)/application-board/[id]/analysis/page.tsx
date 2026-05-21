@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { useApplications } from '../../../../../hooks/useApplications';
 import { useResumes } from '../../../../../hooks/useResumes';
-import { useAnalysisStore } from '../../../../../hooks/useAnalysisStore';
+import { useRunAnalysis } from '../../../../../hooks/useRunAnalysis';
 
 import MatchAnalysisDetail from '../../../../../components/application-board/MatchAnalysisDetail';
 
@@ -16,40 +16,21 @@ export default function AnalysisPage() {
 
   const { jobs, updateJob } = useApplications();
   const { resumes } = useResumes();
-  const { startAnalysis, setError, finishAnalysis } = useAnalysisStore();
+  const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
 
   const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
-    startAnalysis();
-    try {
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-      if (apiKey) headers['x-api-key'] = apiKey;
-
-      const response = await fetch('/api/compare', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ resumeText: resumeContent, jobDescription: jobDesc }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to compare resume and job description.');
-
+    const data = await runAnalysis(jobId, resumeContent, jobDesc);
+    if (data) {
       updateJob(jobId, {
         matchScore: data.score,
         analysisResult: data,
         jobDescription: jobDesc,
       });
-      return data;
-    } catch (err: any) {
-      const message = err.message || 'An unexpected error occurred. Please try again.';
-      setError(message);
-      throw err;
-    } finally {
-      finishAnalysis();
     }
-  }, [startAnalysis, setError, finishAnalysis, updateJob]);
+    return data;
+  }, [runAnalysis, updateJob]);
 
   if (!job) {
     return (
