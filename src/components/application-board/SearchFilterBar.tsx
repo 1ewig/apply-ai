@@ -44,7 +44,7 @@ export default function SearchFilterBar({
           <option value="rejected">Rejected</option>
         </select>
 
-        <span className="text-[10px] font-bold text-[var(--text-muted)] whitespace-nowrap bg-[var(--bg-page)] px-3 py-2 rounded-xl">
+        <span className="text-[10px] font-bold text-[var(--text-muted)] whitespace-nowrap bg-[var(--bg-page)] px-3 py-2.5 rounded-xl flex items-center">
           {filteredCount} of {total} roles
         </span>
       </div>
