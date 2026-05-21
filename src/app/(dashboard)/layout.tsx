@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
           <AnalysisLoadingOverlay isLoading={isLoading} loadingPhase={loadingPhase} phases={phases} />
           <ErrorToast error={error} onDismiss={clearError} />
-          <div className="md:hidden relative flex items-center justify-center px-4 py-3 border-b border-[var(--border)] bg-white">
+          <div className="md:hidden relative flex items-center justify-center px-4 py-4 border-b border-[var(--border)] bg-white">
             <button
               onClick={() => setMobileSidebarOpen(true)}
               className="absolute left-4 p-1.5 rounded-lg hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
