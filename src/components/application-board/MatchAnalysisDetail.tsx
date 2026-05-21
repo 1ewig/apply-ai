@@ -61,10 +61,6 @@ export default function MatchAnalysisDetail({
               <RotateCcw className="w-3.5 h-3.5 shrink-0" />
               <span className="hidden sm:inline">Re-run Analysis</span>
             </Button>
-            <Button variant="primary" size="sm" onClick={onBackClick}>
-              <span className="hidden sm:inline">Done View</span>
-              <span className="sm:hidden">Done</span>
-            </Button>
           </div>
         </div>
       </div>
