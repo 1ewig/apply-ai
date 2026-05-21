@@ -28,7 +28,7 @@ export default function ApplicationBoardPage() {
 
   useEffect(() => {
     setMounted(true);
-    storeUser().catch((err) => console.error('Error syncing user:', err));
+    storeUser().catch((err: any) => console.error('Error syncing user:', err));
   }, [storeUser]);
 
   const handleRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDescription: string) => {
@@ -114,7 +114,7 @@ export default function ApplicationBoardPage() {
           }
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error saving job application:', err);
     }
   }, [addJob, updateJob, handleRunAnalysis, router]);
