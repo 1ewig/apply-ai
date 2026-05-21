@@ -34,7 +34,13 @@ export default function SearchFilterBar({
         <select
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="p-2.5 border border-black/10 rounded-xl bg-slate-50/50 text-xs text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+          className="p-2.5 pr-7 border border-black/10 rounded-xl bg-slate-50/50 text-xs text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'right 6px center',
+            backgroundSize: '14px',
+          }}
         >
           <option value="all">All Statuses</option>
           <option value="wishlist">Wishlist</option>
