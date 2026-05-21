@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { overlayFade, progressWidth } from '@/utils/animations';
 import { Sparkle } from 'lucide-react';
 
 interface AnalysisLoadingOverlayProps {
@@ -12,9 +13,7 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          {...overlayFade}
           className="fixed inset-0 bg-white/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
         >
           <div className="bg-white rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] p-12 text-center max-w-md w-full">
@@ -41,8 +40,7 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
               <div className="w-full bg-gray-200 h-1 rounded-full mt-3 overflow-hidden">
                 <motion.div
                   className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] h-full"
-                  animate={{ width: `${((loadingPhase + 1) / phases.length) * 100}%` }}
-                  transition={{ duration: 0.5 }}
+                  {...progressWidth(((loadingPhase + 1) / phases.length) * 100)}
                 />
               </div>
             </div>

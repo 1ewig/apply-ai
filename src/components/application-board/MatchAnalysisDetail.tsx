@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { contentSlideUp } from '@/utils/animations';
 import Button from '../ui/Button';
 import type { JobApplication, Resume } from '../../hooks/types';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
@@ -42,7 +43,7 @@ export default function MatchAnalysisDetail({
   const result = job.analysisResult;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-4xl mx-auto">
+    <motion.div {...contentSlideUp} className="space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between bg-white border border-[var(--border)] rounded-2xl p-4 shadow-sm">
         <div className="flex items-center gap-3">
           <button onClick={onBackClick} className="p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">

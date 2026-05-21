@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { scoreReveal } from '@/utils/animations';
 
 function getScoreStroke(score: number) {
   if (score >= 85) return '#22C55E';
@@ -22,9 +23,7 @@ export default function ScoreRing({ score, fitLevel }: ScoreRingProps) {
             cx="18" cy="18" r="15" fill="none"
             stroke={getScoreStroke(score)}
             strokeWidth="2.5" strokeLinecap="round"
-            initial={{ strokeDasharray: '0, 100' }}
-            animate={{ strokeDasharray: `${score * 0.942}, 100` }}
-            transition={{ duration: 1.2 }}
+            {...scoreReveal(score)}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">

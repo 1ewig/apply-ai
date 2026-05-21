@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { accordionExpand } from '@/utils/animations';
 import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface PrepItem {
@@ -37,9 +38,7 @@ export default function InterviewPrepList({ items, expandedIndex, onToggle }: In
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
+                    {...accordionExpand}
                     className="overflow-hidden border-t border-[var(--border)] bg-slate-50"
                   >
                     <div className="p-4 text-[11px] text-[var(--text-body)] leading-relaxed">

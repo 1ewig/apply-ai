@@ -81,3 +81,44 @@ export const getFloatingTransition = (yOffset = -6, duration = 6, delay = 0): Ta
     delay,
   },
 });
+
+export const backdropFade = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+} as const;
+
+export const modalSpringScale = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.95 },
+  transition: { type: 'spring' as const, damping: 25, stiffness: 300 },
+} as const;
+
+export const contentSlideUp = {
+  initial: { opacity: 0, y: 15 },
+  animate: { opacity: 1, y: 0 },
+} as const;
+
+export const accordionExpand = {
+  initial: { height: 0, opacity: 0 },
+  animate: { height: 'auto' as const, opacity: 1 },
+  exit: { height: 0, opacity: 0 },
+} as const;
+
+export const overlayFade = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+} as const;
+
+export const scoreReveal = (score: number) => ({
+  initial: { strokeDasharray: '0, 100' as const },
+  animate: { strokeDasharray: `${score * 0.942}, 100` },
+  transition: { duration: 1.2 },
+});
+
+export const progressWidth = (percent: number) => ({
+  animate: { width: `${percent}%` },
+  transition: { duration: 0.5 },
+});
