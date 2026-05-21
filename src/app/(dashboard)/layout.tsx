@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { Menu } from 'lucide-react';
 import { useAnalysisStore } from '@/hooks/useAnalysisStore';
 import Sidebar from '@/components/dashboard/Sidebar';
 import AnalysisLoadingOverlay from '@/components/dashboard/AnalysisLoadingOverlay';
@@ -7,15 +9,28 @@ import ErrorToast from '@/components/dashboard/ErrorToast';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isLoading, loadingPhase, phases, error, clearError } = useAnalysisStore();
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <main className="bg-[var(--bg-page)] min-h-screen animate-fade-up" style={{ fontFamily: '"DM Sans", sans-serif' }}>
       <div className="flex min-h-screen bg-[var(--bg-page)] text-[var(--text-body)]">
-        <Sidebar />
+        <Sidebar
+          isMobileOpen={mobileSidebarOpen}
+          onMobileClose={() => setMobileSidebarOpen(false)}
+        />
         <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
           <AnalysisLoadingOverlay isLoading={isLoading} loadingPhase={loadingPhase} phases={phases} />
           <ErrorToast error={error} onDismiss={clearError} />
-          <div className="p-8 flex-1">
+          <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-[var(--border)] bg-white">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-1.5 rounded-lg hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
+            >
+              <Menu className="w-5 h-5 text-[var(--text-heading)]" />
+            </button>
+            <span className="font-display font-extrabold text-sm text-[var(--text-heading)]">ApplyAI</span>
+          </div>
+          <div className="p-4 md:p-8 flex-1">
             {children}
           </div>
         </main>
