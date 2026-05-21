@@ -11,6 +11,7 @@ import InterviewPrepList from './InterviewPrepList';
 interface MatchAnalysisDetailProps {
   job: JobApplication;
   resumes: Resume[];
+  resumeForReRun?: Resume;
   expandedPrepIndex: number | null;
   onTogglePrepItem: (index: number) => void;
   onBackClick: () => void;
@@ -20,6 +21,7 @@ interface MatchAnalysisDetailProps {
 export default function MatchAnalysisDetail({
   job,
   resumes,
+  resumeForReRun,
   expandedPrepIndex,
   onTogglePrepItem,
   onBackClick,
@@ -38,8 +40,6 @@ export default function MatchAnalysisDetail({
   }
 
   const result = job.analysisResult;
-
-  const resumeForReRun = resumes.find(r => r.id === job.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
 
   return (
     <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 max-w-4xl mx-auto">

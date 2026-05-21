@@ -77,7 +77,7 @@ export default function AddApplicationModal({
             </div>
 
             {/* Modal Form Layout */}
-            <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 text-xs flex flex-col justify-between">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="p-6 overflow-y-auto flex-1 text-xs flex flex-col justify-between">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 {/* Column 1: Application Details */}
@@ -140,7 +140,7 @@ export default function AddApplicationModal({
                       <label className="block font-semibold text-[var(--text-heading)] mb-1">Resume Template Link</label>
                       <select
                         value={selectedResumeId}
-                        onChange={handleResumeTemplateChange}
+                        onChange={(e) => handleResumeTemplateChange(e.target.value)}
                         className="w-full p-2.5 rounded-xl border border-black/10 bg-white focus:outline-none focus:border-[var(--accent)] cursor-pointer"
                       >
                         <option value="">-- Choose Template --</option>

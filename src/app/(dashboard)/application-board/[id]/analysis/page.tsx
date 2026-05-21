@@ -40,10 +40,13 @@ export default function AnalysisPage() {
     );
   }
 
+  const resumeForReRun = resumes.find(r => r.id === job.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
+
   return (
     <MatchAnalysisDetail
       job={job}
       resumes={resumes}
+      resumeForReRun={resumeForReRun}
       expandedPrepIndex={expandedPrepIndex}
       onTogglePrepItem={(idx) => setExpandedPrepIndex(expandedPrepIndex === idx ? null : idx)}
       onBackClick={() => router.push('/application-board')}

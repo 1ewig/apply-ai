@@ -56,8 +56,7 @@ export function useApplicationForm(
     }
   }, [isOpen, editingJob, resumes]);
 
-  const handleResumeTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const templateId = e.target.value;
+  const handleResumeTemplateChange = (templateId: string) => {
     setSelectedResumeId(templateId);
     const selectedTemplate = resumes.find(r => r.id === templateId);
     if (selectedTemplate) {
@@ -65,8 +64,7 @@ export function useApplicationForm(
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onSubmit({
       company: company.trim() || 'Unnamed Company',
       role: role.trim() || 'Unnamed Role',
