@@ -1,0 +1,20 @@
+## Error Type
+Build Error
+
+## Error Message
+Module not found: Can't resolve 'convex/react'
+
+## Build Output
+./src/app/(dashboard)/application-board/page.tsx:4:1
+Module not found: Can't resolve 'convex/react'
+  2 |
+  3 | import { useEffect, useState, useCallback } from 'react';
+> 4 | import { useMutation } from 'convex/react';
+    | ^
+  5 | import { api } from '../../../../convex/_generated/api';
+  6 | import { useRouter } from 'next/navigation';
+  7 |
+
+https://nextjs.org/docs/messages/module-not-found
+
+Next.js version: 15.5.18 (Webpack)
