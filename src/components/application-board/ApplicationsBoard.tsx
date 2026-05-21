@@ -39,7 +39,7 @@ export default function ApplicationsBoard({
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <div>
+        <div className="text-center sm:text-left">
           <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Applications</h2>
           <p className="text-xs text-[var(--text-muted)]">Track your target roles and evaluate compatibility</p>
         </div>

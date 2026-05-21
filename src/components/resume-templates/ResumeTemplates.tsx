@@ -21,7 +21,7 @@ export default function ResumeTemplates({
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <div>
+        <div className="text-center sm:text-left">
           <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Resume Templates</h2>
           <p className="text-xs text-[var(--text-muted)]">Store and edit resumes to use during job matches</p>
         </div>
