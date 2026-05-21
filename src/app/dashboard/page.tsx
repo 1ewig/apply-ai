@@ -13,12 +13,12 @@ import { useApplicationSearch } from "../../hooks/useApplicationSearch";
 import { useDashboardActions } from "../../hooks/useDashboardActions";
 
 import Sidebar from "../../components/dashboard/Sidebar";
-import ApplicationsBoard from "../../components/dashboard/ApplicationsBoard";
-import ResumeTemplates from "../../components/dashboard/ResumeTemplates";
-import MatchAnalysisDetail from "../../components/dashboard/MatchAnalysisDetail";
-import AddApplicationModal from "../../components/dashboard/AddApplicationModal";
-import AddResumeModal from "../../components/dashboard/AddResumeModal";
-import EditResumeModal from "../../components/dashboard/EditResumeModal";
+import ApplicationsBoard from "../../components/application-board/ApplicationsBoard";
+import ResumeTemplates from "../../components/resume-templates/ResumeTemplates";
+import MatchAnalysisDetail from "../../components/application-board/MatchAnalysisDetail";
+import AddApplicationModal from "../../components/application-board/AddApplicationModal";
+import AddResumeModal from "../../components/resume-templates/AddResumeModal";
+import EditResumeModal from "../../components/resume-templates/EditResumeModal";
 import AnalysisLoadingOverlay from "../../components/dashboard/AnalysisLoadingOverlay";
 import ErrorToast from "../../components/dashboard/ErrorToast";
 
