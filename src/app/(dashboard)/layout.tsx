@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <Menu className="w-5 h-5 text-[var(--text-heading)]" />
             </button>
-            <span className="font-display font-extrabold text-sm text-[var(--text-heading)]">ApplyAI</span>
+            <span className="font-display font-extrabold text-base text-[var(--text-heading)]">ApplyAI</span>
           </div>
           <div className="p-4 md:p-8 flex-1">
             {children}
