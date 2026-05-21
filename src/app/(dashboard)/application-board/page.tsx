@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import { useApplications } from '../../../hooks/useApplications';
 import { useResumes } from '../../../hooks/useResumes';
-import { useAnalysisStore } from '../../../hooks/useAnalysisStore';
+import { useRunAnalysis } from '../../../hooks/useRunAnalysis';
 import { useApplicationSearch } from '../../../hooks/useApplicationSearch';
 
 import ApplicationsBoard from '../../../components/application-board/ApplicationsBoard';
@@ -24,37 +24,12 @@ export default function ApplicationBoardPage() {
   const { jobs, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
-  const { startAnalysis, setError, finishAnalysis } = useAnalysisStore();
+  const { runAnalysis } = useRunAnalysis();
 
   useEffect(() => {
     setMounted(true);
     storeUser().catch((err: any) => console.error('Error syncing user:', err));
   }, [storeUser]);
-
-  const handleRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDescription: string) => {
-    startAnalysis();
-    try {
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-      if (apiKey) headers['x-api-key'] = apiKey;
-
-      const response = await fetch('/api/compare', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ resumeText: resumeContent, jobDescription }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to compare resume and job description.');
-      return data;
-    } catch (err: any) {
-      const message = err.message || 'An unexpected error occurred. Please try again.';
-      setError(message);
-      throw err;
-    } finally {
-      finishAnalysis();
-    }
-  }, [startAnalysis, setError, finishAnalysis]);
 
   const handleAddJobSubmit = useCallback(async (jobData: {
     company: string;
@@ -80,7 +55,7 @@ export default function ApplicationBoardPage() {
         });
 
         if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          const data = await handleRunAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
+          const data = await runAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
           if (data) {
             updateJob(jobData.editingJobId, {
               matchScore: data.score,
@@ -103,7 +78,7 @@ export default function ApplicationBoardPage() {
         });
 
         if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          const data = await handleRunAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
+          const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
           if (data) {
             updateJob(createdJobId, {
               matchScore: data.score,
@@ -117,7 +92,7 @@ export default function ApplicationBoardPage() {
     } catch (err: any) {
       console.error('Error saving job application:', err);
     }
-  }, [addJob, updateJob, handleRunAnalysis, router]);
+  }, [addJob, updateJob, runAnalysis, router]);
 
   const handleAddJob = useCallback(() => {
     setEditingJob(null);
