@@ -37,7 +37,7 @@ export function useApplicationForm(
       setJobDescription(editingJob.jobDescription || '');
       setSelectedResumeId(editingJob.resumeUsed || '');
       setCustomResumeContent(editingJob.customResumeContent || '');
-      setAnalyzeImmediately(true);
+      setAnalyzeImmediately(false);
     } else {
       const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
       if (defaultResume) {
