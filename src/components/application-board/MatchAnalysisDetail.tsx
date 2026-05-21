@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { contentSlideUp } from '@/utils/animations';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { backdropFade, modalSpringScale, contentSlideUp } from '@/utils/animations';
 import Button from '../ui/Button';
 import type { JobApplication, Resume } from '../../hooks/types';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
@@ -28,6 +29,7 @@ export default function MatchAnalysisDetail({
   onBackClick,
   onReRunAnalysis,
 }: MatchAnalysisDetailProps) {
+  const [showConfirm, setShowConfirm] = useState(false);
 
   if (!job.analysisResult) {
     return (
@@ -41,6 +43,15 @@ export default function MatchAnalysisDetail({
   }
 
   const result = job.analysisResult;
+
+  const canReRun = resumeForReRun && job.jobDescription;
+
+  const handleConfirmReRun = () => {
+    setShowConfirm(false);
+    if (canReRun) {
+      onReRunAnalysis(job.id, resumeForReRun!.content, job.jobDescription!);
+    }
+  };
 
   return (
     <motion.div {...contentSlideUp} className="space-y-6 max-w-4xl mx-auto">
@@ -56,10 +67,10 @@ export default function MatchAnalysisDetail({
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => { if (resumeForReRun && job.jobDescription) onReRunAnalysis(job.id, resumeForReRun.content, job.jobDescription); }} className="flex items-center gap-1.5">
+          <div className="hidden sm:flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setShowConfirm(true)} className="flex items-center gap-1.5">
               <RotateCcw className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Re-run Analysis</span>
+              Re-run Analysis
             </Button>
           </div>
         </div>
@@ -77,6 +88,44 @@ export default function MatchAnalysisDetail({
       <StrengthsAndGaps strengths={result.strengths} gaps={result.gaps} />
       <ResumeSuggestions suggestions={result.suggestions} />
       <InterviewPrepList items={result.interviewPrep} expandedIndex={expandedPrepIndex} onToggle={onTogglePrepItem} />
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => setShowConfirm(true)}
+        className="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-[var(--accent)] text-white shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center justify-center cursor-pointer"
+      >
+        <RotateCcw className="w-5 h-5" />
+      </button>
+
+      {/* Confirmation dialog */}
+      <AnimatePresence>
+        {showConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              {...backdropFade}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => setShowConfirm(false)}
+            />
+            <motion.div
+              {...modalSpringScale}
+              className="relative bg-white rounded-3xl p-6 max-w-sm w-full shadow-[var(--shadow-float)]"
+            >
+              <h3 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-2">Re-run Analysis?</h3>
+              <p className="text-xs text-[var(--text-body)] mb-6">
+                {canReRun
+                  ? 'This will overwrite the current analysis result. Are you sure?'
+                  : 'Add a job description and select a resume to enable re-analysis.'}
+              </p>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={() => setShowConfirm(false)}>Cancel</Button>
+                <Button variant="primary" size="sm" onClick={handleConfirmReRun} disabled={!canReRun}>
+                  Re-run
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
