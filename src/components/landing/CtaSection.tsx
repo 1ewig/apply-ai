@@ -46,7 +46,7 @@ export default function CtaSection() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mt-10">
-          <Link href="/dashboard">
+          <Link href="/application-board">
             <Button
               variant="primary"
               size="lg"

@@ -79,7 +79,7 @@ export default function Navbar({
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/dashboard">
+                <Link href="/application-board">
                   <Button variant="primary" size="sm" className="group">
                     Launch Dashboard
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -87,7 +87,7 @@ export default function Navbar({
                 </Link>
               </Show>
               <Show when="signed-in">
-                <Link href="/dashboard">
+                <Link href="/application-board">
                   <Button variant="outline" size="sm" className="group">
                     Go to Dashboard
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -140,7 +140,7 @@ export default function Navbar({
                   Sign In
                 </Button>
               </Link>
-              <Link href="/dashboard">
+              <Link href="/application-board">
                 <Button variant="primary" size="md" className="w-full group" onClick={() => setMobileOpen(false)}>
                   Launch Dashboard
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -148,7 +148,7 @@ export default function Navbar({
               </Link>
             </Show>
             <Show when="signed-in">
-              <Link href="/dashboard">
+              <Link href="/application-board">
                 <Button variant="outline" size="md" className="w-full group mb-2" onClick={() => setMobileOpen(false)}>
                   Go to Dashboard
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

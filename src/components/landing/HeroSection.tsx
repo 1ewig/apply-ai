@@ -137,7 +137,7 @@ export default function HeroSection({ onStartDashboard }: { onStartDashboard?: (
             variants={fadeInUpGentle}
             className="flex flex-wrap items-center justify-center gap-4 mt-8"
           >
-            <Link href="/dashboard">
+            <Link href="/application-board">
               <Button
                 variant="primary"
                 size="lg"
