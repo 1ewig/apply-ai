@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
+import { useResumeForm } from '../../hooks/useResumeForm';
 
 interface AddResumeModalProps {
   isOpen: boolean;
@@ -9,19 +9,11 @@ interface AddResumeModalProps {
 }
 
 export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeModalProps) {
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [isDefault, setIsDefault] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !content) return;
-    onSubmit({ name, content, isDefault });
-    setName('');
-    setContent('');
-    setIsDefault(false);
-    onClose();
-  };
+  const { name, setName, content, setContent, isDefault, setIsDefault, handleSubmit } = useResumeForm({
+    isOpen,
+    onSubmit,
+    onClose,
+  });
 
   return (
     <AnimatePresence>
@@ -51,7 +43,7 @@ export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeM
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
               <div>
                 <label className="block font-semibold text-[var(--text-heading)] mb-1">Template Name *</label>
                 <input

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
 import type { Resume } from '../../hooks/types';
+import { useResumeForm } from '../../hooks/useResumeForm';
 
 interface EditResumeModalProps {
   resume: Resume | null;
@@ -10,26 +10,16 @@ interface EditResumeModalProps {
 }
 
 export default function EditResumeModal({ resume, onClose, onSubmit }: EditResumeModalProps) {
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [isDefault, setIsDefault] = useState(false);
-
-  useEffect(() => {
-    if (resume) {
-      setName(resume.name);
-      setContent(resume.content);
-      setIsDefault(resume.isDefault);
-    }
-  }, [resume]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!resume || !name || !content) return;
-    onSubmit(resume.id, { name, content, isDefault });
-    onClose();
-  };
-
   const isOpen = resume !== null;
+
+  const { name, setName, content, setContent, isDefault, setIsDefault, handleSubmit } = useResumeForm({
+    isOpen,
+    editingResume: resume,
+    onSubmit: (data) => {
+      if (resume) onSubmit(resume.id, data);
+    },
+    onClose,
+  });
 
   return (
     <AnimatePresence>
@@ -59,7 +49,7 @@ export default function EditResumeModal({ resume, onClose, onSubmit }: EditResum
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
               <div>
                 <label className="block font-semibold text-[var(--text-heading)] mb-1">Template Name *</label>
                 <input
