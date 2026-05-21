@@ -44,23 +44,28 @@ export default function MatchAnalysisDetail({
 
   return (
     <motion.div {...contentSlideUp} className="space-y-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between bg-white border border-[var(--border)] rounded-2xl p-4 shadow-sm">
-        <div className="flex items-center gap-3">
-          <button onClick={onBackClick} className="p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
-            <ArrowLeft className="w-4 h-4 text-[var(--text-body)]" />
-          </button>
-          <div>
-            <h2 className="font-display font-extrabold text-sm text-[var(--text-heading)] leading-none">{job.company}</h2>
-            <span className="text-[10px] text-[var(--text-muted)] mt-1 block">{job.role} &bull; Match Analysis</span>
+      <div className="bg-white border border-[var(--border)] rounded-2xl p-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <button onClick={onBackClick} className="p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0">
+              <ArrowLeft className="w-4 h-4 text-[var(--text-body)]" />
+            </button>
+            <div className="min-w-0">
+              <h2 className="font-display font-extrabold text-sm text-[var(--text-heading)] leading-none truncate">{job.company}</h2>
+              <span className="text-[10px] text-[var(--text-muted)] mt-1 block truncate">{job.role} &bull; Match Analysis</span>
+            </div>
           </div>
-        </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => { if (resumeForReRun && job.jobDescription) onReRunAnalysis(job.id, resumeForReRun.content, job.jobDescription); }} className="flex items-center gap-1.5">
-            <RotateCcw className="w-3.5 h-3.5" />
-            Re-run Analysis
-          </Button>
-          <Button variant="primary" size="sm" onClick={onBackClick}>Done View</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => { if (resumeForReRun && job.jobDescription) onReRunAnalysis(job.id, resumeForReRun.content, job.jobDescription); }} className="flex items-center gap-1.5">
+              <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Re-run Analysis</span>
+            </Button>
+            <Button variant="primary" size="sm" onClick={onBackClick}>
+              <span className="hidden sm:inline">Done View</span>
+              <span className="sm:hidden">Done</span>
+            </Button>
+          </div>
         </div>
       </div>
 

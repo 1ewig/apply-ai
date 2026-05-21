@@ -18,7 +18,7 @@ export default function SearchFilterBar({
   filteredCount,
 }: SearchFilterBarProps) {
   return (
-    <div className="flex flex-col sm:flex-row gap-3 bg-white p-4 rounded-2xl border border-[var(--border)] shadow-sm">
+    <div className="flex flex-col sm:flex-row gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-[var(--border)] shadow-sm">
       <div className="flex-1 relative">
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input

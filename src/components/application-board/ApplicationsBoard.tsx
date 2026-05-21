@@ -38,14 +38,15 @@ export default function ApplicationsBoard({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h2 className="font-display font-extrabold text-2xl text-[var(--text-heading)]">Applications</h2>
+          <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Applications</h2>
           <p className="text-xs text-[var(--text-muted)]">Track your target roles and evaluate compatibility</p>
         </div>
-        <Button variant="primary" size="md" onClick={onAddJobClick} className="flex items-center gap-1.5 shadow-md text-xs">
+        <Button variant="primary" size="md" onClick={onAddJobClick} className="flex items-center gap-1.5 shadow-md text-xs self-start sm:self-auto">
           <Plus className="w-3.5 h-3.5" />
-          Add Application
+          <span className="hidden sm:inline">Add Application</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 
