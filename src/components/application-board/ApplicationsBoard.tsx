@@ -43,10 +43,9 @@ export default function ApplicationsBoard({
           <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Applications</h2>
           <p className="text-xs text-[var(--text-muted)]">Track your target roles and evaluate compatibility</p>
         </div>
-        <Button variant="primary" size="md" onClick={onAddJobClick} className="flex items-center gap-1.5 shadow-md text-xs self-start sm:self-auto">
+        <Button variant="primary" size="md" onClick={onAddJobClick} className="hidden sm:flex items-center gap-1.5 shadow-md text-xs">
           <Plus className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Add Application</span>
-          <span className="sm:hidden">Add</span>
+          Add Application
         </Button>
       </div>
 
@@ -88,6 +87,13 @@ export default function ApplicationsBoard({
           </div>
         )}
       </div>
+
+      <button
+        onClick={onAddJobClick}
+        className="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-[var(--accent)] text-white shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center justify-center cursor-pointer"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 }

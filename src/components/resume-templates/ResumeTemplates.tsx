@@ -25,10 +25,9 @@ export default function ResumeTemplates({
           <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Resume Templates</h2>
           <p className="text-xs text-[var(--text-muted)]">Store and edit resumes to use during job matches</p>
         </div>
-        <Button variant="primary" size="md" onClick={onAddResumeClick} className="flex items-center gap-1.5 shadow-md text-xs self-start sm:self-auto">
+        <Button variant="primary" size="md" onClick={onAddResumeClick} className="hidden sm:flex items-center gap-1.5 shadow-md text-xs">
           <Plus className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Add Resume</span>
-          <span className="sm:hidden">Add</span>
+          Add Resume
         </Button>
       </div>
 
@@ -56,6 +55,13 @@ export default function ResumeTemplates({
           </div>
         )}
       </div>
+
+      <button
+        onClick={onAddResumeClick}
+        className="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-[var(--accent)] text-white shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center justify-center cursor-pointer"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 }
