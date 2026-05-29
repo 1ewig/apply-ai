@@ -7,13 +7,9 @@ export function useRunAnalysis() {
   const runAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDescription: string) => {
     startAnalysis();
     try {
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-      if (apiKey) headers['x-api-key'] = apiKey;
-
       const response = await fetch('/api/compare', {
         method: 'POST',
-        headers,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resumeText: resumeContent, jobDescription }),
       });
 
