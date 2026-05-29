@@ -4,7 +4,7 @@ import HeroSection from "../components/landing/HeroSection";
 import SolutionsSection from "../components/landing/SolutionsSection";
 import FeaturesSection from "../components/landing/FeaturesSection";
 import RoadmapSection from "../components/landing/RoadmapSection";
-import IntegrationsSection from "../components/landing/IntegrationsSection";
+import WorkspaceSandboxSection from "../components/landing/WorkspaceSandboxSection";
 import TestimonialsSection from "../components/landing/TestimonialsSection";
 import PricingSection from "../components/landing/PricingSection";
 import CtaSection from "../components/landing/CtaSection";
@@ -26,7 +26,7 @@ export default function LandingPage() {
       <SolutionsSection />
       <FeaturesSection />
       <RoadmapSection />
-      <IntegrationsSection />
+      <WorkspaceSandboxSection />
       <TestimonialsSection />
       <PricingSection />
       <CtaSection />
