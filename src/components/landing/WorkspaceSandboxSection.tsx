@@ -21,11 +21,11 @@ export default function WorkspaceSandboxSection() {
           {/* Copywriting Column */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-4">
-              <h3 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)] leading-tight">
+              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-[var(--text-heading)] leading-tight">
                 AI is your Co-Pilot.<br />
                 You are the Driver.
               </h3>
-              <p className="text-xs text-[var(--text-body)] leading-relaxed">
+              <p className="text-sm md:text-base text-[var(--text-body)] leading-relaxed">
                 Automated generic black-box resume writers spit out identical robotic templates. ApplyAI combines rapid LLM matching with a professional editor so you retain absolute control over your story.
               </p>
             </div>
@@ -37,8 +37,8 @@ export default function WorkspaceSandboxSection() {
                   <AlignLeft className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-xs text-[var(--text-heading)]">Zero Tab-Switching</h5>
-                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5 leading-relaxed">Your resume editor, target job posting, and real-time AI suggestions sit inside a unified, three-column panel.</p>
+                  <h5 className="font-bold text-sm text-[var(--text-heading)]">Zero Tab-Switching</h5>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5 leading-relaxed">Your resume editor, target job posting, and real-time AI suggestions sit inside a unified, three-column panel.</p>
                 </div>
               </div>
 
@@ -48,8 +48,8 @@ export default function WorkspaceSandboxSection() {
                   <PencilLine className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-xs text-[var(--text-heading)]">Distraction-Free Monospace</h5>
-                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5 leading-relaxed">Write and tweak bullet points inside a clean monospaced layout built for precise, typographic clarity.</p>
+                  <h5 className="font-bold text-sm text-[var(--text-heading)]">Distraction-Free Monospace</h5>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5 leading-relaxed">Write and tweak bullet points inside a clean monospaced layout built for precise, typographic clarity.</p>
                 </div>
               </div>
 
@@ -59,8 +59,8 @@ export default function WorkspaceSandboxSection() {
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-xs text-[var(--text-heading)]">Granular Bullet Rewrites</h5>
-                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5 leading-relaxed">Instead of rewrites that don't sound like you, get side-by-side phrasing optimizations with exact professional justifications.</p>
+                  <h5 className="font-bold text-sm text-[var(--text-heading)]">Granular Bullet Rewrites</h5>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5 leading-relaxed">Instead of rewrites that don't sound like you, get side-by-side phrasing optimizations with exact professional justifications.</p>
                 </div>
               </div>
             </div>
