@@ -1,3 +1,5 @@
+"use client";
+
 import Button from '../ui/Button';
 import type { JobApplication, Resume } from '../../hooks/types';
 import { Plus, Search } from 'lucide-react';

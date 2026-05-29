@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '../ui/Button';
