@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from 'framer-motion';
 import { useReveal } from '@/utils/useReveal';
 import SectionHeader from './SectionHeader';

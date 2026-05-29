@@ -1,3 +1,5 @@
+"use client";
+
 import { useReveal } from '@/utils/useReveal';
 import Link from 'next/link';
 import Button from '../ui/Button';

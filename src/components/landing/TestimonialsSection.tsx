@@ -1,3 +1,5 @@
+"use client";
+
 import { useReveal } from '@/utils/useReveal';
 import SectionHeader from './SectionHeader';
 import TestimonialCard from './TestimonialCard';
