@@ -20,15 +20,7 @@ export default function WorkspaceSandboxSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-10">
           {/* Copywriting Column */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-4">
-              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-[var(--text-heading)] leading-tight">
-                AI is your Co-Pilot.<br />
-                You are the Driver.
-              </h3>
-              <p className="text-sm md:text-base text-[var(--text-body)] leading-relaxed">
-                Automated generic black-box resume writers spit out identical robotic templates. ApplyAI combines rapid LLM matching with a professional editor so you retain absolute control over your story.
-              </p>
-            </div>
+
 
             <div className="space-y-4">
               {/* Point 1 */}
@@ -107,7 +99,7 @@ export default function WorkspaceSandboxSection() {
                     <Sparkles className="w-3 h-3 text-emerald-400" />
                     AI Bullet Rewrite
                   </span>
-                  
+
                   <div className="space-y-3">
                     <div className="rounded-lg bg-slate-950 p-2 border border-slate-800">
                       <span className="text-[8px] font-bold text-rose-400 block uppercase tracking-wider font-mono">Original</span>

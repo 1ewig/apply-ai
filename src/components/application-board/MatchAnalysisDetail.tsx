@@ -78,7 +78,7 @@ export default function MatchAnalysisDetail({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div id="overview" className="scroll-mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <ScoreRing score={result.score} fitLevel={result.fitLevel} />
         <div className="md:col-span-2 bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] flex flex-col justify-center">
           <h3 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-2">Match Assessment</h3>
@@ -86,10 +86,21 @@ export default function MatchAnalysisDetail({
         </div>
       </div>
 
-      <KeywordCoverage matchedKeywords={result.matchedKeywords} missingKeywords={result.missingKeywords} />
-      <StrengthsAndGaps strengths={result.strengths} gaps={result.gaps} />
-      <ResumeSuggestions suggestions={result.suggestions} />
-      <InterviewPrepList items={result.interviewPrep} expandedIndex={expandedPrepIndex} onToggle={onTogglePrepItem} />
+      <div id="keywords" className="scroll-mt-6">
+        <KeywordCoverage matchedKeywords={result.matchedKeywords} missingKeywords={result.missingKeywords} />
+      </div>
+
+      <div id="strengths" className="scroll-mt-6">
+        <StrengthsAndGaps strengths={result.strengths} gaps={result.gaps} />
+      </div>
+
+      <div id="suggestions" className="scroll-mt-6">
+        <ResumeSuggestions suggestions={result.suggestions} />
+      </div>
+
+      <div id="interview" className="scroll-mt-6">
+        <InterviewPrepList items={result.interviewPrep} expandedIndex={expandedPrepIndex} onToggle={onTogglePrepItem} />
+      </div>
 
       {/* Mobile FAB */}
       <button
