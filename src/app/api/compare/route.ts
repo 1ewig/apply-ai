@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { createGroq } from "@ai-sdk/groq";
-import { generateText } from "ai";
+import { generateObject } from "ai";
 import { COMPARE_SYSTEM_PROMPT, buildComparePrompt } from "@/ai/prompts";
 import { comparisonResultSchema } from "@/ai/schemas";
-
-// Helper for cleaning LLM responses that might contain markdown fences
-function cleanJsonString(str: string): string {
-  let cleaned = str.trim();
-  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "");
-  cleaned = cleaned.replace(/\s*```$/, "");
-  return cleaned.trim();
-}
 
 export async function POST(request: Request) {
   try {
@@ -72,17 +64,15 @@ export async function POST(request: Request) {
 
     const model = groqProvider("llama-3.3-70b-versatile");
 
-    const result = await generateText({
+    const result = await generateObject({
       model,
-      experimental_responseFormat: { type: "json_object" },
+      schema: comparisonResultSchema,
       system: COMPARE_SYSTEM_PROMPT,
       prompt: buildComparePrompt(resumeText, jobDescription),
-    } as any);
+    });
 
     console.log("Comparison completed successfully inside Next.js.");
-    const cleanedText = cleanJsonString(result.text);
-    const parsedData = comparisonResultSchema.parse(JSON.parse(cleanedText));
-    return NextResponse.json(parsedData);
+    return NextResponse.json(result.object);
   } catch (err: any) {
     console.error("Comparison route error:", err);
     return NextResponse.json(
