@@ -43,10 +43,17 @@ export default defineSchema({
     url: v.optional(v.string()),
     jobDescription: v.optional(v.string()),
     matchScore: v.optional(v.number()),
-    analysisResult: v.optional(comparisonResult),
     resumeUsed: v.optional(v.string()),
     customResumeContent: v.optional(v.string()),
   }).index("by_userId", ["userId"]),
+
+  analyses: defineTable({
+    applicationId: v.id("applications"),
+    userId: v.string(), // Maps to the user's Clerk user ID
+    result: comparisonResult,
+    updatedAt: v.string(),
+  }).index("by_applicationId", ["applicationId"])
+    .index("by_userId", ["userId"]),
 
   resumes: defineTable({
     userId: v.string(), // Maps to the user's Clerk user ID

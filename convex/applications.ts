@@ -45,6 +45,30 @@ export const list = query({
 });
 
 /**
+ * Retrieve the AI analysis result for a specific application.
+ */
+export const getAnalysis = query({
+  args: { applicationId: v.id("applications") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+
+    const analysis = await ctx.db
+      .query("analyses")
+      .withIndex("by_applicationId", (q) => q.eq("applicationId", args.applicationId))
+      .first();
+
+    if (!analysis || analysis.userId !== identity.subject) {
+      return null;
+    }
+
+    return analysis.result;
+  },
+});
+
+/**
  * Add a new job application to the user's pipeline.
  */
 export const add = mutation({
@@ -75,10 +99,18 @@ export const add = mutation({
       url: args.url,
       jobDescription: args.jobDescription,
       matchScore: args.matchScore,
-      analysisResult: args.analysisResult,
       resumeUsed: args.resumeUsed,
       customResumeContent: args.customResumeContent,
     });
+
+    if (args.analysisResult) {
+      await ctx.db.insert("analyses", {
+        applicationId: newId,
+        userId: identity.subject,
+        result: args.analysisResult,
+        updatedAt: new Date().toISOString(),
+      });
+    }
 
     return newId;
   },
@@ -112,8 +144,29 @@ export const update = mutation({
       throw new Error("Unauthorized or application not found");
     }
 
-    const { id, ...updates } = args;
+    const { id, analysisResult, ...updates } = args;
     await ctx.db.patch(args.id, updates);
+
+    if (analysisResult) {
+      const existing = await ctx.db
+        .query("analyses")
+        .withIndex("by_applicationId", (q) => q.eq("applicationId", args.id))
+        .first();
+
+      if (existing) {
+        await ctx.db.patch(existing._id, {
+          result: analysisResult,
+          updatedAt: new Date().toISOString(),
+        });
+      } else {
+        await ctx.db.insert("analyses", {
+          applicationId: args.id,
+          userId: identity.subject,
+          result: analysisResult,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    }
   },
 });
 
@@ -133,6 +186,15 @@ export const remove = mutation({
     const app = await ctx.db.get(args.id);
     if (!app || app.userId !== identity.subject) {
       throw new Error("Unauthorized or application not found");
+    }
+
+    // Delete associated analysis if any
+    const existing = await ctx.db
+      .query("analyses")
+      .withIndex("by_applicationId", (q) => q.eq("applicationId", args.id))
+      .first();
+    if (existing) {
+      await ctx.db.delete(existing._id);
     }
 
     await ctx.db.delete(args.id);
