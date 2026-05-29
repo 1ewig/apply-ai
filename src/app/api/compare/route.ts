@@ -67,6 +67,11 @@ export async function POST(request: Request) {
     const result = await generateObject({
       model,
       schema: comparisonResultSchema,
+      providerOptions: {
+        groq: {
+          structuredOutputs: false, // Force fallback to json_object format (JSON mode)
+        },
+      },
       system: COMPARE_SYSTEM_PROMPT,
       prompt: buildComparePrompt(resumeText, jobDescription),
     });
