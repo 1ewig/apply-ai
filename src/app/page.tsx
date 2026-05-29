@@ -3,6 +3,7 @@ import Navbar from "../components/landing/Navbar";
 import HeroSection from "../components/landing/HeroSection";
 import SolutionsSection from "../components/landing/SolutionsSection";
 import FeaturesSection from "../components/landing/FeaturesSection";
+import RoadmapSection from "../components/landing/RoadmapSection";
 import IntegrationsSection from "../components/landing/IntegrationsSection";
 import TestimonialsSection from "../components/landing/TestimonialsSection";
 import PricingSection from "../components/landing/PricingSection";
@@ -24,6 +25,7 @@ export default function LandingPage() {
       <HeroSection />
       <SolutionsSection />
       <FeaturesSection />
+      <RoadmapSection />
       <IntegrationsSection />
       <TestimonialsSection />
       <PricingSection />

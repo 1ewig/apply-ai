@@ -2,7 +2,7 @@
 
 import Button from '../ui/Button';
 import type { JobApplication, Resume } from '../../hooks/types';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, Sparkles } from 'lucide-react';
 import JobCard from './JobCard';
 import SearchFilterBar from './SearchFilterBar';
 
@@ -49,6 +49,24 @@ export default function ApplicationsBoard({
           <Plus className="w-3.5 h-3.5" />
           Add Application
         </Button>
+      </div>
+
+      {/* Premium Product Update Notice */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-50/70 via-cyan-50/50 to-indigo-50/70 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-xl bg-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
+            <Sparkles className="w-4.5 h-4.5 text-blue-600 stroke-[2.5]" />
+          </div>
+          <div>
+            <h4 className="font-display font-extrabold text-xs text-blue-900 flex items-center gap-1.5 leading-none">
+              ApplyAI Premium Upgrades
+              <span className="text-[8px] bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider scale-90 origin-left">Alpha Progress</span>
+            </h4>
+            <p className="text-[10px] text-blue-700/80 mt-1.5 max-w-2xl leading-relaxed">
+              We are actively developing premium dashboard features! Coming next in the alpha roadmap: **Resume PDF Drag-and-Drop Parser**, **Pipeline Analytics Dashboard**, and **OAuth-Secure Gmail Auto-Sync** to automatically parse company replies.
+            </p>
+          </div>
+        </div>
       </div>
 
       <SearchFilterBar
