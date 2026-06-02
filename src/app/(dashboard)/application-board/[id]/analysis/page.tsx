@@ -12,6 +12,11 @@ import type { ComparisonResult } from '../../../../../hooks/types';
 
 import MatchAnalysisDetail from '../../../../../components/application-board/MatchAnalysisDetail';
 
+interface AnalysisQueryResult {
+  currentResult: ComparisonResult;
+  previousResult: ComparisonResult | null;
+}
+
 export default function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -22,7 +27,7 @@ export default function AnalysisPage() {
   const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
-  const analysisResult = useQuery(api.applications.getAnalysis, { applicationId: id as any });
+  const analysisData = useQuery(api.applications.getAnalysis, { applicationId: id as any }) as AnalysisQueryResult | undefined;
 
   const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
     const data = await runAnalysis(jobId, resumeContent, jobDesc);
@@ -44,7 +49,7 @@ export default function AnalysisPage() {
     );
   }
 
-  if (analysisResult === undefined) {
+  if (analysisData === undefined) {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-4">
         <div className="w-10 h-10 rounded-full border-4 border-slate-100 border-t-[var(--accent)] animate-spin"></div>
@@ -57,7 +62,8 @@ export default function AnalysisPage() {
 
   return (
     <MatchAnalysisDetail
-      job={{ ...job, analysisResult: analysisResult ? (analysisResult as ComparisonResult) : undefined }}
+      job={{ ...job, analysisResult: analysisData?.currentResult ?? undefined }}
+      previousAnalysisResult={analysisData?.previousResult ?? undefined}
       resumes={resumes}
       resumeForReRun={resumeForReRun}
       expandedPrepIndex={expandedPrepIndex}

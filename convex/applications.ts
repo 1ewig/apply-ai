@@ -121,7 +121,10 @@ export const getAnalysis = query({
       return null;
     }
 
-    return analysis.result;
+    return {
+      currentResult: analysis.result,
+      previousResult: analysis.previousResult ?? null,
+    };
   },
 });
 
