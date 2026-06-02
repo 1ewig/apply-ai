@@ -1,5 +1,22 @@
-import type { ComparisonResult } from "../ai/schemas";
-export type { ComparisonResult };
+import type {
+  ComparisonResult,
+  EnhancedKeyword,
+  ScoreBreakdown,
+  StructureSuggestion,
+  SkillRecommendation,
+  ActionItem,
+  AtsCheck,
+} from "../ai/schemas";
+
+export type {
+  ComparisonResult,
+  EnhancedKeyword,
+  ScoreBreakdown,
+  StructureSuggestion,
+  SkillRecommendation,
+  ActionItem,
+  AtsCheck,
+};
 
 export interface JobApplication {
   id: string;

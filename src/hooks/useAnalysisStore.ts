@@ -6,8 +6,11 @@ const LOADING_PHASES = [
   'Extracting technical skills and core competencies...',
   'Analyzing job description requirements...',
   'Calculating semantic match and keywords coverage...',
+  'Evaluating score breakdown across all dimensions...',
   'Generating optimized resume bullets and suggestions...',
   'Formulating targeted interview prep strategy...',
+  'Building cover letter draft and skill roadmap...',
+  'Running ATS compatibility check...',
 ];
 
 interface AnalysisStore {
