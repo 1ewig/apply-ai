@@ -108,6 +108,7 @@ export default defineSchema({
     applicationId: v.id("applications"),
     userId: v.string(), // Maps to the user's Clerk user ID
     result: comparisonResult,
+    previousResult: v.optional(comparisonResult),
     updatedAt: v.string(),
   }).index("by_applicationId", ["applicationId"])
     .index("by_userId", ["userId"]),
