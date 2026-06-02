@@ -4,16 +4,24 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale, contentSlideUp } from '@/utils/animations';
 import Button from '../ui/Button';
-import type { JobApplication, Resume } from '../../hooks/types';
+import type { JobApplication, Resume, ComparisonResult } from '../../hooks/types';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import ScoreRing from './ScoreRing';
+import ScoreBreakdown from './ScoreBreakdown';
 import KeywordCoverage from './KeywordCoverage';
 import StrengthsAndGaps from './StrengthsAndGaps';
 import ResumeSuggestions from './ResumeSuggestions';
+import StructureSuggestions from './StructureSuggestions';
 import InterviewPrepList from './InterviewPrepList';
+import CoverLetterDraft from './CoverLetterDraft';
+import SkillRoadmap from './SkillRoadmap';
+import ActionItems from './ActionItems';
+import ATSCheck from './ATSCheck';
+import AnalysisDiff from './AnalysisDiff';
 
 interface MatchAnalysisDetailProps {
   job: JobApplication;
+  previousAnalysisResult?: ComparisonResult;
   resumes: Resume[];
   resumeForReRun?: Resume;
   expandedPrepIndex: number | null;
@@ -24,6 +32,7 @@ interface MatchAnalysisDetailProps {
 
 export default function MatchAnalysisDetail({
   job,
+  previousAnalysisResult,
   resumes,
   resumeForReRun,
   expandedPrepIndex,
@@ -60,6 +69,12 @@ export default function MatchAnalysisDetail({
       <div className="bg-white border border-[var(--border)] rounded-2xl p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
+            <button
+              onClick={onBackClick}
+              className="p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4 text-[var(--text-muted)]" />
+            </button>
             <div className="min-w-0">
               <h2 className="font-display font-extrabold text-sm text-[var(--text-heading)] leading-none truncate">{job.company}</h2>
               <span className="text-[10px] text-[var(--text-muted)] mt-1 block truncate">{job.role} &bull; Match Analysis</span>
@@ -75,9 +90,16 @@ export default function MatchAnalysisDetail({
         </div>
       </div>
 
-      <div id="overview" className="scroll-mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <ScoreRing score={result.score} fitLevel={result.fitLevel} />
-        <div className="md:col-span-2 bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] flex flex-col justify-center">
+      <div id="overview" className="scroll-mt-6">
+        <ScoreBreakdown
+          overallScore={result.score}
+          fitLevel={result.fitLevel}
+          breakdown={result.scoreBreakdown}
+        />
+      </div>
+
+      <div id="summary" className="scroll-mt-6">
+        <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
           <h3 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-2">Match Assessment</h3>
           <p className="text-xs md:text-sm text-[var(--text-body)] leading-relaxed">{result.summary}</p>
         </div>
@@ -91,15 +113,50 @@ export default function MatchAnalysisDetail({
         <StrengthsAndGaps strengths={result.strengths} gaps={result.gaps} />
       </div>
 
+      {result.structureSuggestions && result.structureSuggestions.length > 0 && (
+        <div id="structure" className="scroll-mt-6">
+          <StructureSuggestions suggestions={result.structureSuggestions} />
+        </div>
+      )}
+
+      {result.skillRecommendations && result.skillRecommendations.length > 0 && (
+        <div id="roadmap" className="scroll-mt-6">
+          <SkillRoadmap recommendations={result.skillRecommendations} />
+        </div>
+      )}
+
+      {result.atsCheck && (
+        <div id="ats" className="scroll-mt-6">
+          <ATSCheck atsCheck={result.atsCheck} />
+        </div>
+      )}
+
+      {result.actionItems && result.actionItems.length > 0 && (
+        <div id="actions" className="scroll-mt-6">
+          <ActionItems items={result.actionItems} />
+        </div>
+      )}
+
+      {previousAnalysisResult && (
+        <div id="diff" className="scroll-mt-6">
+          <AnalysisDiff previous={previousAnalysisResult} current={result} />
+        </div>
+      )}
+
       <div id="suggestions" className="scroll-mt-6">
         <ResumeSuggestions suggestions={result.suggestions} />
       </div>
+
+      {result.coverLetterDraft && (
+        <div id="cover-letter" className="scroll-mt-6">
+          <CoverLetterDraft draft={result.coverLetterDraft} />
+        </div>
+      )}
 
       <div id="interview" className="scroll-mt-6">
         <InterviewPrepList items={result.interviewPrep} expandedIndex={expandedPrepIndex} onToggle={onTogglePrepItem} />
       </div>
 
-      {/* Mobile FAB */}
       <button
         onClick={() => setShowConfirm(true)}
         className="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-[var(--accent)] text-white shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center justify-center cursor-pointer"
@@ -107,7 +164,6 @@ export default function MatchAnalysisDetail({
         <RotateCcw className="w-5 h-5" />
       </button>
 
-      {/* Confirmation dialog */}
       <AnimatePresence>
         {showConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

@@ -1,6 +1,23 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+// Normalize old-format string[] keywords to new object format for backward compatibility
+function normalizeKeyword(keyword: any): any {
+  if (typeof keyword === "string") {
+    return { keyword, category: "other", importance: "preferred", matchContext: "", whyImportant: "" };
+  }
+  return keyword;
+}
+
+function normalizeResult(result: any): any {
+  if (!result) return result;
+  return {
+    ...result,
+    matchedKeywords: (result.matchedKeywords || []).map(normalizeKeyword),
+    missingKeywords: (result.missingKeywords || []).map(normalizeKeyword),
+  };
+}
+
 // ComparisonResult type validator for mutation args
 const enhancedKeyword = v.object({
   keyword: v.string(),
@@ -122,8 +139,8 @@ export const getAnalysis = query({
     }
 
     return {
-      currentResult: analysis.result,
-      previousResult: analysis.previousResult ?? null,
+      currentResult: normalizeResult(analysis.result),
+      previousResult: analysis.previousResult ? normalizeResult(analysis.previousResult) : null,
     };
   },
 });
