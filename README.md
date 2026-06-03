@@ -1,72 +1,101 @@
-# ApplyAI 🚀
+# ApplyAI
 
-> **A Production-Grade, Full-Stack AI Job Application Tracker & Side-by-Side Resume Tailoring Workspace.**  
-> Built with Next.js 15, Clerk v7 (Auth), Convex (Reactive Serverless DB), and Groq Llama 3.3 70b.
+> A production-grade, full-stack AI job application tracker & resume tailoring workspace.
+> Built with Next.js 15, React 19, Convex, Clerk, Groq Llama 3.3 70b, Zod, Zustand, Tailwind v4, and Framer Motion.
 
-ApplyAI is a premium, desktop-grade workspace designed to help job seekers organize their pipelines, manage resume templates, and leverage deep LLM evaluations to tailor their CV specifically to target job description requirements in real-time.
+ApplyAI helps job seekers organize their pipelines, manage resume templates, and leverage deep LLM evaluations to tailor their CV to target job descriptions in real time.
 
 ---
 
-## 🛠️ The Ultimate Developer Experience (DX) Stack
-
-This project was built to demonstrate an elite, modern tech stack designed for high velocity, extreme security, and instantaneous real-time responsiveness.
+## Stack
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                   Next.js 15 Client                    │
-└───────────┬────────────────────────────────┬───────────┘
-            │                                │
-    [Auth Handshake]                 [Reactive WebSockets]
-            ▼                                ▼
-┌───────────────────────┐        ┌───────────────────────┐
-│     Clerk v7 Auth     │        │  Convex Serverless DB │
-└───────────────────────┘        └───────────┬───────────┘
-                                             │
-                                     [Structured LLM]
-                                             ▼
-                                 ┌───────────────────────┐
-                                 │ Groq API (Llama-3.3)  │
-                                 └───────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                     Next.js 15 (App Router)                  │
+│  React 19 · Tailwind v4 · Framer Motion · Lucide Icons      │
+└──┬────────────────────────┬──────────────────┬───────────────┘
+   │                        │                  │
+   │  [Auth Handshake]     │                  │
+   ▼                        ▼                  ▼
+┌─────────────┐   ┌──────────────────┐   ┌──────────────┐
+│  Clerk v7   │   │ Convex Serverless│   │  Zustand     │
+│  (Auth)     │◄──┤ DB + WebSockets  │   │  (Client     │
+│             │   │ (reactive sync)  │   │   State)     │
+└─────────────┘   └────────┬─────────┘   └──────────────┘
+                           │
+                   [Structured LLM Call]
+                           ▼
+                ┌───────────────────────┐
+                │   Vercel AI SDK       │
+                │   @ai-sdk/groq        │
+                │   → Zod v4 Validation │
+                └───────────┬───────────┘
+                            │
+                ┌───────────▼───────────┐
+                │  Groq LPU Inference   │
+                │  Llama 3.3 70b        │
+                └───────────────────────┘
 ```
 
-### Why We Chose This Stack:
+### Why This Stack
 
-*   **Next.js 15 (App Router)**: Transitioning from a single-file Vite client to Next.js unlocks advanced Server Components, optimized image/font asset pipelines, secure API routing, clean Middleware-level access protection, and seamless production hosting.
-*   **Clerk v7 (Identity Management)**: The industry gold standard for authentication. It eliminates the security risks of custom auth backends, providing zero-boilerplate, frictionless secure logins, embeddable user buttons, and native user profile custom metadata.
-*   **Convex (Reactive Serverless Database)**: Traditional database queries are polling-based or require complex state synchronization (Zustand, Redux). Convex solves this by maintaining a persistent cryptographic WebSocket connection. **When data in the database updates, the UI reactively shifts instantly without a single manual reload or fetch request.**
-*   **Groq & Llama-3.3-70b**: Structured AI outputs can be slow on standard APIs. By using Groq's specialized LPU architecture, ApplyAI performs deep JSON resume alignment analysis, keyword matching, and interview coaching generation **in under 1 second**.
-
----
-
-## ✨ Features
-
-*   **📊 Kanban Applications Board**: A grid-based job application pipeline dashboard supporting real-time status transitions (Wishlist, Applied, Interviewing, Offer, Rejected), complete search filters, and custom match score badges.
-*   **📑 Side-by-Side 3-Column Tailoring Workspace**: 
-    *   **Column 1**: Application metadata configuration and resume template selection.
-    *   **Column 2**: A monospace tailored resume content editor. Selecting a template instantly loads its copy, allowing you to edit and refine your resume wording specifically for this job description.
-    *   **Column 3**: Monospace target job description requirements.
-*   **🤖 Real-Time Llama AI Match Analysis**: Evaluates your customized resume copy side-by-side against the job post to generate:
-    *   *Match Score & Fit Level*: Numerical percentage score and overall alignment category.
-    *   *Keyword Sync*: Categorized list of matched and missing keywords.
-    *   *Strengths & Gaps*: A transparent comparison highlighting critical achievements and missing credentials.
-    *   *Actionable Bullet Rewrites*: Clear, side-by-side edits (*Original vs. Suggested text*) with exact professional rationales.
-    *   *Interview Prep Coach*: Personalized interview questions and behavioral strategy advice targeted at your resume's weaknesses.
-*   **📁 Multi-Resume Template Manager**: Create, edit, and store multiple versions of your resume. Mark a default template to automatically initialize the tailoring workspace.
+- **Next.js 15 + React 19** — App Router, Server Components, API routes, Middleware-level access protection, optimized asset pipeline, seamless Vercel deployment.
+- **Clerk v7** — Zero-boilerplate auth with pre-built components (SignIn, SignUp, UserButton), JWT integration with Convex, and middleware route protection.
+- **Convex** — Reactive serverless database with persistent WebSocket sync. UI updates instantly when data changes — no polling, no manual refetches.
+- **Groq + Llama 3.3 70b** — LPU-accelerated inference generates deep structured resume analysis in under a second.
+- **Zod v4** — Validates and type-checks every LLM JSON response at the API boundary, ensuring type safety end-to-end.
+- **Zustand** — Lightweight client state for analysis loading phases and UI orchestration.
+- **Tailwind v4 + CSS Custom Properties** — Utility-first styling with design tokens and 3-tier dark mode (explicit class, system preference, FOUC-prevention script).
+- **Framer Motion** — Page transitions, modal enter/exit animations, sidebar slide-in, scroll reveal.
 
 ---
 
-## 🔒 Edge-Level Security
+## Features
 
-*   **Cryptographic JWT Verification**: In `convex/auth.config.js`, Convex automatically verifies incoming WebSocket handshakes against Clerk’s public key cryptography, ensuring zero unauthorized data access.
-*   **Strict Multi-Tenant Isolation**: Database actions filter user records strictly at the database query level using the un-spoofable Clerk ID (`ctx.auth.getUserIdentity()`), preventing any cross-user data leakage.
-*   **Zero Secret Leaks**: All local configurations (`.env.local`, `.clerk/`, and local testing keys) are strongly isolated inside `.gitignore` to guarantee absolute safety before pushing to GitHub.
+- **Dark Mode** — Full light/dark theme with localStorage persistence, system preference detection, and a blocking inline script that prevents flash of unstyled content (FOUC). Toggle in both the landing navbar and dashboard sidebar.
+
+- **Kanban Applications Board** — Grid-based pipeline (Wishlist, Applied, Interviewing, Offer, Rejected) with real-time status transitions, search/filter, and match score badges.
+
+- **AI Resume Analysis** — Evaluates your resume against a job description and returns:
+  - **Match Score & Fit Level** — Numerical score (0–100) with breakdown across technical skills, experience, keyword match, and seniority fit.
+  - **Score Breakdown** — Radar-ready sub-scores for each dimension.
+  - **Keyword Coverage** — Categorized matched/missing keywords with importance levels and context.
+  - **Strengths & Gaps** — Direct comparison highlighting achievements and missing credentials.
+  - **Bullet Rewrites** — Side-by-side original vs. suggested text with professional rationale.
+  - **Structure Suggestions** — Section-level recommendations (summary, experience, education, etc.) with priority.
+  - **Skill Roadmap** — Prioritized skill recommendations with learning resources.
+  - **Action Items** — Critical/recommended/optional next steps with impact and effort estimates.
+  - **ATS Check** — ATS compatibility score with formatting issues and severity warnings.
+  - **Cover Letter Draft** — Generated 2–3 paragraph cover letter.
+  - **Interview Coach** — Role-specific questions with strategy advice and difficulty ratings.
+
+- **Analysis Diff** — When re-analyzing an application, shows a diff between the previous and new result, highlighting what changed.
+
+- **Side-by-Side 3-Column Tailoring Workspace** — Left panel for application metadata and resume selection, center panel for editing resume copy, right panel for the target job description.
+
+- **Multi-Resume Template Manager** — Create, edit, and store multiple resume versions. Mark a default for auto-loading into the tailoring workspace.
 
 ---
 
-## 🚀 Getting Started
+## Security
 
-### 1. Installation
-Clone the repository and install dependencies:
+- **Clerk Middleware** — Protects `/dashboard/*`, `/application-board/*`, `/resume-templates/*`, and `/api/compare` behind authentication.
+- **API Key Fallback** — The `/api/compare` endpoint can be called without a Clerk session by passing an `x-api-key` header matching the `API_KEY` env var (optional).
+- **JWT Verification** — Convex validates incoming WebSocket handshakes against Clerk's JWT issuer for zero unauthorized data access.
+- **Multi-Tenant Isolation** — Every database query filters by Clerk user ID (`ctx.auth.getUserIdentity()`), preventing cross-user leakage.
+- **Zod Validation** — All LLM output is validated and sanitized through Zod schemas before reaching the database or UI.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm (or Bun 1.0+)
+- Accounts: [Clerk](https://clerk.com), [Groq](https://console.groq.com), [Convex](https://convex.dev)
+
+### 1. Clone and Install
+
 ```bash
 git clone https://github.com/1ewig/apply-ai-full-stack.git
 cd apply-ai-full-stack
@@ -74,31 +103,42 @@ bun install
 ```
 
 ### 2. Environment Setup
-1. Copy the example environment template:
-   ```bash
-   cp .env.example .env.local
-   ```
-2. Fill in your credentials inside `.env.local`:
-   *   `GROQ_API_KEY`: Obtain from [Groq Console](https://console.groq.com).
-   *   `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` & `CLERK_SECRET_KEY`: Find in your [Clerk Dashboard](https://dashboard.clerk.com).
-   *   `CLERK_JWT_ISSUER_DOMAIN`: The JWT template issuer URL from your Clerk Convex integration settings (e.g., `https://your-issuer.clerk.accounts.dev`).
 
-### 3. Start Convex Database
-Initiate the reactive backend server:
+Copy `.env.example` to `.env.local` and fill in your credentials:
+
+| Variable | Source |
+|---|---|
+| `GROQ_API_KEY` | [Groq Console](https://console.groq.com) → API Keys |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | [Clerk Dashboard](https://dashboard.clerk.com) → API Keys |
+| `CLERK_SECRET_KEY` | Same |
+| `CLERK_JWT_ISSUER_DOMAIN` | Clerk Dashboard → Configure → JWT Templates → Convex template → Issuer |
+| `NEXT_PUBLIC_CONVEX_URL` | Printed by `npx convex dev` |
+| `NEXT_PUBLIC_CONVEX_SITE_URL` | Printed by `npx convex dev` |
+
+### 3. Start Convex
+
 ```bash
 npx convex dev
 ```
-*This command will set up your Convex project and synchronize the schema located in `/convex/schema.ts`.*
 
-### 4. Run the Dev Server
-Launch the Next.js development client:
+This deploys the backend functions and prints your Convex URLs.
+
+### 4. Run Dev Server
+
 ```bash
 bun run dev
 ```
-Open `http://localhost:3000` to interact with your workspace locally!
+
+Open `http://localhost:3000`.
 
 ---
 
-## 📄 License
+## Deployment
 
-This project is open-source and available under the [MIT License](./LICENSE).
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for a step-by-step guide covering Clerk production setup, Convex deployment, environment variables, and Vercel hosting.
+
+---
+
+## License
+
+MIT

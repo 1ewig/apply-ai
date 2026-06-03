@@ -15,7 +15,6 @@
     "clsx": "2.1.1",
     "convex": "1.39.1",
     "framer-motion": "^12.38.0",
-    "hono": "^4.12.19",
     "lucide-react": "^1.14.0",
     "next": "^15.1.0",
     "react": "19.2.6",
