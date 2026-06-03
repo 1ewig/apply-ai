@@ -12,9 +12,12 @@ import {
   TrendingUp,
   Lightbulb,
   MessageSquare,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../providers/ThemeProvider';
 import { backdropFade } from '@/utils/animations';
 
 interface SidebarProps {
@@ -23,6 +26,7 @@ interface SidebarProps {
 }
 
 function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
+  const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -180,8 +184,17 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
       </nav>
 
       <div className="p-4 border-t border-[var(--border)] space-y-3">
-        <div className="flex items-center justify-center p-2.5 bg-[var(--bg-page)] rounded-xl border border-[var(--border)] shadow-sm">
-          <UserButton showName />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer h-9"
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            {theme === 'dark' ? 'Light' : 'Dark'}
+          </button>
+          <div className="flex-1 bg-[var(--bg-page)] rounded-xl border border-[var(--border)] shadow-sm h-9 flex items-center justify-center">
+            <UserButton showName />
+          </div>
         </div>
         <button
           onClick={() => router.push('/')}
