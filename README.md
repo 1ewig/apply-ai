@@ -97,8 +97,8 @@ ApplyAI helps job seekers organize their pipelines, manage resume templates, and
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/1ewig/apply-ai-full-stack.git
-cd apply-ai-full-stack
+git clone https://github.com/1ewig/apply-ai.git
+cd apply-ai
 bun install
 ```
 
