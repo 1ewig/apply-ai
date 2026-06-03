@@ -12,7 +12,7 @@ export default function FollowUpPreview() {
       {jobs.map((job, i) => (
         <div
           key={i}
-          className="flex items-center justify-between bg-white rounded-lg px-3 py-2.5 border border-[var(--border)] shadow-sm"
+          className="flex items-center justify-between bg-[var(--bg-surface)] rounded-lg px-3 py-2.5 border border-[var(--border)] shadow-sm"
         >
           <div>
             <div className="text-xs font-medium text-[var(--text-heading)]">{job.name}</div>

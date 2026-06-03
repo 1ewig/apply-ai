@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { Show, UserButton } from "@clerk/nextjs";
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../providers/ThemeProvider';
 
 export default function Navbar({
   onStartDashboard,
@@ -15,12 +16,13 @@ export default function Navbar({
   isDashboard?: boolean;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const links = ['Solutions', 'Features', 'Integrations', 'Pricing'];
 
   return (
     <nav
-      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-black/5"
+      className="sticky top-0 z-50 bg-[var(--bg-surface)]/95 backdrop-blur-sm border-b border-[var(--border)]"
       role="navigation"
       aria-label="Main navigation"
     >
@@ -63,6 +65,15 @@ export default function Navbar({
             ))
           )}
         </div>
+
+        {/* Theme toggle - desktop */}
+        <button
+          onClick={toggleTheme}
+          className="hidden md:flex items-center justify-center w-9 h-9 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all"
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-4">
@@ -122,7 +133,15 @@ export default function Navbar({
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-black/5 px-4 pb-5 pt-2">
+        <div className="md:hidden bg-[var(--bg-surface)] border-t border-[var(--border)] px-4 pb-5 pt-2">
+          {/* Theme toggle - mobile */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-3 w-full py-3 px-2 text-sm font-medium text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] rounded-lg transition-colors"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </button>
           <div className="flex flex-col gap-1">
             {links.map((link) => (
               <a
@@ -135,7 +154,7 @@ export default function Navbar({
               </a>
             ))}
           </div>
-          <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-black/5">
+          <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-[var(--border)]">
             <Show when="signed-out">
               <Link href="/sign-in">
                 <Button variant="ghost" size="md" className="w-full" onClick={() => setMobileOpen(false)}>

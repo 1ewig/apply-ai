@@ -15,7 +15,7 @@ interface InterviewPrepListProps {
 
 export default function InterviewPrepList({ items, expandedIndex, onToggle }: InterviewPrepListProps) {
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-1 flex items-center gap-2">
         <HelpCircle className="w-4.5 h-4.5 text-[var(--accent)]" />
         Targeted Interview Prep
@@ -27,7 +27,7 @@ export default function InterviewPrepList({ items, expandedIndex, onToggle }: In
         {items.map((prep, idx) => {
           const isExpanded = expandedIndex === idx;
           return (
-            <div key={idx} className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
+            <div key={idx} className="border border-[var(--border)] rounded-xl overflow-hidden bg-[var(--bg-surface)]">
               <button
                 onClick={() => onToggle(idx)}
                 className="w-full px-4 py-3 flex items-center justify-between text-left font-semibold text-xs text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer"

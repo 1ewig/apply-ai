@@ -93,7 +93,7 @@ export default function ApplicationsBoard({
         ))}
 
         {filteredJobs.length === 0 && (
-          <div className="col-span-full py-16 text-center border border-dashed border-slate-200 rounded-3xl bg-white shadow-sm">
+          <div className="col-span-full py-16 text-center border border-dashed border-slate-200 rounded-3xl bg-[var(--bg-surface)] shadow-sm">
             <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
             <h4 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-1">No Applications Found</h4>
             <p className="text-xs text-[var(--text-muted)] mb-6 max-w-xs mx-auto">

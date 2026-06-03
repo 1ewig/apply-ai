@@ -27,7 +27,7 @@ export default function PricingCard({
         'relative rounded-[var(--radius-card)] border p-7 flex flex-col',
         highlighted
           ? 'bg-[var(--accent)] text-white border-transparent scale-[1.04] shadow-[var(--shadow-float)] z-10'
-          : 'bg-white border-[var(--border)] shadow-[var(--shadow-card)]',
+          : 'bg-[var(--bg-surface)] border-[var(--border)] shadow-[var(--shadow-card)]',
         'transition-all duration-300 hover:-translate-y-1'
       )}
     >

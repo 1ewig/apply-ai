@@ -53,7 +53,7 @@ export default function HeroSection({ onStartDashboard }: { onStartDashboard?: (
       >
         <motion.div
           animate={getFloatingTransition(-8, 7, 0.5)}
-          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[200px]"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-[var(--shadow-float)] max-w-[200px]"
         >
           <ResumeMatchWidget compact />
         </motion.div>
@@ -70,7 +70,7 @@ export default function HeroSection({ onStartDashboard }: { onStartDashboard?: (
       >
         <motion.div
           animate={getFloatingTransition(-7, 6.5, 0.2)}
-          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[260px]"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-[var(--shadow-float)] max-w-[260px]"
         >
           <KanbanPreview compact />
         </motion.div>
@@ -87,7 +87,7 @@ export default function HeroSection({ onStartDashboard }: { onStartDashboard?: (
       >
         <motion.div
           animate={getFloatingTransition(-6, 5.8, 0.4)}
-          className="bg-white rounded-2xl shadow-[var(--shadow-float)] max-w-[180px]"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-[var(--shadow-float)] max-w-[180px]"
         >
           <AnalyticsWidget compact />
         </motion.div>

@@ -44,7 +44,7 @@ export default function MatchAnalysisDetail({
 
   if (!job.analysisResult) {
     return (
-      <div className="text-center p-8 bg-white border border-[var(--border)] rounded-3xl">
+      <div className="text-center p-8 bg-[var(--bg-surface)] border border-[var(--border)] rounded-3xl">
         <p className="text-sm">No analysis result available for this job.</p>
         <Button variant="outline" size="sm" onClick={onBackClick} className="mt-4">
           Go Back
@@ -66,7 +66,7 @@ export default function MatchAnalysisDetail({
 
   return (
     <motion.div {...contentSlideUp} className="space-y-6 max-w-4xl mx-auto">
-      <div className="bg-white border border-[var(--border)] rounded-2xl p-4 shadow-sm">
+      <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
             <button
@@ -99,7 +99,7 @@ export default function MatchAnalysisDetail({
       </div>
 
       <div id="summary" className="scroll-mt-6">
-        <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+        <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
           <h3 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-2">Match Assessment</h3>
           <p className="text-xs md:text-sm text-[var(--text-body)] leading-relaxed">{result.summary}</p>
         </div>
@@ -174,7 +174,7 @@ export default function MatchAnalysisDetail({
             />
             <motion.div
               {...modalSpringScale}
-              className="relative bg-white rounded-3xl p-6 max-w-sm w-full shadow-[var(--shadow-float)]"
+              className="relative bg-[var(--bg-surface)] rounded-3xl p-6 max-w-sm w-full shadow-[var(--shadow-float)]"
             >
               <h3 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-2">Re-run Analysis?</h3>
               <p className="text-xs text-[var(--text-body)] mb-6">

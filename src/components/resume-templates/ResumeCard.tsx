@@ -12,7 +12,7 @@ interface ResumeCardProps {
 
 export default function ResumeCard({ resume, onEditResumeClick, onDeleteResume, onSetDefaultResume }: ResumeCardProps) {
   return (
-    <Card className="p-5 border border-black/5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col justify-between min-h-[220px]">
+    <Card className="p-5 border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col justify-between min-h-[220px]">
       <div>
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-2">
@@ -43,7 +43,7 @@ export default function ResumeCard({ resume, onEditResumeClick, onDeleteResume, 
         </p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-black/5 text-[10px] text-[var(--text-muted)] flex justify-between items-center">
+      <div className="mt-4 pt-3 border-t border-[var(--border)] text-[10px] text-[var(--text-muted)] flex justify-between items-center">
         <span>{resume.content.split(/\s+/).filter(Boolean).length} words</span>
         <span>{resume.content.length} chars</span>
       </div>

@@ -15,7 +15,7 @@ interface ScoreRingProps {
 
 export default function ScoreRing({ score, fitLevel }: ScoreRingProps) {
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] flex flex-col items-center justify-center text-center">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] flex flex-col items-center justify-center text-center">
       <div className="relative w-32 h-32 mb-4">
         <svg className="w-32 h-32 -rotate-90" viewBox="0 0 36 36">
           <circle cx="18" cy="18" r="15" fill="none" stroke="#F1F5F9" strokeWidth="2.5" />

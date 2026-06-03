@@ -50,7 +50,7 @@ export default function KanbanPreview({ compact = false }: { compact?: boolean }
             {col.cards.map((card) => (
               <div
                 key={card}
-                className="bg-white rounded-lg px-3 py-2.5 text-xs text-[var(--text-body)] border border-[var(--border)] shadow-sm"
+                className="bg-[var(--bg-surface)] rounded-lg px-3 py-2.5 text-xs text-[var(--text-body)] border border-[var(--border)] shadow-sm"
               >
                 <div className="font-medium text-[var(--text-heading)] mb-1">{card}</div>
                 <div className="flex gap-1">

@@ -16,7 +16,7 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
           {...overlayFade}
           className="fixed inset-0 bg-white/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
         >
-          <div className="bg-white rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] p-12 text-center max-w-md w-full">
+          <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] p-12 text-center max-w-md w-full">
             <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border-4 border-blue-50 animate-ping"></div>
               <div className="absolute inset-0 rounded-full border-4 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin"></div>
@@ -29,7 +29,7 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
               Applying advanced semantic matching rules to optimize your resume bullets.
             </p>
 
-            <div className="bg-[var(--bg-page)] rounded-2xl p-4 text-left border border-black/5">
+            <div className="bg-[var(--bg-page)] rounded-2xl p-4 text-left border border-[var(--border)]">
               <span className="text-[9px] font-bold text-[var(--accent)] uppercase tracking-wider block mb-1">
                 System Pipeline Status
               </span>
@@ -37,7 +37,7 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
                 <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse shrink-0"></div>
                 {phases[loadingPhase]}
               </div>
-              <div className="w-full bg-gray-200 h-1 rounded-full mt-3 overflow-hidden">
+              <div className="w-full bg-[var(--progress-track)] h-1 rounded-full mt-3 overflow-hidden">
                 <motion.div
                   className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] h-full"
                   {...progressWidth(((loadingPhase + 1) / phases.length) * 100)}

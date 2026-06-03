@@ -8,7 +8,7 @@ interface StrengthsAndGapsProps {
 export default function StrengthsAndGaps({ strengths, gaps }: StrengthsAndGapsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+      <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
         <h3 className="font-display font-extrabold text-sm text-[#16A34A] mb-3 flex items-center gap-2">
           <CheckCircle2 className="w-4.5 h-4.5" />
           Key Strengths
@@ -23,7 +23,7 @@ export default function StrengthsAndGaps({ strengths, gaps }: StrengthsAndGapsPr
         </ul>
       </div>
 
-      <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+      <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
         <h3 className="font-display font-extrabold text-sm text-[#EF4444] mb-3 flex items-center gap-2">
           <AlertTriangle className="w-4.5 h-4.5" />
           Major Gaps

@@ -18,7 +18,7 @@ export default function SkillRoadmap({ recommendations }: SkillRoadmapProps) {
   if (!recommendations || recommendations.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-1 flex items-center gap-2">
         <GraduationCap className="w-4.5 h-4.5 text-[var(--accent)]" />
         Skills Development Roadmap

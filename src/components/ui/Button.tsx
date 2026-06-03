@@ -22,7 +22,7 @@ export default function Button({
     ghost:
       'text-[var(--text-body)] hover:text-[var(--text-heading)] rounded-full',
     outline:
-      'border border-[var(--border)] rounded-full hover:bg-white/80 text-[var(--text-heading)]',
+      'border border-[var(--border)] rounded-full hover:bg-[var(--bg-page)] text-[var(--text-heading)]',
     'white-outline':
       'border border-white/30 rounded-full hover:bg-white/10 text-white',
   };

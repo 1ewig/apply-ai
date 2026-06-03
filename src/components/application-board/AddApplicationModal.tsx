@@ -52,7 +52,7 @@ export default function AddApplicationModal({
         >
           <motion.div
             {...modalSpringScale}
-            className="bg-white rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-6xl overflow-hidden flex flex-col max-h-[95vh]"
+            className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-6xl overflow-hidden flex flex-col max-h-[95vh]"
           >
             {/* Modal Header */}
             <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
@@ -79,7 +79,7 @@ export default function AddApplicationModal({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 {/* Column 1: Application Details */}
-                <div className="space-y-4 pr-0 lg:pr-2 lg:border-r border-black/5">
+                <div className="space-y-4 pr-0 lg:pr-2 lg:border-r border-[var(--border)]">
                   <h4 className="font-bold text-xs text-[var(--text-heading)] border-b pb-2 flex items-center gap-1.5 uppercase tracking-wider">
                     <span className="w-4 h-4 rounded-full bg-[var(--accent)] text-white text-[10px] flex items-center justify-center">1</span>
                     Application Info
@@ -92,7 +92,7 @@ export default function AddApplicationModal({
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g. Stripe"
-                      className="w-full p-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] bg-slate-50/50"
+                      className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                     />
                   </div>
 
@@ -103,7 +103,7 @@ export default function AddApplicationModal({
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                       placeholder="e.g. Senior Frontend Dev"
-                      className="w-full p-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] bg-slate-50/50"
+                      className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                     />
                   </div>
 
@@ -112,7 +112,7 @@ export default function AddApplicationModal({
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as JobApplication['status'])}
-                      className="w-full p-2.5 rounded-xl border border-black/10 bg-white focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+                      className="w-full p-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
                     >
                       <option value="wishlist">Wishlist</option>
                       <option value="applied">Applied</option>
@@ -129,7 +129,7 @@ export default function AddApplicationModal({
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="https://example.com/job"
-                      className="w-full p-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] bg-slate-50/50"
+                      className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                     />
                   </div>
 
@@ -139,7 +139,7 @@ export default function AddApplicationModal({
                       <select
                         value={selectedResumeId}
                         onChange={(e) => handleResumeTemplateChange(e.target.value)}
-                        className="w-full p-2.5 rounded-xl border border-black/10 bg-white focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+                        className="w-full p-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
                       >
                         <option value="">-- Choose Template --</option>
                         {resumes.map((r) => (
@@ -156,7 +156,7 @@ export default function AddApplicationModal({
                 </div>
 
                 {/* Column 2: Resume Content (Tailorable) */}
-                <div className="space-y-4 pr-0 lg:pr-2 lg:border-r border-black/5 flex flex-col">
+                <div className="space-y-4 pr-0 lg:pr-2 lg:border-r border-[var(--border)] flex flex-col">
                   <h4 className="font-bold text-xs text-[var(--text-heading)] border-b pb-2 flex items-center gap-1.5 uppercase tracking-wider">
                     <span className="w-4 h-4 rounded-full bg-[var(--accent)] text-white text-[10px] flex items-center justify-center">2</span>
                     Tailored Resume
@@ -167,7 +167,7 @@ export default function AddApplicationModal({
                       value={customResumeContent}
                       onChange={(e) => setCustomResumeContent(e.target.value)}
                       placeholder="Highlight skills or project achievements matching the job description here..."
-                      className="w-full p-3 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[280px]"
+                      className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[280px]"
                     />
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export default function AddApplicationModal({
                       value={jobDescription}
                       onChange={(e) => setJobDescription(e.target.value)}
                       placeholder="Paste the core requirements or full job description here..."
-                      className="w-full p-3 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[280px]"
+                      className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[280px]"
                     />
                   </div>
                 </div>

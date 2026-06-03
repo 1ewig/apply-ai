@@ -25,7 +25,7 @@ export default function CtaSection() {
         return (
           <div
             key={i}
-            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100/80 rounded-xl items-center justify-center`}
+            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-[var(--bg-surface)] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100/80 rounded-xl items-center justify-center`}
             aria-hidden="true"
           >
             <Icon className="w-5 h-5" style={{ color: fi.color }} />

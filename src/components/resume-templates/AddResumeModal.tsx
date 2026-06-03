@@ -25,7 +25,7 @@ export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeM
         >
           <motion.div
             {...modalSpringScale}
-            className="bg-white rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]"
+            className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]"
           >
             <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
               <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
@@ -48,7 +48,7 @@ export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeM
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Senior Frontend Dev Resume"
-                  className="w-full p-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)]"
+                  className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)]"
                 />
               </div>
 
@@ -60,7 +60,7 @@ export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeM
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Paste the full text of your CV/Resume here..."
-                  className="w-full p-3 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none"
+                  className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none"
                 />
               </div>
 

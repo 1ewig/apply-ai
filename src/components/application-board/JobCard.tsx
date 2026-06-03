@@ -41,7 +41,7 @@ export default function JobCard({
   const badgeDetails = getStatusBadge(job.status);
 
   return (
-    <Card className="p-5 border border-black/5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col justify-between group min-h-[220px]">
+    <Card className="p-5 border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col justify-between group min-h-[220px]">
       <div>
         <div className="flex justify-between items-start gap-2 mb-2">
           <div>
@@ -67,7 +67,7 @@ export default function JobCard({
           )}
         </div>
 
-        <div className="mt-4 pt-3 border-t border-black/5 flex items-center gap-3 justify-between">
+        <div className="mt-4 pt-3 border-t border-[var(--border)] flex items-center gap-3 justify-between">
           <div>
             <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">
               AI Compatibility
@@ -103,13 +103,13 @@ export default function JobCard({
         </div>
       </div>
 
-      <div className="mt-5 pt-3 border-t border-black/5 flex justify-between items-center gap-2">
+      <div className="mt-5 pt-3 border-t border-[var(--border)] flex justify-between items-center gap-2">
         <div className="flex items-center gap-1.5">
           <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Status:</span>
           <select
             value={job.status}
             onChange={(e) => onUpdateJobStatus(job.id, e.target.value as JobApplication['status'])}
-            className="text-[10px] border border-black/10 rounded-lg px-2 py-1 bg-white text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+            className="text-[10px] border border-[var(--border)] rounded-lg px-2 py-1 bg-[var(--bg-surface)] text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
           >
             <option value="wishlist">Wishlist</option>
             <option value="applied">Applied</option>

@@ -31,7 +31,7 @@ export default function AtsCheckComponent({ atsCheck }: AtsCheckProps) {
   const strokeColor = atsScore >= 80 ? '#22C55E' : atsScore >= 60 ? '#FACC15' : '#EF4444';
 
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-4 flex items-center gap-2">
         <FileText className="w-4.5 h-4.5 text-[var(--accent-cyan)]" />
         ATS Compatibility Check

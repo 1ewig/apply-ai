@@ -58,7 +58,7 @@ function ScoreBar({ label, score, color }: { label: string; score: number; color
 
 export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: ScoreBreakdownProps) {
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-4 flex items-center gap-2">
         <BarChart3 className="w-4.5 h-4.5 text-[var(--accent)]" />
         Score Overview

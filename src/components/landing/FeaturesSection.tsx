@@ -16,7 +16,7 @@ export default function FeaturesSection() {
   const ref = useReveal();
 
   return (
-    <section id="features" className="section-gap bg-white">
+    <section id="features" className="section-gap bg-[var(--bg-surface)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Features"

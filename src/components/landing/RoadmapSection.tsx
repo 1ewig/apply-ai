@@ -57,7 +57,7 @@ export default function RoadmapSection() {
             const Icon = item.icon;
             const isInDevelopment = item.status === 'In Development';
             return (
-              <Card key={i} hover className="p-6 flex flex-col justify-between border border-black/5 hover:border-[var(--accent)] transition-all bg-white">
+              <Card key={i} hover className="p-6 flex flex-col justify-between border border-[var(--border)] hover:border-[var(--accent)] transition-all bg-[var(--bg-surface)]">
                 <div>
                   <div className="flex justify-between items-start gap-2 mb-4">
                     <div
@@ -84,7 +84,7 @@ export default function RoadmapSection() {
                   </p>
                 </div>
 
-                <div className="space-y-1.5 pt-3 border-t border-black/5">
+                <div className="space-y-1.5 pt-3 border-t border-[var(--border)]">
                   <div className="flex justify-between text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
                     <span>Alpha Progress</span>
                     <span>{item.progress}%</span>

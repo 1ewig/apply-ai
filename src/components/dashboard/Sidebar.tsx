@@ -109,7 +109,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
         <div className="p-4 border-b border-[var(--border)]">
           <button
             onClick={() => handleNav('/application-board')}
-            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:border-slate-300 transition-all cursor-pointer shadow-sm bg-white active:scale-[0.98] select-none"
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:border-slate-300 transition-all cursor-pointer shadow-sm bg-[var(--bg-surface)] active:scale-[0.98] select-none"
           >
             <ArrowLeft className="w-4 h-4 text-[var(--accent)] shrink-0" />
             Back to Board
@@ -198,7 +198,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
 export default function Sidebar({ isMobileOpen, onMobileClose }: SidebarProps) {
   return (
     <>
-      <aside className="hidden md:flex w-64 bg-white border-r border-[var(--border)] flex-col shrink-0 text-left">
+      <aside className="hidden md:flex w-64 bg-[var(--bg-surface)] border-r border-[var(--border)] flex-col shrink-0 text-left">
         <SidebarContent />
       </aside>
 
@@ -215,7 +215,7 @@ export default function Sidebar({ isMobileOpen, onMobileClose }: SidebarProps) {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="absolute left-0 top-0 bottom-0 w-64 bg-white border-r border-[var(--border)] flex flex-col text-left"
+              className="absolute left-0 top-0 bottom-0 w-64 bg-[var(--bg-surface)] border-r border-[var(--border)] flex flex-col text-left"
             >
               <button
                 onClick={onMobileClose}

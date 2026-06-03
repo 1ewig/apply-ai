@@ -7,7 +7,7 @@ export default function InterviewPrepPreview() {
         <div className="w-6 h-6 rounded-lg bg-[var(--accent-cyan)]/15 flex items-center justify-center shrink-0">
           <Bot className="w-3.5 h-3.5 text-[var(--accent-cyan)]" />
         </div>
-        <div className="bg-white rounded-r-xl rounded-bl-xl p-2.5 border border-[var(--border)] max-w-[85%] shadow-sm">
+        <div className="bg-[var(--bg-surface)] rounded-r-xl rounded-bl-xl p-2.5 border border-[var(--border)] max-w-[85%] shadow-sm">
           <p className="text-[9px] font-bold text-[var(--text-heading)]">AI Coach</p>
           <p className="text-[10px] text-[var(--text-body)] mt-0.5 leading-snug">
             "Tell me about a time you handled a tight deadline."

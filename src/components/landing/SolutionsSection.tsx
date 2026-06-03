@@ -62,7 +62,7 @@ export default function SolutionsSection() {
 
         {/* Large app preview */}
         <div className="bg-[var(--accent)] rounded-[20px] p-4 md:p-6 shadow-[var(--shadow-float)]">
-          <div className="bg-white rounded-[16px] overflow-hidden">
+          <div className="bg-[var(--bg-surface)] rounded-[16px] overflow-hidden">
             {/* Title bar */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border)]">
               <div className="flex gap-1.5">

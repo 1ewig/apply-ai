@@ -39,7 +39,7 @@ export default function AnalysisDiff({ previous, current }: AnalysisDiffProps) {
   if (!hasChanges) return null;
 
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] border-l-4 border-l-amber-400">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] border-l-4 border-l-amber-400">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-3 flex items-center gap-2">
         <GitCompare className="w-4.5 h-4.5 text-amber-500" />
         Changes Since Last Analysis

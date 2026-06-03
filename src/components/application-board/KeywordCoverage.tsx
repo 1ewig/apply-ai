@@ -30,7 +30,7 @@ function KeywordTag({ kw, showCategory }: { kw: EnhancedKeyword; showCategory?: 
         <span className="text-[8px] text-[var(--text-muted)] uppercase tracking-wider mt-0.5 px-1">{kw.category}</span>
       )}
       {kw.matchContext && (
-        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded-lg bg-slate-800 text-white text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded-lg bg-[var(--tooltip-bg)] text-white text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
           {kw.matchContext}
         </span>
       )}
@@ -40,7 +40,7 @@ function KeywordTag({ kw, showCategory }: { kw: EnhancedKeyword; showCategory?: 
 
 export default function KeywordCoverage({ matchedKeywords, missingKeywords }: KeywordCoverageProps) {
   return (
-    <div className="bg-white rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
+    <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-4 flex items-center gap-2">
         <FileSpreadsheet className="w-4.5 h-4.5 text-[var(--accent-cyan)]" />
         Keyword Coverage
@@ -73,7 +73,7 @@ export default function KeywordCoverage({ matchedKeywords, missingKeywords }: Ke
                 </span>
                 <span className="text-[8px] text-[var(--text-muted)] uppercase tracking-wider mt-0.5 px-1">{kw.category}</span>
                 {kw.whyImportant && (
-                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded-lg bg-slate-800 text-white text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded-lg bg-[var(--tooltip-bg)] text-white text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                     {kw.whyImportant}
                   </span>
                 )}

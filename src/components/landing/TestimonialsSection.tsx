@@ -42,7 +42,7 @@ export default function TestimonialsSection() {
   const ref = useReveal();
 
   return (
-    <section className="section-gap bg-white">
+    <section className="section-gap bg-[var(--bg-surface)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Testimonials"
