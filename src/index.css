@@ -51,6 +51,7 @@
   --tooltip-bg: #1E293B;
   --input-bg: rgba(0, 0, 0, 0.02);
   --progress-track: #E2E8F0;
+  --dot-color: #E2E8F0;
 }
 
 .dark {
@@ -69,6 +70,7 @@
   --tooltip-bg: #334155;
   --input-bg: rgba(255, 255, 255, 0.04);
   --progress-track: #334155;
+  --dot-color: rgba(255, 255, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -88,6 +90,7 @@
     --tooltip-bg: #334155;
     --input-bg: rgba(255, 255, 255, 0.04);
     --progress-track: #334155;
+    --dot-color: rgba(255, 255, 255, 0.06);
   }
 }
 

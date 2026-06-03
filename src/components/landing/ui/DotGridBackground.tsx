@@ -8,7 +8,7 @@ export default function DotGridBackground() {
     >
       <defs>
         <pattern id="dotGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-          <circle cx="2" cy="2" r="1.2" fill="#E2E8F0" />
+          <circle cx="2" cy="2" r="1.2" style={{ fill: 'var(--dot-color)' }} />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#dotGrid)" />
