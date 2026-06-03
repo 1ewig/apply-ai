@@ -31,7 +31,7 @@ export default function SolutionsSection() {
   const ref = useReveal();
 
   return (
-    <section id="solutions" className="section-gap bg-[var(--bg-page)]">
+    <section id="solutions" className="section-gap bg-gradient-to-b from-[var(--bg-page)] to-[var(--bg-surface)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Solutions"

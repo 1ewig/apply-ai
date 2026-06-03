@@ -54,7 +54,7 @@ export default function PricingSection() {
   const ref = useReveal();
 
   return (
-    <section id="pricing" className="section-gap bg-[var(--bg-surface)] border-t border-[var(--border)]">
+    <section id="pricing" className="section-gap bg-gradient-to-b from-[var(--bg-surface)] to-[var(--bg-page)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Pricing Plans"

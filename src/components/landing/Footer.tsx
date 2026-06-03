@@ -26,7 +26,7 @@ const floatingIcons = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--bg-page)]">
+    <footer className="bg-gradient-to-b from-[var(--bg-surface)] to-[var(--bg-page)]">
       <div className="section-container" style={{ paddingBlock: 'clamp(3rem, 6vw, 5rem)' }}>
         {/* Floating decorative icons */}
         <div className="flex items-center justify-center gap-4 mb-10">
