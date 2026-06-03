@@ -18,7 +18,7 @@ export default function Navbar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  const links = ['Solutions', 'Features', 'Integrations', 'Pricing'];
+  const links = ['Solutions', 'Features', 'Roadmap', 'Pricing'];
 
   return (
     <nav
@@ -66,17 +66,15 @@ export default function Navbar({
           )}
         </div>
 
-        {/* Theme toggle - desktop */}
-        <button
-          onClick={toggleTheme}
-          className="hidden md:flex items-center justify-center w-9 h-9 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all"
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-
         {/* Desktop CTAs */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+          </button>
           {isDashboard ? (
             <>
               <Badge className="text-xs px-2.5 py-1">
