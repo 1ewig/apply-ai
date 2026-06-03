@@ -25,8 +25,8 @@ export default function InterviewPrepPreview() {
           <User className="w-3.5 h-3.5 text-[var(--accent)]" />
         </div>
       </div>
-      <div className="bg-[#ECFDF5] rounded-lg p-2.5 border border-[#A7F3D0] text-[9px] text-[#065F46] flex gap-1.5 items-center">
-        <Sparkles className="w-3.5 h-3.5 text-[#10B981] shrink-0 animate-pulse" />
+      <div className="bg-emerald-500/10 rounded-lg p-2.5 border border-emerald-500/20 text-[9px] text-emerald-600 flex gap-1.5 items-center">
+        <Sparkles className="w-3.5 h-3.5 text-emerald-500 shrink-0 animate-pulse" />
         <span><strong>Score: 92%</strong> — Excellent focus on outcomes, but mention metrics.</span>
       </div>
     </div>

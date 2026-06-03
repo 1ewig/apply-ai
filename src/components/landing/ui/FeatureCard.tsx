@@ -9,7 +9,7 @@ interface FeatureCardProps {
 export default function FeatureCard({ title, caption, children }: FeatureCardProps) {
   return (
     <Card hover className="overflow-hidden flex flex-col">
-      <div className="bg-[#F8FAFC] p-6 flex items-center justify-center min-h-[200px] border-b border-[var(--border)]">
+      <div className="bg-[var(--bg-page)] p-6 flex items-center justify-center min-h-[200px] border-b border-[var(--border)]">
         {children}
       </div>
       <div className="p-6">

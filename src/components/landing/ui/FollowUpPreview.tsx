@@ -19,8 +19,8 @@ export default function FollowUpPreview() {
             <div className="text-[10px] text-[var(--text-muted)]">Applied {job.daysAgo} days ago</div>
           </div>
           {job.urgent && (
-            <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#D97706] font-semibold whitespace-nowrap flex items-center gap-1">
-              <AlertTriangle className="w-3.5 h-3.5 text-[#D97706]" />
+            <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500 font-semibold whitespace-nowrap flex items-center gap-1">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
               {job.daysAgo} days no update
             </span>
           )}
