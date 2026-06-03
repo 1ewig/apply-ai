@@ -54,7 +54,7 @@ export default function PricingSection() {
   const ref = useReveal();
 
   return (
-    <section id="pricing" className="section-gap">
+    <section id="pricing" className="section-gap bg-[var(--bg-surface)] border-t border-[var(--border)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Pricing Plans"

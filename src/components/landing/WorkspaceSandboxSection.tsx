@@ -9,7 +9,7 @@ export default function WorkspaceSandboxSection() {
   const ref = useReveal();
 
   return (
-    <section id="sandbox" className="section-gap bg-[var(--bg-page)] border-t border-[var(--border)]">
+    <section id="sandbox" className="section-gap bg-[var(--bg-surface)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Core Workspace"

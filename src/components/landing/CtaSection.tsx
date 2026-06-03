@@ -18,7 +18,7 @@ export default function CtaSection() {
   const ref = useReveal();
 
   return (
-    <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-[var(--bg-page)] to-[var(--bg-surface)] border-t border-[var(--border)]" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
+    <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-[var(--bg-surface)] to-[var(--bg-page)]" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
       {/* Floating icons — hidden on mobile */}
       {floatingIcons.map((fi, i) => {
         const Icon = fi.icon;

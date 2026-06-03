@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <main 
-      className="bg-[var(--bg-page)] min-h-screen animate-fade-up" 
+      className="min-h-screen animate-fade-up" 
       style={{ fontFamily: '"DM Sans", sans-serif' }}
     >
       <Navbar />

@@ -31,7 +31,7 @@ export default function SolutionsSection() {
   const ref = useReveal();
 
   return (
-    <section id="solutions" className="section-gap">
+    <section id="solutions" className="section-gap bg-[var(--bg-page)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Solutions"

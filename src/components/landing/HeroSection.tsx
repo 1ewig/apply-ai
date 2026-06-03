@@ -18,7 +18,7 @@ import {
 
 export default function HeroSection({ onStartDashboard }: { onStartDashboard?: () => void }) {
   return (
-    <section className="relative min-h-[82vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[82vh] flex items-center overflow-hidden bg-[var(--bg-page)]">
       <DotGridBackground />
 
       {/* Floating Widgets — hidden on mobile */}
