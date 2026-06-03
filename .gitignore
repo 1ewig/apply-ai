@@ -46,6 +46,5 @@ CASE_STUDY_APPLYAI.md
 # clerk configuration (can include secrets)
 /.clerk/
 
-# convex auto-generated files
-convex/_generated/
+
 
