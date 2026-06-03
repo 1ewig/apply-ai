@@ -59,59 +59,59 @@ export default function WorkspaceSandboxSection() {
           </div>
 
           {/* Interactive visual Sandbox Mockup */}
-          <div className="lg:col-span-7 bg-[#0F172A] rounded-[24px] p-4 md:p-6 shadow-[var(--shadow-float)] border border-slate-800">
+          <div className="lg:col-span-7 bg-[var(--bg-surface)] rounded-[24px] p-4 md:p-6 shadow-[var(--shadow-float)] border border-[var(--border)]">
             {/* Mock Header */}
-            <div className="flex justify-between items-center pb-4 border-b border-slate-800 mb-4">
+            <div className="flex justify-between items-center pb-4 border-b border-[var(--border)] mb-4">
               <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-slate-700" />
-                <div className="w-3 h-3 rounded-full bg-slate-700" />
-                <div className="w-3 h-3 rounded-full bg-slate-700" />
+                <div className="w-3 h-3 rounded-full bg-[var(--progress-track)]" />
+                <div className="w-3 h-3 rounded-full bg-[var(--progress-track)]" />
+                <div className="w-3 h-3 rounded-full bg-[var(--progress-track)]" />
               </div>
-              <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">tailoring_sandbox.log</span>
-              <div className="w-4 h-4 rounded bg-slate-800" />
+              <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-widest">tailoring_sandbox.log</span>
+              <div className="w-4 h-4 rounded bg-[var(--bg-page)]" />
             </div>
 
             {/* Mock Columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Column 1: Monospace Editor */}
-              <div className="bg-slate-900/60 rounded-xl p-4 border border-slate-800/80 flex flex-col justify-between min-h-[220px]">
+              <div className="bg-[var(--bg-page)] rounded-xl p-4 border border-[var(--border)] flex flex-col justify-between min-h-[220px]">
                 <div>
-                  <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider block mb-2 font-mono">Column 2 • Monospace Resume</span>
-                  <div className="font-mono text-[9px] text-slate-300 space-y-2 leading-relaxed">
-                    <p className="text-slate-500">// Tailor experience for Stripe requirements</p>
+                  <span className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-2 font-mono">Column 2 • Monospace Resume</span>
+                  <div className="font-mono text-[9px] text-[var(--text-body)] space-y-2 leading-relaxed">
+                    <p className="text-[var(--text-muted)]">// Tailor experience for Stripe requirements</p>
                     <p>
                       - Maintained clean, well-commented codebases using type-safe React architectures.
                     </p>
-                    <p className="border-l-2 border-[var(--color-accent-cyan)] pl-2 text-white bg-[var(--color-accent-cyan)]/5 py-1">
+                    <p className="border-l-2 border-[var(--color-accent-cyan)] pl-2 text-[var(--text-heading)] bg-[var(--color-accent-cyan)]/5 py-1">
                       - Spearheaded development of modular APIs in TypeScript... <span className="animate-pulse bg-[var(--color-accent-cyan)] text-transparent">|</span>
                     </p>
                   </div>
                 </div>
                 <div className="flex justify-end pt-3">
-                  <span className="text-[8px] font-mono text-slate-500">Ln 42, Col 12</span>
+                  <span className="text-[8px] font-mono text-[var(--text-muted)]">Ln 42, Col 12</span>
                 </div>
               </div>
 
               {/* Column 2: AI Suggestions */}
-              <div className="bg-slate-900/60 rounded-xl p-4 border border-slate-800/80 flex flex-col justify-between min-h-[220px]">
+              <div className="bg-[var(--bg-page)] rounded-xl p-4 border border-[var(--border)] flex flex-col justify-between min-h-[220px]">
                 <div>
                   <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-wider block mb-2 font-mono flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-emerald-400" />
+                    <Sparkles className="w-3 h-3 text-emerald-500" />
                     AI Bullet Rewrite
                   </span>
 
                   <div className="space-y-3">
-                    <div className="rounded-lg bg-slate-950 p-2 border border-slate-800">
+                    <div className="rounded-lg bg-[var(--bg-surface)] p-2 border border-[var(--border)]">
                       <span className="text-[8px] font-bold text-rose-400 block uppercase tracking-wider font-mono">Original</span>
-                      <p className="font-mono text-[9px] text-slate-400 mt-1">Maintained codebases using React...</p>
+                      <p className="font-mono text-[9px] text-[var(--text-muted)] mt-1">Maintained codebases using React...</p>
                     </div>
 
-                    <div className="rounded-lg bg-emerald-950/20 p-2 border border-emerald-900/30">
-                      <span className="text-[8px] font-bold text-emerald-400 block uppercase tracking-wider font-mono">Suggested</span>
-                      <p className="font-mono text-[9px] text-emerald-200 mt-1">Architected type-safe React 19 component trees, slashing bundle sizes by 28%...</p>
+                    <div className="rounded-lg bg-emerald-500/10 p-2 border border-emerald-500/20">
+                      <span className="text-[8px] font-bold text-emerald-500 block uppercase tracking-wider font-mono">Suggested</span>
+                      <p className="font-mono text-[9px] text-emerald-600 mt-1">Architected type-safe React 19 component trees, slashing bundle sizes by 28%...</p>
                     </div>
 
-                    <p className="text-[9px] text-slate-400 italic leading-snug">
+                    <p className="text-[9px] text-[var(--text-muted)] italic leading-snug">
                       <strong>Rationale</strong>: Connects your performance capabilities directly to Stripe's focus on high-speed dashboard metrics.
                     </p>
                   </div>
