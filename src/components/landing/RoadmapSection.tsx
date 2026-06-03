@@ -44,7 +44,7 @@ export default function RoadmapSection() {
   const ref = useReveal();
 
   return (
-    <section id="roadmap" className="section-gap bg-gradient-to-b from-white to-slate-50 border-t border-slate-100">
+    <section id="roadmap" className="section-gap bg-gradient-to-b from-[var(--bg-surface)] to-[var(--bg-page)] border-t border-[var(--border)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Product Roadmap"
@@ -68,10 +68,10 @@ export default function RoadmapSection() {
                     </div>
                     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
                       isInDevelopment 
-                        ? 'bg-blue-50 text-blue-700 border-blue-100' 
-                        : 'bg-slate-50 text-slate-600 border-slate-100'
+                        ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' 
+                        : 'bg-[var(--bg-page)] text-[var(--text-muted)] border-[var(--border)]'
                     }`}>
-                      {isInDevelopment && <Sparkles className="w-3 h-3 text-blue-600 animate-pulse" />}
+                      {isInDevelopment && <Sparkles className="w-3 h-3 text-blue-500 animate-pulse" />}
                       {item.status}
                     </span>
                   </div>
@@ -89,7 +89,7 @@ export default function RoadmapSection() {
                     <span>Alpha Progress</span>
                     <span>{item.progress}%</span>
                   </div>
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[var(--progress-track)] h-1.5 rounded-full overflow-hidden">
                     <div 
                       className="h-full rounded-full transition-all duration-500" 
                       style={{ 

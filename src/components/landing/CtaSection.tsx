@@ -18,14 +18,14 @@ export default function CtaSection() {
   const ref = useReveal();
 
   return (
-    <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white border-t border-slate-100" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
+    <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-[var(--bg-page)] to-[var(--bg-surface)] border-t border-[var(--border)]" style={{ paddingBlock: 'clamp(5rem, 10vw, 8rem)' }}>
       {/* Floating icons — hidden on mobile */}
       {floatingIcons.map((fi, i) => {
         const Icon = fi.icon;
         return (
           <div
             key={i}
-            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-[var(--bg-surface)] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100/80 rounded-xl items-center justify-center`}
+            className={`hidden lg:flex absolute ${fi.pos} animate-float ${fi.delay} w-12 h-12 bg-[var(--bg-surface)] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-[var(--border)] rounded-xl items-center justify-center`}
             aria-hidden="true"
           >
             <Icon className="w-5 h-5" style={{ color: fi.color }} />

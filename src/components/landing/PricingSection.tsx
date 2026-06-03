@@ -62,13 +62,13 @@ export default function PricingSection() {
         />
 
         {/* Beta Phase Announcement Alert */}
-        <div className="max-w-2xl mx-auto mb-10 overflow-hidden bg-gradient-to-r from-cyan-50/70 via-blue-50/50 to-indigo-50/70 border border-blue-100 rounded-2xl p-4 flex items-center justify-center text-center shadow-sm">
+        <div className="max-w-2xl mx-auto mb-10 overflow-hidden bg-[var(--accent)]/5 border border-[var(--accent)]/20 rounded-2xl p-4 flex items-center justify-center text-center shadow-sm">
           <div className="flex items-center gap-2">
             <span className="flex h-2.5 w-2.5 relative shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-cyan)] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--accent-cyan)]"></span>
             </span>
-            <span className="text-xs font-semibold text-blue-900 leading-none">
+            <span className="text-xs font-semibold text-[var(--text-heading)] leading-none">
               ApplyAI Open Beta Phase: All premium Pro & Teams capabilities are currently 100% unlocked and free!
             </span>
           </div>
