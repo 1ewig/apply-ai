@@ -20,7 +20,7 @@ export default function SearchFilterBar({
   return (
     <div className="flex flex-col sm:flex-row gap-3 bg-[var(--bg-surface)] p-3 sm:p-4 rounded-2xl border border-[var(--border)] shadow-sm">
       <div className="flex-1 relative">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
         <input
           type="text"
           value={searchTerm}
@@ -34,9 +34,9 @@ export default function SearchFilterBar({
         <select
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="p-2.5 pr-7 border border-[var(--border)] rounded-xl bg-[var(--input-bg)] text-xs text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+          className="p-2.5 pr-7 border border-[var(--border)] rounded-xl bg-[var(--input-bg)] text-xs text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'right 6px center',
             backgroundSize: '14px',

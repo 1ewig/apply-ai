@@ -20,16 +20,16 @@ export default function ResumeSuggestions({ suggestions }: ResumeSuggestionsProp
       </p>
       <div className="space-y-4">
         {suggestions.map((sug, idx) => (
-          <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
+          <div key={idx} className="p-4 rounded-xl bg-[var(--bg-page)] border border-[var(--border)] space-y-3">
             <span className="text-[9px] font-bold text-[var(--accent)] uppercase tracking-wider block">{sug.section}</span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="p-2.5 bg-rose-50 border border-rose-100 rounded-lg">
+              <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg">
                 <span className="text-[9px] font-bold text-rose-500 uppercase tracking-wider block mb-1">Original</span>
-                <p className="text-[11px] text-rose-800 italic">"{sug.original}"</p>
+                <p className="text-[11px] text-rose-600 italic">"{sug.original}"</p>
               </div>
-              <div className="p-2.5 bg-emerald-50 border border-emerald-100 rounded-lg">
+              <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                 <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider block mb-1">Suggested Rewrite</span>
-                <p className="text-[11px] text-emerald-900 font-medium">"{sug.suggested}"</p>
+                <p className="text-[11px] text-emerald-600 font-medium">"{sug.suggested}"</p>
               </div>
             </div>
             <div className="text-[11px] text-[var(--text-body)]">

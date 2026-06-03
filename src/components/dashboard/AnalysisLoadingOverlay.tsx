@@ -14,11 +14,11 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
       {isLoading && (
         <motion.div
           {...overlayFade}
-          className="fixed inset-0 bg-white/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
+          className="fixed inset-0 bg-[var(--bg-surface)]/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
         >
           <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] p-12 text-center max-w-md w-full">
             <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-blue-50 animate-ping"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-[var(--accent)]/20 animate-ping"></div>
               <div className="absolute inset-0 rounded-full border-4 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin"></div>
               <Sparkle className="w-8 h-8 text-[var(--accent-cyan)] animate-pulse" />
             </div>

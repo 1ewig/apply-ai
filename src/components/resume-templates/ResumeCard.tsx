@@ -20,10 +20,10 @@ export default function ResumeCard({ resume, onEditResumeClick, onDeleteResume, 
             <h4 className="font-display font-extrabold text-sm text-[var(--text-heading)] leading-tight line-clamp-1">{resume.name}</h4>
           </div>
           <div className="flex gap-1 shrink-0">
-            <button onClick={() => onEditResumeClick(resume)} className="p-1 text-slate-400 hover:text-[var(--accent)] transition-colors cursor-pointer" title="Edit Resume">
+            <button onClick={() => onEditResumeClick(resume)} className="p-1 text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors cursor-pointer" title="Edit Resume">
               <Edit className="w-3.5 h-3.5" />
             </button>
-            <button onClick={() => onDeleteResume(resume.id)} className="p-1 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer" title="Delete Template">
+            <button onClick={() => onDeleteResume(resume.id)} className="p-1 text-[var(--text-muted)] hover:text-rose-500 transition-colors cursor-pointer" title="Delete Template">
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -32,13 +32,13 @@ export default function ResumeCard({ resume, onEditResumeClick, onDeleteResume, 
         <div className="flex gap-2 items-center mb-4">
           <span className="text-[9px] text-[var(--text-muted)]">Updated: {resume.updatedAt}</span>
           {resume.isDefault ? (
-            <Badge className="px-2 py-0.2 text-[8px] font-bold bg-emerald-50 text-emerald-700 border-emerald-200">Active Template</Badge>
+            <Badge className="px-2 py-0.2 text-[8px] font-bold bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Active Template</Badge>
           ) : (
-            <button onClick={() => onSetDefaultResume(resume.id)} className="text-[8px] font-bold text-blue-600 hover:underline cursor-pointer">Set Active</button>
+            <button onClick={() => onSetDefaultResume(resume.id)} className="text-[8px] font-bold text-[var(--accent)] hover:underline cursor-pointer">Set Active</button>
           )}
         </div>
 
-        <p className="text-[11px] text-[var(--text-body)] line-clamp-4 font-mono bg-slate-50 p-2 rounded-lg leading-relaxed border border-slate-100">
+        <p className="text-[11px] text-[var(--text-body)] line-clamp-4 font-mono bg-[var(--bg-page)] p-2 rounded-lg leading-relaxed border border-[var(--border)]">
           {resume.content}
         </p>
       </div>

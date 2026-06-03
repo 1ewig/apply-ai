@@ -8,14 +8,14 @@ interface KeywordCoverageProps {
 
 function getCategoryColor(cat: string) {
   switch (cat) {
-    case 'language': return 'bg-blue-50 border-blue-200 text-blue-700';
-    case 'framework': return 'bg-violet-50 border-violet-200 text-violet-700';
-    case 'tool': return 'bg-cyan-50 border-cyan-200 text-cyan-700';
-    case 'domain': return 'bg-amber-50 border-amber-200 text-amber-700';
-    case 'soft_skill': return 'bg-pink-50 border-pink-200 text-pink-700';
-    case 'education': return 'bg-emerald-50 border-emerald-200 text-emerald-700';
-    case 'certification': return 'bg-orange-50 border-orange-200 text-orange-700';
-    default: return 'bg-slate-50 border-slate-200 text-slate-600';
+    case 'language': return 'bg-blue-500/10 border-blue-500/20 text-blue-500';
+    case 'framework': return 'bg-violet-500/10 border-violet-500/20 text-violet-500';
+    case 'tool': return 'bg-cyan-500/10 border-cyan-500/20 text-cyan-500';
+    case 'domain': return 'bg-amber-500/10 border-amber-500/20 text-amber-500';
+    case 'soft_skill': return 'bg-pink-500/10 border-pink-500/20 text-pink-500';
+    case 'education': return 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500';
+    case 'certification': return 'bg-orange-500/10 border-orange-500/20 text-orange-500';
+    default: return 'bg-[var(--bg-page)] border-[var(--border)] text-[var(--text-body)]';
   }
 }
 

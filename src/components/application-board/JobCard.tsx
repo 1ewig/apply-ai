@@ -7,15 +7,15 @@ import { Sparkles, Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-rea
 function getStatusBadge(status: JobApplication['status']) {
   switch (status) {
     case 'wishlist':
-      return { label: 'Wishlist', className: 'bg-slate-100 text-slate-700 border-slate-200' };
+      return { label: 'Wishlist', className: 'bg-[var(--bg-page)] text-[var(--text-heading)] border-[var(--border)]' };
     case 'applied':
-      return { label: 'Applied', className: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return { label: 'Applied', className: 'bg-blue-500/10 text-blue-500 border-blue-500/20' };
     case 'interviewing':
-      return { label: 'Interviewing', className: 'bg-amber-50 text-amber-700 border-amber-200' };
+      return { label: 'Interviewing', className: 'bg-amber-500/10 text-amber-500 border-amber-500/20' };
     case 'offer':
-      return { label: 'Offer Received', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      return { label: 'Offer Received', className: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' };
     case 'rejected':
-      return { label: 'Rejected', className: 'bg-rose-50 text-rose-700 border-rose-200' };
+      return { label: 'Rejected', className: 'bg-rose-500/10 text-rose-500 border-rose-500/20' };
   }
 }
 
@@ -73,7 +73,7 @@ export default function JobCard({
               AI Compatibility
             </span>
             {job.matchScore !== undefined ? (
-              <span className="text-sm font-extrabold text-[#16A34A] flex items-center gap-1 mt-0.5">
+              <span className="text-sm font-extrabold text-emerald-600 flex items-center gap-1 mt-0.5">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600/10" />
                 {job.matchScore}% Match
               </span>
@@ -94,7 +94,7 @@ export default function JobCard({
               size="sm"
               onClick={() => onMatchClick(job)}
               disabled={resumes.length === 0}
-              className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1 border-blue-200 text-blue-600 hover:bg-blue-50/50"
+              className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1 border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/10"
             >
               <Play className="w-3 h-3 fill-current" />
               Evaluate
@@ -122,14 +122,14 @@ export default function JobCard({
         <div className="flex items-center gap-1">
           <button
             onClick={() => onEditJobClick(job)}
-            className="p-1.5 rounded-lg border border-transparent hover:border-blue-100 hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg border border-transparent hover:bg-[var(--bg-page)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors cursor-pointer"
             title="Edit Application"
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => onDeleteJob(job.id)}
-            className="p-1.5 rounded-lg border border-transparent hover:border-rose-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg border border-transparent hover:bg-[var(--bg-page)] text-[var(--text-muted)] hover:text-rose-500 transition-colors cursor-pointer"
             title="Delete Application"
           >
             <Trash2 className="w-3.5 h-3.5" />

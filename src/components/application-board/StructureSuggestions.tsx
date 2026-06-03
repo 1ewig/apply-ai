@@ -20,10 +20,10 @@ function getTypeIcon(type: string) {
 
 function getPriorityColor(priority: string) {
   switch (priority) {
-    case 'high': return 'bg-rose-50 border-rose-200 text-rose-700';
-    case 'medium': return 'bg-amber-50 border-amber-200 text-amber-700';
-    case 'low': return 'bg-slate-50 border-slate-200 text-slate-600';
-    default: return 'bg-slate-50 border-slate-200 text-slate-600';
+    case 'high': return 'bg-rose-500/10 border-rose-500/20 text-rose-500';
+    case 'medium': return 'bg-amber-500/10 border-amber-500/20 text-amber-500';
+    case 'low': return 'bg-[var(--bg-page)] border-[var(--border)] text-[var(--text-body)]';
+    default: return 'bg-[var(--bg-page)] border-[var(--border)] text-[var(--text-body)]';
   }
 }
 
@@ -46,7 +46,7 @@ export default function StructureSuggestions({ suggestions }: StructureSuggestio
       </p>
       <div className="space-y-3">
         {suggestions.map((s, idx) => (
-          <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+          <div key={idx} className="p-4 rounded-xl bg-[var(--bg-page)] border border-[var(--border)]">
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               <span className="flex items-center gap-1 text-[9px] font-bold text-[var(--accent)] uppercase tracking-wider">
                 {getTypeIcon(s.type)} {TYPE_LABELS[s.type] || s.type}

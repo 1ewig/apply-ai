@@ -25,7 +25,7 @@ export default function CoverLetterDraft({ draft }: CoverLetterDraftProps) {
         </h3>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-[10px] font-semibold text-[var(--accent)] hover:text-blue-700 transition-colors px-2.5 py-1.5 rounded-lg hover:bg-blue-50 cursor-pointer"
+          className="flex items-center gap-1 text-[10px] font-semibold text-[var(--accent)] hover:text-blue-700 transition-colors px-2.5 py-1.5 rounded-lg hover:bg-[var(--accent)]/10 cursor-pointer"
         >
           {copied ? (
             <><Check className="w-3.5 h-3.5" /> Copied</>
@@ -34,7 +34,7 @@ export default function CoverLetterDraft({ draft }: CoverLetterDraftProps) {
           )}
         </button>
       </div>
-      <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+      <div className="p-4 rounded-xl bg-[var(--bg-page)] border border-[var(--border)]">
         <p className="text-[11px] text-[var(--text-body)] leading-relaxed whitespace-pre-line">{draft}</p>
       </div>
     </div>

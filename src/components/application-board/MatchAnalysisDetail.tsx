@@ -71,7 +71,7 @@ export default function MatchAnalysisDetail({
           <div className="flex items-center gap-3">
             <button
               onClick={onBackClick}
-              className="p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-2 rounded-lg hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 text-[var(--text-muted)]" />
             </button>

@@ -39,7 +39,7 @@ export default function InterviewPrepList({ items, expandedIndex, onToggle }: In
                 {isExpanded && (
                   <motion.div
                     {...accordionExpand}
-                    className="overflow-hidden border-t border-[var(--border)] bg-slate-50"
+                    className="overflow-hidden border-t border-[var(--border)] bg-[var(--bg-page)]"
                   >
                     <div className="p-4 text-[11px] text-[var(--text-body)] leading-relaxed">
                       <span className="font-bold text-[var(--text-heading)] block mb-1 text-[9px] uppercase tracking-wider">

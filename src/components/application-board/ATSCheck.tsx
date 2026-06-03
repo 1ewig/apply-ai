@@ -10,17 +10,17 @@ function getSeverityIcon(severity: string) {
   switch (severity) {
     case 'error': return <XCircle className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />;
     case 'warning': return <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />;
-    case 'info': return <Info className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />;
-    default: return <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />;
+    case 'info': return <Info className="w-3.5 h-3.5 text-[var(--accent)] shrink-0 mt-0.5" />;
+    default: return <Info className="w-3.5 h-3.5 text-[var(--text-muted)] shrink-0 mt-0.5" />;
   }
 }
 
 function getSeverityBadge(severity: string) {
   switch (severity) {
-    case 'error': return 'bg-rose-50 text-rose-700 border-rose-200';
-    case 'warning': return 'bg-amber-50 text-amber-700 border-amber-200';
-    case 'info': return 'bg-blue-50 text-blue-700 border-blue-200';
-    default: return 'bg-slate-50 text-slate-600 border-slate-200';
+    case 'error': return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
+    case 'warning': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+    case 'info': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+    default: return 'bg-[var(--bg-page)] text-[var(--text-body)] border-[var(--border)]';
   }
 }
 
@@ -40,7 +40,7 @@ export default function AtsCheckComponent({ atsCheck }: AtsCheckProps) {
       <div className="flex items-center gap-6">
         <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
           <svg className="w-24 h-24 -rotate-90" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15" fill="none" stroke="#F1F5F9" strokeWidth="2.5" />
+            <circle cx="18" cy="18" r="15" fill="none" style={{ stroke: 'var(--progress-track)' }} strokeWidth="2.5" />
             <motion.circle
               cx="18" cy="18" r="15" fill="none"
               stroke={strokeColor}

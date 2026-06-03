@@ -9,17 +9,17 @@ function getPriorityIcon(priority: string) {
   switch (priority) {
     case 'critical': return <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />;
     case 'recommended': return <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />;
-    case 'optional': return <Info className="w-3.5 h-3.5 text-blue-500" />;
-    default: return <Info className="w-3.5 h-3.5 text-slate-400" />;
+    case 'optional': return <Info className="w-3.5 h-3.5 text-[var(--accent)]" />;
+    default: return <Info className="w-3.5 h-3.5 text-[var(--text-muted)]" />;
   }
 }
 
 function getEffortColor(effort: string) {
   switch (effort) {
-    case 'low': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-    case 'medium': return 'bg-amber-50 text-amber-700 border-amber-200';
-    case 'high': return 'bg-rose-50 text-rose-700 border-rose-200';
-    default: return 'bg-slate-50 text-slate-600 border-slate-200';
+    case 'low': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+    case 'medium': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+    case 'high': return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
+    default: return 'bg-[var(--bg-page)] text-[var(--text-body)] border-[var(--border)]';
   }
 }
 
@@ -37,7 +37,7 @@ export default function ActionItems({ items }: ActionItemsProps) {
       </p>
       <div className="space-y-2">
         {items.map((item, idx) => (
-          <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[var(--bg-page)] border border-[var(--border)]">
             <div className="mt-0.5 shrink-0">
               {getPriorityIcon(item.priority)}
             </div>

@@ -27,13 +27,13 @@ export default function AddResumeModal({ isOpen, onClose, onSubmit }: AddResumeM
             {...modalSpringScale}
             className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]"
           >
-            <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
+            <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--bg-page)]">
               <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
                 Add New Resume Template
               </h3>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer"
+                className="text-[var(--text-muted)] hover:text-[var(--text-heading)] text-sm font-bold cursor-pointer"
               >
                 ✕
               </button>

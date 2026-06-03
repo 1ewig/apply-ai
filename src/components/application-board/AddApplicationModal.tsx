@@ -55,7 +55,7 @@ export default function AddApplicationModal({
             className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-6xl overflow-hidden flex flex-col max-h-[95vh]"
           >
             {/* Modal Header */}
-            <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-slate-50">
+            <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--bg-page)]">
               <div>
                 <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
                   {editingJob
@@ -68,7 +68,7 @@ export default function AddApplicationModal({
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer"
+                className="text-[var(--text-muted)] hover:text-[var(--text-heading)] text-sm font-bold cursor-pointer"
               >
                 ✕
               </button>

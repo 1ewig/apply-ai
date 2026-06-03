@@ -45,7 +45,7 @@ export default function AnalysisDiff({ previous, current }: AnalysisDiffProps) {
         Changes Since Last Analysis
       </h3>
 
-      <div className="flex items-center gap-4 mb-4 p-3 rounded-xl bg-slate-50 border border-slate-100">
+      <div className="flex items-center gap-4 mb-4 p-3 rounded-xl bg-[var(--bg-page)] border border-[var(--border)]">
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-[var(--text-muted)]">Score:</span>
           <span className="text-sm font-extrabold text-[var(--text-heading)]">{previous.score}%</span>
@@ -56,22 +56,22 @@ export default function AnalysisDiff({ previous, current }: AnalysisDiffProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {newMatched.length > 0 && (
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
-            <span className="text-[9px] font-bold text-emerald-700 uppercase tracking-wider block mb-1">New Matched Keywords</span>
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wider block mb-1">New Matched Keywords</span>
             <div className="flex flex-wrap gap-1">
               {newMatched.map(kw => (
-                <span key={kw} className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">{kw}</span>
+                <span key={kw} className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 font-semibold">{kw}</span>
               ))}
             </div>
           </div>
         )}
 
         {newStrengths.length > 0 && (
-          <div className="p-3 rounded-xl bg-green-50 border border-green-100">
-            <span className="text-[9px] font-bold text-green-700 uppercase tracking-wider block mb-1">New Strengths</span>
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wider block mb-1">New Strengths</span>
             <ul className="space-y-0.5">
               {newStrengths.map((s, i) => (
-                <li key={i} className="text-[9px] text-green-800 flex items-start gap-1">
+                <li key={i} className="text-[9px] text-emerald-600 flex items-start gap-1">
                   <span className="mt-0.5">+</span> {s}
                 </li>
               ))}
@@ -80,11 +80,11 @@ export default function AnalysisDiff({ previous, current }: AnalysisDiffProps) {
         )}
 
         {resolvedGaps.length > 0 && (
-          <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
-            <span className="text-[9px] font-bold text-amber-700 uppercase tracking-wider block mb-1">Resolved Gaps</span>
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <span className="text-[9px] font-bold text-amber-500 uppercase tracking-wider block mb-1">Resolved Gaps</span>
             <ul className="space-y-0.5">
               {resolvedGaps.map((g, i) => (
-                <li key={i} className="text-[9px] text-amber-800 flex items-start gap-1">
+                <li key={i} className="text-[9px] text-amber-600 flex items-start gap-1">
                   <span className="mt-0.5 line-through">-</span> {g}
                 </li>
               ))}

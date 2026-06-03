@@ -18,7 +18,7 @@ export default function ScoreRing({ score, fitLevel }: ScoreRingProps) {
     <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)] flex flex-col items-center justify-center text-center">
       <div className="relative w-32 h-32 mb-4">
         <svg className="w-32 h-32 -rotate-90" viewBox="0 0 36 36">
-          <circle cx="18" cy="18" r="15" fill="none" stroke="#F1F5F9" strokeWidth="2.5" />
+          <circle cx="18" cy="18" r="15" fill="none" style={{ stroke: 'var(--progress-track)' }} strokeWidth="2.5" />
           <motion.circle
             cx="18" cy="18" r="15" fill="none"
             stroke={getScoreStroke(score)}
@@ -31,7 +31,7 @@ export default function ScoreRing({ score, fitLevel }: ScoreRingProps) {
           <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Match Score</span>
         </div>
       </div>
-      <div className="inline-block px-3 py-1 rounded-full bg-blue-50 text-[10px] font-bold text-[var(--accent)]">
+      <div className="inline-block px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[10px] font-bold text-[var(--accent)]">
         {fitLevel}
       </div>
     </div>

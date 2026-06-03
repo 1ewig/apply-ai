@@ -24,7 +24,7 @@ function ScoreRing({ score, size = 80 }: { score: number; size?: number }) {
 
   return (
     <svg width={size} height={size} viewBox="0 0 36 36" className="-rotate-90 shrink-0">
-      <circle cx="18" cy="18" r="15" fill="none" stroke="#F1F5F9" strokeWidth="2.5" />
+      <circle cx="18" cy="18" r="15" fill="none" style={{ stroke: 'var(--progress-track)' }} strokeWidth="2.5" />
       <motion.circle
         cx="18" cy="18" r="15" fill="none"
         stroke={stroke}
@@ -42,7 +42,7 @@ function ScoreBar({ label, score, color }: { label: string; score: number; color
   return (
     <div className="flex items-center gap-3">
       <span className="text-[10px] font-semibold text-[var(--text-muted)] w-28 shrink-0 text-right">{label}</span>
-      <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
+      <div className="flex-1 h-2.5 bg-[var(--progress-track)] rounded-full overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ background: color }}
@@ -70,7 +70,7 @@ export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: Sc
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-0.5">
             <span className="text-lg font-display font-extrabold text-[var(--text-heading)]">{overallScore}%</span>
           </div>
-          <span className="text-[9px] px-2 py-0.5 rounded-full bg-blue-50 text-[var(--accent)] font-bold mt-1">
+          <span className="text-[9px] px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold mt-1">
             {fitLevel}
           </span>
         </div>

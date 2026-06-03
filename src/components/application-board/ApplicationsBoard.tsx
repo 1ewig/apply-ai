@@ -52,17 +52,17 @@ export default function ApplicationsBoard({
       </div>
 
       {/* Premium Product Update Notice */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-50/70 via-cyan-50/50 to-indigo-50/70 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm">
+      <div className="relative overflow-hidden bg-gradient-to-r from-[var(--accent)]/5 via-[var(--accent-cyan)]/5 to-[var(--accent)]/5 border border-[var(--accent)]/20 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm">
         <div className="flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
-            <Sparkles className="w-4.5 h-4.5 text-blue-600 stroke-[2.5]" />
+          <div className="w-9 h-9 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0">
+            <Sparkles className="w-4.5 h-4.5 text-[var(--accent)] stroke-[2.5]" />
           </div>
           <div>
-            <h4 className="font-display font-extrabold text-xs text-blue-900 flex items-center gap-1.5 leading-none">
+            <h4 className="font-display font-extrabold text-xs text-[var(--text-heading)] flex items-center gap-1.5 leading-none">
               ApplyAI Premium Upgrades
-              <span className="text-[8px] bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider scale-90 origin-left">Alpha Progress</span>
+              <span className="text-[8px] bg-[var(--accent)] text-white font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider scale-90 origin-left">Alpha Progress</span>
             </h4>
-            <p className="text-[10px] text-blue-700/80 mt-1.5 max-w-2xl leading-relaxed">
+            <p className="text-[10px] text-[var(--text-body)] mt-1.5 max-w-2xl leading-relaxed">
               We are actively developing premium dashboard features! Coming next in the alpha roadmap: **Resume PDF Drag-and-Drop Parser**, **Pipeline Analytics Dashboard**, and **OAuth-Secure Gmail Auto-Sync** to automatically parse company replies.
             </p>
           </div>
@@ -93,8 +93,8 @@ export default function ApplicationsBoard({
         ))}
 
         {filteredJobs.length === 0 && (
-          <div className="col-span-full py-16 text-center border border-dashed border-slate-200 rounded-3xl bg-[var(--bg-surface)] shadow-sm">
-            <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+          <div className="col-span-full py-16 text-center border border-dashed border-[var(--border)] rounded-3xl bg-[var(--bg-surface)] shadow-sm">
+            <Search className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-4" />
             <h4 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-1">No Applications Found</h4>
             <p className="text-xs text-[var(--text-muted)] mb-6 max-w-xs mx-auto">
               {searchTerm || statusFilter !== 'all'

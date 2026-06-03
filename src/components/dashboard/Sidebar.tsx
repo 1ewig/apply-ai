@@ -109,7 +109,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
         <div className="p-4 border-b border-[var(--border)]">
           <button
             onClick={() => handleNav('/application-board')}
-            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:border-slate-300 transition-all cursor-pointer shadow-sm bg-[var(--bg-surface)] active:scale-[0.98] select-none"
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:border-[var(--accent)] transition-all cursor-pointer shadow-sm bg-[var(--bg-surface)] active:scale-[0.98] select-none"
           >
             <ArrowLeft className="w-4 h-4 text-[var(--accent)] shrink-0" />
             Back to Board
@@ -141,7 +141,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
                 onClick={() => handleScrollTo(section.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-[var(--accent)] border border-blue-100 shadow-sm translate-x-1'
+                    ? 'bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-cyan)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm translate-x-1'
                     : 'text-[var(--text-body)] hover:bg-[var(--bg-page)] hover:translate-x-0.5 border border-transparent'
                 }`}
               >
@@ -156,7 +156,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
               onClick={() => handleNav('/application-board')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                 isJobsActive
-                  ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-[var(--accent)] border border-blue-100 shadow-sm'
+                  ? 'bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-cyan)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm'
                   : 'text-[var(--text-body)] hover:bg-[var(--bg-page)] border border-transparent'
               }`}
             >
@@ -168,7 +168,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
               onClick={() => handleNav('/resume-templates')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                 isResumesActive
-                  ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-[var(--accent)] border border-blue-100 shadow-sm'
+                  ? 'bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-cyan)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm'
                   : 'text-[var(--text-body)] hover:bg-[var(--bg-page)] border border-transparent'
               }`}
             >
@@ -180,7 +180,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
       </nav>
 
       <div className="p-4 border-t border-[var(--border)] space-y-3">
-        <div className="flex items-center justify-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 shadow-sm">
+        <div className="flex items-center justify-center p-2.5 bg-[var(--bg-page)] rounded-xl border border-[var(--border)] shadow-sm">
           <UserButton showName />
         </div>
         <button
