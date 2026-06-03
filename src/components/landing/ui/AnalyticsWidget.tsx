@@ -17,7 +17,7 @@ export default function AnalyticsWidget({ compact = false }: { compact?: boolean
             <div className="text-[9px] font-medium text-[var(--text-heading)]">This Week</div>
             <div className="text-lg font-bold text-[var(--accent)] font-display">12</div>
           </div>
-          <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-[#DCFCE7] text-[#16A34A] font-medium">
+          <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-medium">
             +3 ↑
           </span>
         </div>
@@ -41,7 +41,7 @@ export default function AnalyticsWidget({ compact = false }: { compact?: boolean
           <div className="text-xs text-[var(--text-muted)]">Applications This Week</div>
           <div className="text-3xl font-bold text-[var(--text-heading)] font-display">12</div>
         </div>
-        <span className="text-xs px-2.5 py-1 rounded-full bg-[#DCFCE7] text-[#16A34A] font-medium">
+        <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-medium">
           +3 from last week ↑
         </span>
       </div>

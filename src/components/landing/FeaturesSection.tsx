@@ -2,14 +2,14 @@
 
 import { motion } from 'framer-motion';
 import { useReveal } from '@/utils/useReveal';
-import SectionHeader from './SectionHeader';
-import FeatureCard from './FeatureCard';
-import KanbanPreview from './KanbanPreview';
-import ResumeMatchWidget from './ResumeMatchWidget';
-import AnalyticsWidget from './AnalyticsWidget';
-import FollowUpPreview from './FollowUpPreview';
-import InterviewPrepPreview from './InterviewPrepPreview';
-import OutreachPreview from './OutreachPreview';
+import SectionHeader from './ui/SectionHeader';
+import FeatureCard from './ui/FeatureCard';
+import KanbanPreview from './ui/KanbanPreview';
+import ResumeMatchWidget from './ui/ResumeMatchWidget';
+import AnalyticsWidget from './ui/AnalyticsWidget';
+import FollowUpPreview from './ui/FollowUpPreview';
+import InterviewPrepPreview from './ui/InterviewPrepPreview';
+import OutreachPreview from './ui/OutreachPreview';
 import { staggerContainer, fadeInUp } from '../../utils/animations';
 
 export default function FeaturesSection() {

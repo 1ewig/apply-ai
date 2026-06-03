@@ -1,7 +1,7 @@
 "use client";
 
 import { useReveal } from '@/utils/useReveal';
-import SectionHeader from './SectionHeader';
+import SectionHeader from './ui/SectionHeader';
 import Card from '../ui/Card';
 import { AlignLeft, Sparkles, PencilLine, Eye } from 'lucide-react';
 
@@ -9,7 +9,7 @@ export default function WorkspaceSandboxSection() {
   const ref = useReveal();
 
   return (
-    <section id="sandbox" className="section-gap bg-slate-50 border-t border-slate-100">
+    <section id="sandbox" className="section-gap bg-[var(--bg-page)] border-t border-[var(--border)]">
       <div ref={ref} className="section-container reveal">
         <SectionHeader
           badge="Core Workspace"
@@ -47,7 +47,7 @@ export default function WorkspaceSandboxSection() {
 
               {/* Point 3 */}
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                <div className="w-8 h-8 rounded-lg bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] flex items-center justify-center shrink-0 border border-[var(--accent-cyan)]/20">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>

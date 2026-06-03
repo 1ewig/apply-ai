@@ -1,7 +1,7 @@
 "use client";
 
 import { useReveal } from '@/utils/useReveal';
-import SectionHeader from './SectionHeader';
+import SectionHeader from './ui/SectionHeader';
 import Card from '../ui/Card';
 import { Calendar, Bot, BarChart3, Mail, FileText, Sparkles } from 'lucide-react';
 

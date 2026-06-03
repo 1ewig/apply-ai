@@ -1,9 +1,9 @@
 "use client";
 
 import { useReveal } from '@/utils/useReveal';
-import SectionHeader from './SectionHeader';
+import SectionHeader from './ui/SectionHeader';
 import Card from '../ui/Card';
-import KanbanPreview from './KanbanPreview';
+import KanbanPreview from './ui/KanbanPreview';
 import { Kanban, Bot, BarChart3 } from 'lucide-react';
 
 const solutions = [

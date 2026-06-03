@@ -1,8 +1,8 @@
 "use client";
 
 import { useReveal } from '@/utils/useReveal';
-import SectionHeader from './SectionHeader';
-import PricingCard from './PricingCard';
+import SectionHeader from './ui/SectionHeader';
+import PricingCard from './ui/PricingCard';
 import { Zap } from 'lucide-react';
 
 const tiers = [

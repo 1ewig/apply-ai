@@ -21,7 +21,7 @@ export default function KanbanPreview({ compact = false }: { compact?: boolean }
               {col.cards.map((card) => (
                 <div
                   key={card}
-                  className="bg-[#F8FAFC] rounded-md px-2 py-1.5 text-[8px] text-[var(--text-body)] border border-[var(--border)] truncate"
+                  className="bg-[var(--bg-page)] rounded-md px-2 py-1.5 text-[8px] text-[var(--text-body)] border border-[var(--border)] truncate"
                 >
                   {card}
                 </div>

@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
-import DotGridBackground from './DotGridBackground';
-import KanbanPreview from './KanbanPreview';
-import ResumeMatchWidget from './ResumeMatchWidget';
-import AnalyticsWidget from './AnalyticsWidget';
+import DotGridBackground from './ui/DotGridBackground';
+import KanbanPreview from './ui/KanbanPreview';
+import ResumeMatchWidget from './ui/ResumeMatchWidget';
+import AnalyticsWidget from './ui/AnalyticsWidget';
 import { Pin, Sparkles, ArrowRight } from 'lucide-react';
 import {
   staggerContainer,
