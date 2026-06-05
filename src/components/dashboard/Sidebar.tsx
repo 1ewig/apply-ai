@@ -7,10 +7,6 @@ import {
   FileText,
   ArrowLeft,
   Activity,
-  CheckSquare,
-  TrendingUp,
-  Lightbulb,
-  MessageSquare,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -33,78 +29,10 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
   const isResumesActive = pathname.startsWith('/resume-templates');
   const isAnalysisPage = pathname.includes('/application-board/') && pathname.includes('/analysis');
 
-  const [activeSection, setActiveSection] = useState('overview');
-
-  useEffect(() => {
-    if (!isAnalysisPage) return;
-
-    let observer: IntersectionObserver | null = null;
-    let intervalId: any = null;
-
-    const targetIds = ['overview', 'keywords', 'strengths', 'suggestions', 'interview'];
-
-    const setupObserver = () => {
-      const elements = targetIds.map(id => document.getElementById(id)).filter(Boolean);
-
-      if (elements.length > 0) {
-        const obs = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveSection(entry.target.id);
-              }
-            });
-          },
-          {
-            root: null, // viewport
-            rootMargin: '-20% 0px -50% 0px', // trigger when section occupies middle of viewport
-            threshold: 0,
-          }
-        );
-
-        observer = obs;
-
-        elements.forEach((el) => {
-          if (el) obs.observe(el);
-        });
-
-        if (elements.length === targetIds.length && intervalId) {
-          clearInterval(intervalId);
-          intervalId = null;
-        }
-      }
-    };
-
-    setupObserver();
-    intervalId = setInterval(setupObserver, 1000);
-
-    return () => {
-      if (observer) observer.disconnect();
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [isAnalysisPage, pathname]);
-
   const handleNav = (path: string) => {
     router.push(path);
     onNavClick?.();
   };
-
-  const handleScrollTo = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setActiveSection(id);
-      onNavClick?.();
-    }
-  };
-
-  const sections = [
-    { id: 'overview', label: 'Match Overview', icon: Activity },
-    { id: 'keywords', label: 'Keyword Coverage', icon: CheckSquare },
-    { id: 'strengths', label: 'Strengths & Gaps', icon: TrendingUp },
-    { id: 'suggestions', label: 'Resume Suggestions', icon: Lightbulb },
-    { id: 'interview', label: 'Interview Coach', icon: MessageSquare },
-  ];
 
   return (
     <>
@@ -136,24 +64,12 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
 
       <nav className="flex-1 p-4 space-y-1.5">
         {isAnalysisPage ? (
-          sections.map((section) => {
-            const Icon = section.icon;
-            const isActive = activeSection === section.id;
-            return (
-              <button
-                key={section.id}
-                onClick={() => handleScrollTo(section.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-cyan)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm translate-x-1'
-                    : 'text-[var(--text-body)] hover:bg-[var(--bg-page)] hover:translate-x-0.5 border border-transparent'
-                }`}
-              >
-                <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
-                {section.label}
-              </button>
-            );
-          })
+          <button
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-cyan)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm translate-x-1 cursor-default"
+          >
+            <Activity className="w-4 h-4 text-[var(--accent)] shrink-0" />
+            Match Analysis
+          </button>
         ) : (
           <>
             <button
