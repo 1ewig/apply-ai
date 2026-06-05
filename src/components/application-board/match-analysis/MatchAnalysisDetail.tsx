@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale, contentSlideUp } from '@/utils/animations';
-import Button from '../ui/Button';
-import type { JobApplication, Resume, ComparisonResult } from '../../hooks/types';
+import Button from '../../ui/Button';
+import type { JobApplication, Resume, ComparisonResult } from '../../../hooks/types';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import ScoreRing from './ScoreRing';
 import ScoreBreakdown from './ScoreBreakdown';
