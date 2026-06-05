@@ -18,15 +18,15 @@ const AXIS_ITEMS: { key: keyof ScoreBreakdownType; label: string; color: string 
 
 function ScoreRing({ score, size = 80 }: { score: number; size?: number }) {
   const stroke = score >= 85 ? '#22C55E' : score >= 70 ? '#2563EB' : score >= 50 ? '#FACC15' : '#EF4444';
-  const radius = size * 0.45;
+  const radius = 14;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
   return (
     <svg width={size} height={size} viewBox="0 0 36 36" className="-rotate-90 shrink-0">
-      <circle cx="18" cy="18" r="15" fill="none" style={{ stroke: 'var(--progress-track)' }} strokeWidth="2.5" />
+      <circle cx="18" cy="18" r={radius} fill="none" style={{ stroke: 'var(--progress-track)' }} strokeWidth="2.5" />
       <motion.circle
-        cx="18" cy="18" r="15" fill="none"
+        cx="18" cy="18" r={radius} fill="none"
         stroke={stroke}
         strokeWidth="2.5" strokeLinecap="round"
         strokeDasharray={circumference}
