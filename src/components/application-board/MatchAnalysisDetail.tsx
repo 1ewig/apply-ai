@@ -69,12 +69,6 @@ export default function MatchAnalysisDetail({
       <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
-            <button
-              onClick={onBackClick}
-              className="p-2 rounded-lg hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4 text-[var(--text-muted)]" />
-            </button>
             <div className="min-w-0">
               <h2 className="font-display font-extrabold text-sm text-[var(--text-heading)] leading-none truncate">{job.company}</h2>
               <span className="text-[10px] text-[var(--text-muted)] mt-1 block truncate">{job.role} &bull; Match Analysis</span>
