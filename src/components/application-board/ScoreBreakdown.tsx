@@ -65,12 +65,14 @@ export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: Sc
       </h3>
 
       <div className="flex items-center gap-6 mb-5">
-        <div className="relative flex flex-col items-center">
-          <ScoreRing score={overallScore} size={80} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-0.5">
-            <span className="text-lg font-display font-extrabold text-[var(--text-heading)]">{overallScore}%</span>
+        <div className="flex flex-col items-center">
+          <div className="relative flex items-center justify-center">
+            <ScoreRing score={overallScore} size={80} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="text-lg font-display font-extrabold text-[var(--text-heading)]">{overallScore}%</span>
+            </div>
           </div>
-          <span className="text-[9px] px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold mt-1">
+          <span className="text-[9px] px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold mt-2">
             {fitLevel}
           </span>
         </div>
