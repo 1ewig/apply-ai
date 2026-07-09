@@ -9,6 +9,7 @@ import { useApplications } from '../../../hooks/useApplications';
 import { useResumes } from '../../../hooks/useResumes';
 import { useRunAnalysis } from '../../../hooks/useRunAnalysis';
 import { useApplicationSearch } from '../../../hooks/useApplicationSearch';
+import { useAnalysisStore } from '@/hooks/useAnalysisStore';
 
 import ApplicationsBoard from '../../../components/application-board/ApplicationsBoard';
 import AddApplicationModal from '../../../components/application-board/AddApplicationModal';
@@ -25,6 +26,7 @@ export default function ApplicationBoardPage() {
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
+  const { startAnalysis, finishAnalysis } = useAnalysisStore();
 
   useEffect(() => {
     setMounted(true);
@@ -55,14 +57,19 @@ export default function ApplicationBoardPage() {
         });
 
         if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          const data = await runAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
-          if (data) {
-            updateJob(jobData.editingJobId, {
-              matchScore: data.score,
-              analysisResult: data,
-              jobDescription: jobData.jobDescription,
-            });
-            router.push(`/application-board/${jobData.editingJobId}/analysis`);
+          startAnalysis();
+          try {
+            const data = await runAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
+            if (data) {
+              updateJob(jobData.editingJobId, {
+                matchScore: data.score,
+                analysisResult: data,
+                jobDescription: jobData.jobDescription,
+              });
+              router.push(`/application-board/${jobData.editingJobId}/analysis`);
+            }
+          } finally {
+            finishAnalysis();
           }
         }
       } else {
@@ -78,14 +85,19 @@ export default function ApplicationBoardPage() {
         });
 
         if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
-          if (data) {
-            updateJob(createdJobId, {
-              matchScore: data.score,
-              analysisResult: data,
-              jobDescription: jobData.jobDescription,
-            });
-            router.push(`/application-board/${createdJobId}/analysis`);
+          startAnalysis();
+          try {
+            const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
+            if (data) {
+              updateJob(createdJobId, {
+                matchScore: data.score,
+                analysisResult: data,
+                jobDescription: jobData.jobDescription,
+              });
+              router.push(`/application-board/${createdJobId}/analysis`);
+            }
+          } finally {
+            finishAnalysis();
           }
         }
       }

@@ -75,7 +75,9 @@ export function useApplicationForm(
       customResumeContent,
       analyzeImmediately,
     });
-    onClose();
+    if (!analyzeImmediately) {
+      onClose();
+    }
   };
 
   return {

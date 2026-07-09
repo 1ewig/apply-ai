@@ -5,6 +5,8 @@ import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '../ui/Button';
 import type { JobApplication, Resume } from '../../hooks/types';
 import { useApplicationForm } from '../../hooks/useApplicationForm';
+import { useAnalysisStore } from '@/hooks/useAnalysisStore';
+import { Loader2 } from 'lucide-react';
 
 interface AddApplicationModalProps {
   isOpen: boolean;
@@ -42,6 +44,7 @@ export default function AddApplicationModal({
     handleResumeTemplateChange,
     handleSubmit,
   } = useApplicationForm(isOpen, editingJob, resumes, onSubmit, onClose);
+  const { isLoading } = useAnalysisStore();
 
   return (
     <AnimatePresence>
@@ -218,9 +221,14 @@ export default function AddApplicationModal({
                     variant="primary"
                     size="sm"
                     type="submit"
-                    disabled={!customResumeContent.trim() && analyzeImmediately}
+                    disabled={(isLoading) || (!customResumeContent.trim() && analyzeImmediately)}
                   >
-                    {editingJob
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : editingJob
                       ? 'Save Changes'
                       : analyzeImmediately
                       ? 'Save & Start AI Match'

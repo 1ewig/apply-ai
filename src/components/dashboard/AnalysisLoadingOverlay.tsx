@@ -64,7 +64,7 @@ export default function AnalysisLoadingOverlay({ isLoading, phases }: AnalysisLo
       {visible && (
         <motion.div
           {...overlayFade}
-          className="fixed inset-0 bg-[var(--bg-surface)]/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
+          className="fixed inset-0 bg-[var(--bg-surface)]/80 backdrop-blur-md z-60 flex items-center justify-center p-6"
         >
           <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] p-12 text-center max-w-md w-full">
             <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
