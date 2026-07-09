@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { useAnalysisStore } from '@/hooks/useAnalysisStore';
-import Sidebar from '@/components/dashboard/Sidebar';
-import AnalysisLoadingOverlay from '@/components/dashboard/AnalysisLoadingOverlay';
-import ErrorToast from '@/components/dashboard/ErrorToast';
+import Sidebar from '@/components/(dashboard)/Sidebar';
+import AnalysisLoadingOverlay from '@/components/(dashboard)/application-board/AnalysisLoadingOverlay';
+import ErrorToast from '@/components/(dashboard)/ErrorToast';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isLoading, loadingPhase, phases, error, clearError } = useAnalysisStore();

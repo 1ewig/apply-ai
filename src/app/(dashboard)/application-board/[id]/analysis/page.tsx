@@ -10,7 +10,7 @@ import { useResumes } from '../../../../../hooks/useResumes';
 import { useRunAnalysis } from '../../../../../hooks/useRunAnalysis';
 import type { ComparisonResult } from '../../../../../hooks/types';
 
-import MatchAnalysisDetail from '../../../../../components/application-board/match-analysis/MatchAnalysisDetail';
+import MatchAnalysisDetail from '../../../../../components/(dashboard)/application-board/match-analysis/MatchAnalysisDetail';
 
 interface AnalysisQueryResult {
   currentResult: ComparisonResult;

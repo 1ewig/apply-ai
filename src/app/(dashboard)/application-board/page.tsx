@@ -11,8 +11,8 @@ import { useRunAnalysis } from '../../../hooks/useRunAnalysis';
 import { useApplicationSearch } from '../../../hooks/useApplicationSearch';
 import { useAnalysisStore } from '@/hooks/useAnalysisStore';
 
-import ApplicationsBoard from '../../../components/application-board/ApplicationsBoard';
-import AddApplicationModal from '../../../components/application-board/AddApplicationModal';
+import ApplicationsBoard from '../../../components/(dashboard)/application-board/ApplicationsBoard';
+import AddApplicationModal from '../../../components/(dashboard)/application-board/AddApplicationModal';
 import type { JobApplication } from '../../../hooks/types';
 
 export default function ApplicationBoardPage() {

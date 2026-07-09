@@ -2,9 +2,9 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
-import Button from '../ui/Button';
-import type { JobApplication, Resume } from '../../hooks/types';
-import { useApplicationForm } from '../../hooks/useApplicationForm';
+import Button from '../../ui/Button';
+import type { JobApplication, Resume } from '../../../hooks/types';
+import { useApplicationForm } from '../../../hooks/useApplicationForm';
 import { useAnalysisStore } from '@/hooks/useAnalysisStore';
 import { Loader2 } from 'lucide-react';
 

@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import { useResumes } from '../../../hooks/useResumes';
 
-import ResumeTemplates from '../../../components/resume-templates/ResumeTemplates';
-import AddResumeModal from '../../../components/resume-templates/AddResumeModal';
-import EditResumeModal from '../../../components/resume-templates/EditResumeModal';
+import ResumeTemplates from '../../../components/(dashboard)/resume-templates/ResumeTemplates';
+import AddResumeModal from '../../../components/(dashboard)/resume-templates/AddResumeModal';
+import EditResumeModal from '../../../components/(dashboard)/resume-templates/EditResumeModal';
 import type { Resume } from '../../../hooks/types';
 
 export default function ResumeTemplatesPage() {
