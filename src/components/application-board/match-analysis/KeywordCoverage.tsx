@@ -1,9 +1,11 @@
-import { CheckCircle2, AlertTriangle, FileSpreadsheet } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, FileSpreadsheet, Plus } from 'lucide-react';
 import type { EnhancedKeyword } from '@/hooks/types';
 
 interface KeywordCoverageProps {
   matchedKeywords: EnhancedKeyword[];
   missingKeywords: EnhancedKeyword[];
+  addedKeywords: Set<string>;
+  onAddKeyword: (keyword: string) => void;
 }
 
 function getCategoryColor(cat: string) {
@@ -19,11 +21,15 @@ function getCategoryColor(cat: string) {
   }
 }
 
-function KeywordTag({ kw, showCategory }: { kw: EnhancedKeyword; showCategory?: boolean }) {
+function KeywordTag({ kw, showCategory, isAdded }: { kw: EnhancedKeyword; showCategory?: boolean; isAdded?: boolean }) {
   return (
     <span className="group relative inline-flex flex-col">
-      <span className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border flex items-center gap-1 ${getCategoryColor(kw.category)}`}>
-        {kw.importance === 'required' && <span className="w-1 h-1 rounded-full bg-current" />}
+      <span className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border flex items-center gap-1 ${getCategoryColor(kw.category)} ${isAdded ? 'border-emerald-500 text-emerald-600 bg-emerald-500/10' : ''}`}>
+        {isAdded ? (
+          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+        ) : (
+          kw.importance === 'required' && <span className="w-1 h-1 rounded-full bg-current" />
+        )}
         {kw.keyword}
       </span>
       {showCategory && (
@@ -38,7 +44,11 @@ function KeywordTag({ kw, showCategory }: { kw: EnhancedKeyword; showCategory?: 
   );
 }
 
-export default function KeywordCoverage({ matchedKeywords, missingKeywords }: KeywordCoverageProps) {
+export default function KeywordCoverage({ matchedKeywords, missingKeywords, addedKeywords, onAddKeyword }: KeywordCoverageProps) {
+  // Separate missing keywords into actually missing vs added in this session
+  const dynamicMissing = missingKeywords.filter((kw) => !addedKeywords.has(kw.keyword));
+  const sessionAddedMatched = missingKeywords.filter((kw) => addedKeywords.has(kw.keyword));
+
   return (
     <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-4 flex items-center gap-2">
@@ -48,13 +58,16 @@ export default function KeywordCoverage({ matchedKeywords, missingKeywords }: Ke
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-2">
-            Matched Keywords ({matchedKeywords.length})
+            Matched Keywords ({matchedKeywords.length + sessionAddedMatched.length})
           </span>
           <div className="flex flex-wrap gap-2">
             {matchedKeywords.map((kw) => (
               <KeywordTag key={kw.keyword} kw={kw} showCategory />
             ))}
-            {matchedKeywords.length === 0 && (
+            {sessionAddedMatched.map((kw) => (
+              <KeywordTag key={kw.keyword} kw={kw} showCategory isAdded />
+            ))}
+            {matchedKeywords.length === 0 && sessionAddedMatched.length === 0 && (
               <span className="text-xs text-[var(--text-muted)] italic">No matches detected.</span>
             )}
           </div>
@@ -62,15 +75,20 @@ export default function KeywordCoverage({ matchedKeywords, missingKeywords }: Ke
 
         <div>
           <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-2">
-            Missing Keywords ({missingKeywords.length})
+            Missing Keywords ({dynamicMissing.length})
           </span>
           <div className="flex flex-wrap gap-2">
-            {missingKeywords.map((kw) => (
+            {dynamicMissing.map((kw) => (
               <span key={kw.keyword} className="group relative inline-flex flex-col">
-                <span className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border flex items-center gap-1 ${getCategoryColor(kw.category)}`}>
-                  <AlertTriangle className="w-3 h-3 text-rose-600" />
+                <button
+                  onClick={() => onAddKeyword(kw.keyword)}
+                  title="Add to resume draft"
+                  className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border flex items-center gap-1 cursor-pointer transition-all hover:scale-105 active:scale-95 ${getCategoryColor(kw.category)} hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-500/5`}
+                >
+                  <AlertTriangle className="w-3 h-3 text-rose-600 group-hover:hidden" />
+                  <Plus className="w-3 h-3 text-emerald-600 hidden group-hover:inline" />
                   {kw.keyword}
-                </span>
+                </button>
                 <span className="text-[8px] text-[var(--text-muted)] uppercase tracking-wider mt-0.5 px-1">{kw.category}</span>
                 {kw.whyImportant && (
                   <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded-lg bg-[var(--tooltip-bg)] text-white text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
@@ -79,7 +97,7 @@ export default function KeywordCoverage({ matchedKeywords, missingKeywords }: Ke
                 )}
               </span>
             ))}
-            {missingKeywords.length === 0 && (
+            {dynamicMissing.length === 0 && (
               <span className="text-xs text-[var(--text-muted)] italic">No missing keywords! Excellent coverage.</span>
             )}
           </div>
@@ -88,3 +106,4 @@ export default function KeywordCoverage({ matchedKeywords, missingKeywords }: Ke
     </div>
   );
 }
+

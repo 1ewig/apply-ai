@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { scoreReveal } from '@/utils/animations';
 import type { ScoreBreakdown as ScoreBreakdownType } from '@/hooks/types';
 import { BarChart3 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface ScoreBreakdownProps {
   overallScore: number;
@@ -57,6 +57,38 @@ function ScoreBar({ label, score, color }: { label: string; score: number; color
 }
 
 export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: ScoreBreakdownProps) {
+  const [displayScore, setDisplayScore] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const end = Math.round(overallScore);
+    if (end === 0) {
+      setDisplayScore(0);
+      return;
+    }
+
+    const duration = 1000;
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOut = progress * (2 - progress);
+      const currentVal = Math.round(easeOut * end);
+
+      setDisplayScore(currentVal);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [overallScore]);
+
   return (
     <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 shadow-[var(--shadow-card)]">
       <h3 className="font-display font-extrabold text-sm text-[var(--text-heading)] mb-4 flex items-center gap-2">
@@ -69,7 +101,7 @@ export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: Sc
           <div className="relative flex items-center justify-center">
             <ScoreRing score={overallScore} size={80} />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <span className="text-lg font-display font-extrabold text-[var(--text-heading)]">{overallScore}%</span>
+              <span className="text-lg font-display font-extrabold text-[var(--text-heading)]">{displayScore}%</span>
             </div>
           </div>
           <span className="text-[9px] px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold mt-2">
@@ -91,3 +123,4 @@ export default function ScoreBreakdown({ overallScore, fitLevel, breakdown }: Sc
     </div>
   );
 }
+

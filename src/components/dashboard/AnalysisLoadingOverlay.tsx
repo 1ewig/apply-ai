@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { overlayFade, progressWidth } from '@/utils/animations';
 import { Sparkle } from 'lucide-react';
@@ -8,10 +9,59 @@ interface AnalysisLoadingOverlayProps {
   phases: string[];
 }
 
-export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases }: AnalysisLoadingOverlayProps) {
+
+export default function AnalysisLoadingOverlay({ isLoading, phases }: AnalysisLoadingOverlayProps) {
+  const [localPhase, setLocalPhase] = useState(0);
+  const [apiFinished, setApiFinished] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) {
+      setLocalPhase(0);
+      setApiFinished(false);
+      setVisible(true);
+    } else {
+      setApiFinished(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!visible) return;
+
+    const interval = setInterval(() => {
+      setLocalPhase((prev) => {
+        if (prev < phases.length - 1) {
+          return prev + 1;
+        } else {
+          // If we reached the end but API is still processing, stay at 95%
+          if (apiFinished) {
+            setVisible(false);
+            clearInterval(interval);
+          }
+          return prev;
+        }
+      });
+    }, 600); // 12 phases * 600ms = 7.2 seconds cinematic minimum duration
+
+    return () => clearInterval(interval);
+  }, [visible, apiFinished, phases.length]);
+
+  // If the API finishes and we've reached the last phase, hide
+  useEffect(() => {
+    if (apiFinished && localPhase === phases.length - 1) {
+      const delay = setTimeout(() => {
+        setVisible(false);
+      }, 300);
+      return () => clearTimeout(delay);
+    }
+  }, [apiFinished, localPhase, phases.length]);
+
+  const activePhase = phases[localPhase] || phases[0];
+  const progressPercent = ((localPhase + 1) / phases.length) * 100;
+
   return (
     <AnimatePresence>
-      {isLoading && (
+      {visible && (
         <motion.div
           {...overlayFade}
           className="fixed inset-0 bg-[var(--bg-surface)]/80 backdrop-blur-md z-50 flex items-center justify-center p-6"
@@ -35,12 +85,12 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
               </span>
               <div className="text-xs font-semibold text-[var(--text-heading)] flex items-center gap-2 min-h-[32px]">
                 <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse shrink-0"></div>
-                {phases[loadingPhase]}
+                {activePhase}
               </div>
               <div className="w-full bg-[var(--progress-track)] h-1 rounded-full mt-3 overflow-hidden">
                 <motion.div
                   className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] h-full"
-                  {...progressWidth(((loadingPhase + 1) / phases.length) * 100)}
+                  {...progressWidth(progressPercent)}
                 />
               </div>
             </div>
@@ -50,3 +100,4 @@ export default function AnalysisLoadingOverlay({ isLoading, loadingPhase, phases
     </AnimatePresence>
   );
 }
+
