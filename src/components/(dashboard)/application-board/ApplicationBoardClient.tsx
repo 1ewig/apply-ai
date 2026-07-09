@@ -9,7 +9,7 @@ import { useApplications } from '../../../hooks/useApplications';
 import { useResumes } from '../../../hooks/useResumes';
 import { useRunAnalysis } from '../../../hooks/useRunAnalysis';
 import { useApplicationSearch } from '../../../hooks/useApplicationSearch';
-import { useAnalysisStore } from '@/hooks/useAnalysisStore';
+import { useSubmitApplication } from '../../../hooks/useSubmitApplication';
 
 import ApplicationsBoard from './ApplicationsBoard';
 import AddApplicationModal from './AddApplicationModal';
@@ -28,85 +28,12 @@ export default function ApplicationBoardClient() {
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
-  const { startAnalysis, finishAnalysis } = useAnalysisStore();
+  const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router });
 
   useEffect(() => {
     setMounted(true);
     storeUser().catch((err: any) => console.error('Error syncing user:', err));
   }, [storeUser]);
-
-  const handleAddJobSubmit = useCallback(async (jobData: {
-    company: string;
-    role: string;
-    status: JobApplication['status'];
-    url: string;
-    jobDescription: string;
-    selectedResumeId: string;
-    customResumeContent: string;
-    analyzeImmediately: boolean;
-    editingJobId?: string;
-  }) => {
-    try {
-      if (jobData.editingJobId) {
-        await updateJob(jobData.editingJobId, {
-          company: jobData.company,
-          role: jobData.role,
-          status: jobData.status,
-          url: jobData.url || '',
-          jobDescription: jobData.jobDescription || '',
-          resumeUsed: jobData.selectedResumeId || '',
-          customResumeContent: jobData.customResumeContent || '',
-        });
-
-        if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          startAnalysis();
-          try {
-            const data = await runAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
-            if (data) {
-              updateJob(jobData.editingJobId, {
-                matchScore: data.score,
-                analysisResult: data,
-                jobDescription: jobData.jobDescription,
-              });
-              router.push(`/application-board/${jobData.editingJobId}/analysis`);
-            }
-          } finally {
-            finishAnalysis();
-          }
-        }
-      } else {
-        const createdJobId = await addJob({
-          company: jobData.company,
-          role: jobData.role,
-          status: jobData.status,
-          dateApplied: new Date().toLocaleDateString(),
-          url: jobData.url || '',
-          jobDescription: jobData.jobDescription || '',
-          resumeUsed: jobData.selectedResumeId || '',
-          customResumeContent: jobData.customResumeContent || '',
-        });
-
-        if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          startAnalysis();
-          try {
-            const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
-            if (data) {
-              updateJob(createdJobId, {
-                matchScore: data.score,
-                analysisResult: data,
-                jobDescription: jobData.jobDescription,
-              });
-              router.push(`/application-board/${createdJobId}/analysis`);
-            }
-          } finally {
-            finishAnalysis();
-          }
-        }
-      }
-    } catch (err: any) {
-      console.error('Error saving job application:', err);
-    }
-  }, [addJob, updateJob, runAnalysis, router]);
 
   const handleAddJob = useCallback(() => {
     setEditingJob(null);
