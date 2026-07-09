@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'ghost' | 'outline' | 'white-outline';
+  variant?: 'primary' | 'ghost' | 'outline' | 'white-outline' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
 }
@@ -25,6 +25,8 @@ export default function Button({
       'border border-[var(--border)] rounded-full hover:bg-[var(--bg-page)] text-[var(--text-heading)]',
     'white-outline':
       'border border-white/30 rounded-full hover:bg-white/10 text-white',
+    danger:
+      'bg-rose-500/90 text-white rounded-full hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]',
   };
 
   const sizes = {

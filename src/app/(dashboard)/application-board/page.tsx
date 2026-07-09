@@ -13,6 +13,7 @@ import { useAnalysisStore } from '@/hooks/useAnalysisStore';
 
 import ApplicationsBoard from '../../../components/(dashboard)/application-board/ApplicationsBoard';
 import AddApplicationModal from '../../../components/(dashboard)/application-board/AddApplicationModal';
+import ConfirmDialog from '../../../components/ui/ConfirmDialog';
 import type { JobApplication } from '../../../hooks/types';
 
 export default function ApplicationBoardPage() {
@@ -20,6 +21,7 @@ export default function ApplicationBoardPage() {
   const [mounted, setMounted] = useState(false);
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
+  const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
   const storeUser = useMutation(api.users.storeUser);
 
   const { jobs, addJob, updateJob, deleteJob } = useApplications();
@@ -149,7 +151,7 @@ export default function ApplicationBoardPage() {
         onMatchClick={handleMatchClick}
         onViewAnalysisClick={handleViewAnalysis}
         onUpdateJobStatus={(id, status) => updateJob(id, { status })}
-        onDeleteJob={(id) => deleteJob(id)}
+        onDeleteJob={(id) => setPendingDeleteJobId(id)}
       />
 
       <AddApplicationModal
@@ -158,6 +160,18 @@ export default function ApplicationBoardPage() {
         resumes={resumes}
         editingJob={editingJob}
         onSubmit={(data) => handleAddJobSubmit({ ...data, editingJobId: editingJob?.id })}
+      />
+
+      <ConfirmDialog
+        isOpen={!!pendingDeleteJobId}
+        title="Delete Application"
+        message={`Are you sure you want to delete this application? This action cannot be undone.`}
+        confirmLabel="Delete"
+        onConfirm={() => {
+          if (pendingDeleteJobId) deleteJob(pendingDeleteJobId);
+          setPendingDeleteJobId(null);
+        }}
+        onCancel={() => setPendingDeleteJobId(null)}
       />
     </>
   );
