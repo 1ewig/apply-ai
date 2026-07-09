@@ -1,24 +1,25 @@
+'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '../../ui/Button';
 import type { Resume } from '../../../hooks/types';
 import { useResumeForm } from '../../../hooks/useResumeForm';
 
-interface EditResumeModalProps {
-  resume: Resume | null;
+interface ResumeFormModalProps {
+  isOpen: boolean;
   onClose: () => void;
-  onSubmit: (id: string, data: { name: string; content: string; isDefault: boolean }) => void;
+  onSubmit: (data: { name: string; content: string; isDefault: boolean }) => void;
+  editingResume?: Resume | null;
 }
 
-export default function EditResumeModal({ resume, onClose, onSubmit }: EditResumeModalProps) {
-  const isOpen = resume !== null;
+export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResume }: ResumeFormModalProps) {
+  const isEditing = !!editingResume;
 
   const { name, setName, content, setContent, isDefault, setIsDefault, handleSubmit } = useResumeForm({
     isOpen,
-    editingResume: resume,
-    onSubmit: (data) => {
-      if (resume) onSubmit(resume.id, data);
-    },
+    editingResume,
+    onSubmit,
     onClose,
   });
 
@@ -35,7 +36,7 @@ export default function EditResumeModal({ resume, onClose, onSubmit }: EditResum
           >
             <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--bg-page)]">
               <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
-                Edit Resume Template
+                {isEditing ? 'Edit Resume Template' : 'Add New Resume Template'}
               </h3>
               <button
                 onClick={onClose}
@@ -73,12 +74,12 @@ export default function EditResumeModal({ resume, onClose, onSubmit }: EditResum
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  id="edit-isDefault"
+                  id="modal-isDefault"
                   checked={isDefault}
                   onChange={(e) => setIsDefault(e.target.checked)}
                   className="w-4 h-4 rounded text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer"
                 />
-                <label htmlFor="edit-isDefault" className="font-medium text-[var(--text-heading)] cursor-pointer selection:bg-transparent">
+                <label htmlFor="modal-isDefault" className="font-medium text-[var(--text-heading)] cursor-pointer selection:bg-transparent">
                   Set as Active default template for matching
                 </label>
               </div>
@@ -88,7 +89,7 @@ export default function EditResumeModal({ resume, onClose, onSubmit }: EditResum
                   Cancel
                 </Button>
                 <Button variant="primary" size="sm" type="submit">
-                  Save Changes
+                  {isEditing ? 'Save Changes' : 'Save Template'}
                 </Button>
               </div>
             </form>
