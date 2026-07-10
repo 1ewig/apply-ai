@@ -7,9 +7,11 @@ import ResumeTemplates from './ResumeTemplates';
 import ResumeFormModal from './ResumeFormModal';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import type { Resume } from '../../../hooks/types';
+import { useAnalysisStore } from '../../../hooks/useAnalysisStore';
 
 export default function ResumeTemplatesClient() {
   const { resumes, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
+  const { setError } = useAnalysisStore();
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -21,11 +23,16 @@ export default function ResumeTemplatesClient() {
     setEditingResume(null);
   };
 
-  const handleSubmit = (data: { name: string; content: string; isDefault: boolean }) => {
-    if (editingResume) {
-      updateResume(editingResume.id, data);
-    } else {
-      addResume(data);
+  const handleSubmit = async (data: { name: string; content: string; isDefault: boolean }) => {
+    try {
+      if (editingResume) {
+        await updateResume(editingResume.id, data);
+      } else {
+        await addResume(data);
+      }
+    } catch (err: any) {
+      console.error('Failed to save resume:', err);
+      setError(err.message || 'Failed to save resume template.');
     }
   };
 
@@ -36,7 +43,14 @@ export default function ResumeTemplatesClient() {
         onAddResumeClick={() => setIsAddResumeOpen(true)}
         onEditResumeClick={(resume) => setEditingResume(resume)}
         onDeleteResume={(id) => setPendingDeleteId(id)}
-        onSetDefaultResume={(id) => setDefaultResume(id)}
+        onSetDefaultResume={async (id) => {
+          try {
+            await setDefaultResume(id);
+          } catch (err: any) {
+            console.error('Failed to set default resume:', err);
+            setError(err.message || 'Failed to set default resume.');
+          }
+        }}
       />
 
       <ResumeFormModal
@@ -51,8 +65,15 @@ export default function ResumeTemplatesClient() {
         title="Delete Resume Template"
         message={`Are you sure you want to delete "${pendingDelete?.name || 'this template'}"? This action cannot be undone.`}
         confirmLabel="Delete"
-        onConfirm={() => {
-          if (pendingDeleteId) deleteResume(pendingDeleteId);
+        onConfirm={async () => {
+          if (pendingDeleteId) {
+            try {
+              await deleteResume(pendingDeleteId);
+            } catch (err: any) {
+              console.error('Failed to delete resume:', err);
+              setError(err.message || 'Failed to delete resume template.');
+            }
+          }
           setPendingDeleteId(null);
         }}
         onCancel={() => setPendingDeleteId(null)}

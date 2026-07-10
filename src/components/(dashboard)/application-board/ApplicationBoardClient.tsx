@@ -22,7 +22,6 @@ export default function ApplicationBoardClient() {
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
   const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
-  const storeUser = useMutation(api.users.storeUser);
 
   const { jobs, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
@@ -32,8 +31,7 @@ export default function ApplicationBoardClient() {
 
   useEffect(() => {
     setMounted(true);
-    storeUser().catch((err: any) => console.error('Error syncing user:', err));
-  }, [storeUser]);
+  }, []);
 
   const handleAddJob = useCallback(() => {
     setEditingJob(null);

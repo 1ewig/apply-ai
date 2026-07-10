@@ -27,18 +27,27 @@ export default function Navbar({
       aria-label="Main navigation"
     >
       <div className="section-container flex items-center justify-between h-16">
-        {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 grid grid-cols-2 gap-1">
-            <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
-            <div className="w-3 h-3 rounded-full bg-[var(--accent-cyan)]" />
-            <div className="w-3 h-3 rounded-full bg-[var(--accent-yellow)]" />
-            <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
-          </div>
-          <span className="font-display font-bold text-lg text-[var(--text-heading)]">
-            ApplyAI
-          </span>
-        </a>
+        {/* Logo & Theme Toggle */}
+        <div className="flex items-center gap-3 shrink-0">
+          <a href="#" className="flex items-center gap-2.5">
+            <div className="w-8 h-8 grid grid-cols-2 gap-1">
+              <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
+              <div className="w-3 h-3 rounded-full bg-[var(--accent-cyan)]" />
+              <div className="w-3 h-3 rounded-full bg-[var(--accent-yellow)]" />
+              <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
+            </div>
+            <span className="font-display font-bold text-lg text-[var(--text-heading)]">
+              ApplyAI
+            </span>
+          </a>
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all cursor-pointer"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+          </button>
+        </div>
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8">
@@ -68,13 +77,6 @@ export default function Navbar({
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all"
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          </button>
           {isDashboard ? (
             <>
               <Badge className="text-xs px-2.5 py-1">
@@ -86,14 +88,8 @@ export default function Navbar({
             <>
               <Show when="signed-out">
                 <Link href="/sign-in">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="primary" size="sm">
                     Sign In
-                  </Button>
-                </Link>
-                <Link href="/application-board">
-                  <Button variant="primary" size="sm" className="group">
-                    Launch Dashboard
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </Button>
                 </Link>
               </Show>
@@ -155,14 +151,8 @@ export default function Navbar({
           <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-[var(--border)]">
             <Show when="signed-out">
               <Link href="/sign-in">
-                <Button variant="ghost" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
+                <Button variant="primary" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
                   Sign In
-                </Button>
-              </Link>
-              <Link href="/application-board">
-                <Button variant="primary" size="md" className="w-full group" onClick={() => setMobileOpen(false)}>
-                  Launch Dashboard
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
             </Show>

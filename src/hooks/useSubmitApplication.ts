@@ -23,7 +23,7 @@ interface UseSubmitApplicationOptions {
 }
 
 export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }: UseSubmitApplicationOptions) {
-  const { startAnalysis, finishAnalysis } = useAnalysisStore();
+  const { startAnalysis, finishAnalysis, setError } = useAnalysisStore();
 
   const handleAddJobSubmit = useCallback(async (jobData: {
     company: string;
@@ -95,6 +95,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
       }
     } catch (err: any) {
       console.error('Error saving job application:', err);
+      setError(err.message || 'Failed to save job application.');
     }
   }, [addJob, updateJob, runAnalysis, router]);
 

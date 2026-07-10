@@ -51,18 +51,18 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <ConvexClientProvider>
-        <html lang="en" suppressHydrationWarning>
-          <head>
-            <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-          </head>
-          <body className={`${bricolageGrotesque.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        </head>
+        <body className={`${bricolageGrotesque.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}>
+          <ConvexClientProvider>
             <ThemeProvider>
               {children}
             </ThemeProvider>
-          </body>
-        </html>
-      </ConvexClientProvider>
+          </ConvexClientProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
