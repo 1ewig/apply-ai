@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { JobApplication, Resume } from '@/types';
+import { useMemo } from 'react';
+import { useForm } from '@/hooks/useForm';
+import type { JobApplication, Resume } from '@/types';
 
 export function useApplicationForm(
   isOpen: boolean,
@@ -17,86 +18,95 @@ export function useApplicationForm(
   }) => void | Promise<void>,
   onClose: () => void,
 ) {
-  const [company, setCompany] = useState('');
-  const [role, setRole] = useState('');
-  const [status, setStatus] = useState<JobApplication['status']>('wishlist');
-  const [url, setUrl] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [selectedResumeId, setSelectedResumeId] = useState('');
-  const [customResumeContent, setCustomResumeContent] = useState('');
-  const [analyzeImmediately, setAnalyzeImmediately] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const defaults = {
+    company: '',
+    role: '',
+    status: 'wishlist' as JobApplication['status'],
+    url: '',
+    jobDescription: '',
+    selectedResumeId: '',
+    customResumeContent: '',
+    analyzeImmediately: true,
+  };
 
-  useEffect(() => {
-    if (!isOpen) return;
+  const initialValues = useMemo(() => {
+    if (!isOpen) return null;
 
     if (editingJob) {
-      setCompany(editingJob.company || '');
-      setRole(editingJob.role || '');
-      setStatus(editingJob.status || 'wishlist');
-      setUrl(editingJob.url || '');
-      setJobDescription(editingJob.jobDescription || '');
-      setSelectedResumeId(editingJob.resumeUsed || '');
-      setCustomResumeContent(editingJob.customResumeContent || '');
-      setAnalyzeImmediately(false);
-    } else {
-      const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
-      if (defaultResume) {
-        setSelectedResumeId(defaultResume.id);
-        setCustomResumeContent(defaultResume.content);
-      } else {
-        setSelectedResumeId('');
-        setCustomResumeContent('');
-      }
-      setCompany('');
-      setRole('');
-      setStatus('wishlist');
-      setUrl('');
-      setJobDescription('');
-      setAnalyzeImmediately(true);
+      return {
+        company: editingJob.company || '',
+        role: editingJob.role || '',
+        status: editingJob.status || 'wishlist' as JobApplication['status'],
+        url: editingJob.url || '',
+        jobDescription: editingJob.jobDescription || '',
+        selectedResumeId: editingJob.resumeUsed || '',
+        customResumeContent: editingJob.customResumeContent || '',
+        analyzeImmediately: false,
+      };
     }
+
+    const defaultResume = resumes.find((r) => r.isDefault) || resumes[0];
+    return {
+      company: '',
+      role: '',
+      status: 'wishlist' as JobApplication['status'],
+      url: '',
+      jobDescription: '',
+      selectedResumeId: defaultResume?.id ?? '',
+      customResumeContent: defaultResume?.content ?? '',
+      analyzeImmediately: true,
+    };
   }, [isOpen, editingJob, resumes]);
 
+  const { values, setField, isSubmitting, handleSubmit: formSubmit } = useForm({
+    isOpen,
+    initialValues,
+    defaults,
+    onSubmit: async (vals) => {
+      await onSubmit({
+        company: vals.company.trim() || 'Unnamed Company',
+        role: vals.role.trim() || 'Unnamed Role',
+        status: vals.status,
+        url: vals.url,
+        jobDescription: vals.jobDescription,
+        selectedResumeId: vals.selectedResumeId,
+        customResumeContent: vals.customResumeContent,
+        analyzeImmediately: vals.analyzeImmediately,
+      });
+    },
+    onClose,
+    autoCloseOnSubmit: false,
+  });
+
   const handleResumeTemplateChange = (templateId: string) => {
-    setSelectedResumeId(templateId);
-    const selectedTemplate = resumes.find(r => r.id === templateId);
+    setField('selectedResumeId', templateId);
+    const selectedTemplate = resumes.find((r) => r.id === templateId);
     if (selectedTemplate) {
-      setCustomResumeContent(selectedTemplate.content);
+      setField('customResumeContent', selectedTemplate.content);
     }
   };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      await onSubmit({
-        company: company.trim() || 'Unnamed Company',
-        role: role.trim() || 'Unnamed Role',
-        status,
-        url,
-        jobDescription,
-        selectedResumeId,
-        customResumeContent,
-        analyzeImmediately,
-      });
-      if (!analyzeImmediately) {
-        onClose();
-      }
-    } catch (err) {
-      console.error('Failed to submit application form:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
+    await formSubmit();
+    if (!values.analyzeImmediately) onClose();
   };
 
   return {
-    company, setCompany,
-    role, setRole,
-    status, setStatus,
-    url, setUrl,
-    jobDescription, setJobDescription,
-    selectedResumeId,
-    customResumeContent, setCustomResumeContent,
-    analyzeImmediately, setAnalyzeImmediately,
+    company: values.company,
+    setCompany: (v: string) => setField('company', v),
+    role: values.role,
+    setRole: (v: string) => setField('role', v),
+    status: values.status,
+    setStatus: (v: JobApplication['status']) => setField('status', v),
+    url: values.url,
+    setUrl: (v: string) => setField('url', v),
+    jobDescription: values.jobDescription,
+    setJobDescription: (v: string) => setField('jobDescription', v),
+    selectedResumeId: values.selectedResumeId,
+    customResumeContent: values.customResumeContent,
+    setCustomResumeContent: (v: string) => setField('customResumeContent', v),
+    analyzeImmediately: values.analyzeImmediately,
+    setAnalyzeImmediately: (v: boolean) => setField('analyzeImmediately', v),
     handleResumeTemplateChange,
     isSubmitting,
     handleSubmit,

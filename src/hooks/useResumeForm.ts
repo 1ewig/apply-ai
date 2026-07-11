@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useForm } from '@/hooks/useForm';
 
 interface ResumeFormData {
   name: string;
@@ -14,42 +14,32 @@ interface UseResumeFormOptions {
 }
 
 export function useResumeForm({ isOpen, editingResume, onSubmit, onClose }: UseResumeFormOptions) {
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [isDefault, setIsDefault] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const defaults = { name: '', content: '', isDefault: false };
+  const initialValues = editingResume ?? null;
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (editingResume) {
-      setName(editingResume.name);
-      setContent(editingResume.content);
-      setIsDefault(editingResume.isDefault);
-    } else {
-      setName('');
-      setContent('');
-      setIsDefault(false);
-    }
-  }, [isOpen, editingResume]);
+  const { values, setField, isSubmitting, handleSubmit: formSubmit } = useForm({
+    isOpen,
+    initialValues,
+    defaults,
+    onSubmit: async (vals) => {
+      await onSubmit({ name: vals.name, content: vals.content, isDefault: vals.isDefault });
+    },
+    onClose,
+    autoCloseOnSubmit: true,
+  });
 
   const handleSubmit = async () => {
-    if (!name || !content) return;
-    setIsSubmitting(true);
-    try {
-      await onSubmit({ name, content, isDefault });
-      onClose();
-    } catch (err) {
-      console.error('Failed to submit resume form:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
+    if (!values.name || !values.content) return;
+    await formSubmit();
   };
 
   return {
-    name, setName,
-    content, setContent,
-    isDefault, setIsDefault,
+    name: values.name,
+    setName: (v: string) => setField('name', v),
+    content: values.content,
+    setContent: (v: string) => setField('content', v),
+    isDefault: values.isDefault,
+    setIsDefault: (v: boolean) => setField('isDefault', v),
     isSubmitting,
     handleSubmit,
   };
