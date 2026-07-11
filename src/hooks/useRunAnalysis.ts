@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 export function useRunAnalysis() {
   const { startAnalysis, setError, finishAnalysis } = useAnalysisStore();

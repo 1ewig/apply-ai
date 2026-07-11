@@ -2,9 +2,9 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
-import Button from '../../ui/Button';
-import type { Resume } from '../../../hooks/types';
-import { useResumeForm } from '../../../hooks/useResumeForm';
+import Button from '@/components/ui/Button';
+import type { Resume } from '@/hooks/types';
+import { useResumeForm } from '@/hooks/useResumeForm';
 import { Loader2 } from 'lucide-react';
 
 interface ResumeFormModalProps {

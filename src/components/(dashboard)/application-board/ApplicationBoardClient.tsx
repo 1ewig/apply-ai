@@ -5,17 +5,17 @@ import { useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useRouter } from 'next/navigation';
 
-import { useApplications } from '../../../hooks/useApplications';
-import { useResumes } from '../../../hooks/useResumes';
-import { useRunAnalysis } from '../../../hooks/useRunAnalysis';
-import { useApplicationSearch } from '../../../hooks/useApplicationSearch';
-import { useSubmitApplication } from '../../../hooks/useSubmitApplication';
+import { useApplications } from '@/hooks/useApplications';
+import { useResumes } from '@/hooks/useResumes';
+import { useRunAnalysis } from '@/hooks/useRunAnalysis';
+import { useApplicationSearch } from '@/hooks/useApplicationSearch';
+import { useSubmitApplication } from '@/hooks/useSubmitApplication';
 
 import ApplicationsBoard from './ApplicationsBoard';
 import AddApplicationModal from './AddApplicationModal';
-import ConfirmDialog from '../../ui/ConfirmDialog';
-import type { JobApplication } from '../../../hooks/types';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import type { JobApplication } from '@/hooks/types';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 export default function ApplicationBoardClient() {
   const router = useRouter();
