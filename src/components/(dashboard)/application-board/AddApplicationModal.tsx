@@ -67,7 +67,11 @@ export default function AddApplicationModal({
                     ? 'Edit Job Application'
                     : 'Add New Job Application'}
                 </h3>
-                <p className="text-[10px] text-[var(--text-muted)] mt-0.5">Customize application details, edit resume wording, and load job requirements side-by-side</p>
+                <p className="text-[10px] text-[var(--text-muted)] mt-0.5">
+                  {editingJob
+                    ? 'Update basic application details, pipeline status, and target URL'
+                    : 'Customize application details, edit resume highlights, and load job requirements side-by-side'}
+                </p>
               </div>
               <button
                 onClick={onClose}
