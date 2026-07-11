@@ -43,27 +43,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
           role: jobData.role,
           status: jobData.status,
           url: jobData.url || '',
-          jobDescription: jobData.jobDescription || '',
-          resumeUsed: jobData.selectedResumeId || '',
-          customResumeContent: jobData.customResumeContent || '',
         });
-
-        if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          startAnalysis();
-          try {
-            const data = await runAnalysis(jobData.editingJobId, jobData.customResumeContent, jobData.jobDescription);
-            if (data) {
-              updateJob(jobData.editingJobId, {
-                matchScore: data.score,
-                analysisResult: data,
-                jobDescription: jobData.jobDescription,
-              });
-              router.push(`/application-board/${jobData.editingJobId}/analysis`);
-            }
-          } finally {
-            finishAnalysis();
-          }
-        }
       } else {
         const createdJobId = await addJob({
           company: jobData.company,
