@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from './Button';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -12,6 +12,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   variant?: 'danger';
+  isLoading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -23,6 +24,7 @@ export default function ConfirmDialog({
   confirmLabel = 'Delete',
   cancelLabel = 'Cancel',
   variant = 'danger' as const,
+  isLoading = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -45,11 +47,18 @@ export default function ConfirmDialog({
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">{message}</p>
             </div>
             <div className="px-6 pb-6 flex justify-end gap-2">
-              <Button variant="outline" size="sm" type="button" onClick={onCancel}>
+              <Button variant="outline" size="sm" type="button" onClick={onCancel} disabled={isLoading}>
                 {cancelLabel}
               </Button>
-              <Button variant={variant} size="sm" type="button" onClick={onConfirm}>
-                {confirmLabel}
+              <Button variant={variant} size="sm" type="button" onClick={onConfirm} disabled={isLoading}>
+                {isLoading ? (
+                  <span className="flex items-center gap-1.5">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    Deleting...
+                  </span>
+                ) : (
+                  confirmLabel
+                )}
               </Button>
             </div>
           </motion.div>

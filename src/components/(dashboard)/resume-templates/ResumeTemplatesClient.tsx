@@ -15,6 +15,7 @@ export default function ResumeTemplatesClient() {
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const pendingDelete = pendingDeleteId ? resumes.find((r) => r.id === pendingDeleteId) : null;
 
@@ -66,16 +67,20 @@ export default function ResumeTemplatesClient() {
         title="Delete Resume Template"
         message={`Are you sure you want to delete "${pendingDelete?.name || 'this template'}"? This action cannot be undone.`}
         confirmLabel="Delete"
+        isLoading={isDeleting}
         onConfirm={async () => {
           if (pendingDeleteId) {
+            setIsDeleting(true);
             try {
               await deleteResume(pendingDeleteId);
+              setPendingDeleteId(null);
             } catch (err: any) {
               console.error('Failed to delete resume:', err);
               setError(err.message || 'Failed to delete resume template.');
+            } finally {
+              setIsDeleting(false);
             }
           }
-          setPendingDeleteId(null);
         }}
         onCancel={() => setPendingDeleteId(null)}
       />

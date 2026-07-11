@@ -15,6 +15,7 @@ import ApplicationsBoard from './ApplicationsBoard';
 import AddApplicationModal from './AddApplicationModal';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import type { JobApplication } from '../../../hooks/types';
+import { useAnalysisStore } from '../../../hooks/useAnalysisStore';
 
 export default function ApplicationBoardClient() {
   const router = useRouter();
@@ -22,12 +23,14 @@ export default function ApplicationBoardClient() {
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
   const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { jobs, isLoading, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
   const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router });
+  const { setError } = useAnalysisStore();
 
   useEffect(() => {
     setMounted(true);
@@ -93,9 +96,20 @@ export default function ApplicationBoardClient() {
         title="Delete Application"
         message="Are you sure you want to delete this application? This action cannot be undone."
         confirmLabel="Delete"
-        onConfirm={() => {
-          if (pendingDeleteJobId) deleteJob(pendingDeleteJobId);
-          setPendingDeleteJobId(null);
+        isLoading={isDeleting}
+        onConfirm={async () => {
+          if (pendingDeleteJobId) {
+            setIsDeleting(true);
+            try {
+              await deleteJob(pendingDeleteJobId);
+              setPendingDeleteJobId(null);
+            } catch (err: any) {
+              console.error('Failed to delete job:', err);
+              setError(err.message || 'Failed to delete application.');
+            } finally {
+              setIsDeleting(false);
+            }
+          }
         }}
         onCancel={() => setPendingDeleteJobId(null)}
       />
