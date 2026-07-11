@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../providers/ThemeProvider';
+import { useThemeStore } from '@/stores/useThemeStore';
 import { backdropFade } from '@/utils/animations';
 
 interface SidebarProps {
@@ -21,9 +21,14 @@ interface SidebarProps {
 }
 
 function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
-  const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, toggleTheme } = useThemeStore();
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isJobsActive = pathname.startsWith('/application-board');
   const isResumesActive = pathname.startsWith('/resume-templates');
@@ -104,8 +109,19 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
           onClick={toggleTheme}
           className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer h-9"
         >
-          {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          {theme === 'dark' ? 'Light' : 'Dark'}
+          {!mounted ? (
+            <div className="w-3.5 h-3.5" />
+          ) : theme === 'dark' ? (
+            <>
+              <Sun className="w-3.5 h-3.5" />
+              Light
+            </>
+          ) : (
+            <>
+              <Moon className="w-3.5 h-3.5" />
+              Dark
+            </>
+          )}
         </button>
         <button
           onClick={() => router.push('/')}

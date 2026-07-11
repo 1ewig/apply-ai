@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import "@/index.css";
 
 const bricolageGrotesque = Bricolage_Grotesque({
@@ -36,10 +35,7 @@ export const metadata: Metadata = {
 
 const themeScript = `
   (function() {
-    var theme = localStorage.getItem('theme');
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+    var theme = localStorage.getItem('theme') || 'dark';
     document.documentElement.classList.add(theme);
   })();
 `;
@@ -57,9 +53,7 @@ export default function RootLayout({
         </head>
         <body className={`${bricolageGrotesque.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}>
           <ConvexClientProvider>
-            <ThemeProvider>
-              {children}
-            </ThemeProvider>
+            {children}
           </ConvexClientProvider>
         </body>
       </html>

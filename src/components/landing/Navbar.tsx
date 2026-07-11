@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Show, UserButton } from "@clerk/nextjs";
-import Button from '../ui/Button';
-import Badge from '../ui/Badge';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
 import { ArrowRight, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../providers/ThemeProvider';
+import { useThemeStore } from '@/stores/useThemeStore';
 
 export default function Navbar({
   onStartDashboard,
@@ -16,7 +16,12 @@ export default function Navbar({
   isDashboard?: boolean;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, toggleTheme } = useThemeStore();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const links = ['Solutions', 'Features', 'Roadmap', 'Pricing'];
 
@@ -43,9 +48,15 @@ export default function Navbar({
           <button
             onClick={toggleTheme}
             className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-body)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-all cursor-pointer"
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={!mounted ? 'Theme Toggle' : theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            {!mounted ? (
+              <div className="w-3.5 h-3.5" />
+            ) : theme === 'dark' ? (
+              <Sun className="w-3.5 h-3.5" />
+            ) : (
+              <Moon className="w-3.5 h-3.5" />
+            )}
           </button>
         </div>
 
