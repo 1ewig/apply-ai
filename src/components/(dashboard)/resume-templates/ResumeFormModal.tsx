@@ -55,6 +55,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Senior Frontend Dev Resume"
+                  maxLength={100}
                   className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)]"
                 />
               </div>
@@ -67,6 +68,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Paste the full text of your CV/Resume here..."
+                  maxLength={25000}
                   className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none"
                 />
               </div>

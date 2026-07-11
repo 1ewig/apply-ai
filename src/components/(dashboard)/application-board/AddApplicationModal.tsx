@@ -101,6 +101,7 @@ export default function AddApplicationModal({
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="e.g. Stripe"
+                        maxLength={100}
                         className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                       />
                     </div>
@@ -112,6 +113,7 @@ export default function AddApplicationModal({
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                         placeholder="e.g. Senior Frontend Dev"
+                        maxLength={100}
                         className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                       />
                     </div>
@@ -138,6 +140,7 @@ export default function AddApplicationModal({
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://example.com/job"
+                        maxLength={512}
                         className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
                       />
                     </div>
@@ -178,6 +181,7 @@ export default function AddApplicationModal({
                             value={customResumeContent}
                             onChange={(e) => setCustomResumeContent(e.target.value)}
                             placeholder="Highlight skills or project achievements matching the job description here..."
+                            maxLength={25000}
                             className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[340px] bg-[var(--input-bg)]"
                           />
                         </div>
@@ -196,6 +200,7 @@ export default function AddApplicationModal({
                             value={jobDescription}
                             onChange={(e) => setJobDescription(e.target.value)}
                             placeholder="Paste the core requirements or full job description here..."
+                            maxLength={25000}
                             className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[340px] bg-[var(--input-bg)]"
                           />
                         </div>
