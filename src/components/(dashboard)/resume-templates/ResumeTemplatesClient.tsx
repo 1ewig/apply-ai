@@ -10,7 +10,7 @@ import type { Resume } from '../../../hooks/types';
 import { useAnalysisStore } from '../../../hooks/useAnalysisStore';
 
 export default function ResumeTemplatesClient() {
-  const { resumes, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
+  const { resumes, isLoading, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
   const { setError } = useAnalysisStore();
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
@@ -40,6 +40,7 @@ export default function ResumeTemplatesClient() {
     <>
       <ResumeTemplates
         resumes={resumes}
+        isLoading={isLoading}
         onAddResumeClick={() => setIsAddResumeOpen(true)}
         onEditResumeClick={(resume) => setEditingResume(resume)}
         onDeleteResume={(id) => setPendingDeleteId(id)}

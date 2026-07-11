@@ -9,6 +9,7 @@ interface ResumeTemplatesProps {
   onEditResumeClick: (resume: Resume) => void;
   onDeleteResume: (id: string) => void;
   onSetDefaultResume: (id: string) => void;
+  isLoading?: boolean;
 }
 
 export default function ResumeTemplates({
@@ -17,6 +18,7 @@ export default function ResumeTemplates({
   onEditResumeClick,
   onDeleteResume,
   onSetDefaultResume,
+  isLoading = false,
 }: ResumeTemplatesProps) {
   return (
     <div className="space-y-6">
@@ -32,17 +34,52 @@ export default function ResumeTemplates({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {resumes.map((resume) => (
-          <ResumeCard
-            key={resume.id}
-            resume={resume}
-            onEditResumeClick={onEditResumeClick}
-            onDeleteResume={onDeleteResume}
-            onSetDefaultResume={onSetDefaultResume}
-          />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 space-y-4 shadow-sm animate-pulse min-h-[220px] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center gap-2 flex-1">
+                    <div className="w-4 h-4 bg-slate-200 dark:bg-slate-800 rounded-md animate-pulse"></div>
+                    <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-2/3"></div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="w-5 h-5 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
+                    <div className="w-5 h-5 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
+                  </div>
+                </div>
 
-        {resumes.length === 0 && (
+                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/3 mt-3"></div>
+
+                <div className="mt-4 p-3 bg-slate-100 dark:bg-slate-900 rounded-xl space-y-2 border border-[var(--border)]">
+                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-full"></div>
+                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-5/6"></div>
+                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-4/5"></div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-[var(--border)] flex justify-between items-center">
+                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
+                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
+              </div>
+            </div>
+          ))
+        ) : (
+          resumes.map((resume) => (
+            <ResumeCard
+              key={resume.id}
+              resume={resume}
+              onEditResumeClick={onEditResumeClick}
+              onDeleteResume={onDeleteResume}
+              onSetDefaultResume={onSetDefaultResume}
+            />
+          ))
+        )}
+
+        {!isLoading && resumes.length === 0 && (
           <div className="col-span-full py-16 text-center border border-dashed border-[var(--border)] rounded-3xl bg-[var(--bg-surface)] shadow-sm">
             <FileText className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-4" />
             <h4 className="font-display font-extrabold text-base text-[var(--text-heading)] mb-1">No Resumes Found</h4>

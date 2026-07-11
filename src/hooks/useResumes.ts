@@ -3,8 +3,9 @@ import { api } from "../../convex/_generated/api";
 import { Resume } from "./types";
 
 export function useResumes() {
-  const resumesRaw = useQuery(api.resumes.list) || [];
-  const resumes = resumesRaw.map((r) => ({ ...r, id: r._id })) as Resume[];
+  const resumesRaw = useQuery(api.resumes.list);
+  const isLoading = resumesRaw === undefined;
+  const resumes = (resumesRaw || []).map((r) => ({ ...r, id: r._id })) as Resume[];
 
   const convexAddResume = useMutation(api.resumes.add);
   const convexUpdateResume = useMutation(api.resumes.update);
@@ -26,5 +27,5 @@ export function useResumes() {
     return convexUpdateResume({ id, isDefault: true });
   };
 
-  return { resumes, addResume, updateResume, deleteResume, setDefaultResume };
+  return { resumes, isLoading, addResume, updateResume, deleteResume, setDefaultResume };
 }
