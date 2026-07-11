@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import ConvexClientProvider from "../components/providers/ConvexClientProvider";
-import { ThemeProvider } from "../components/providers/ThemeProvider";
-import "../index.css";
+import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import "@/index.css";
 
 const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
