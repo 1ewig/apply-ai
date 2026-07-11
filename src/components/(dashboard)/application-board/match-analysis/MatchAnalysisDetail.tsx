@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale, contentSlideUp, accordionExpand } from '@/utils/animations';
-import Button from '../../../ui/Button';
-import type { JobApplication, Resume, ComparisonResult } from '../../../../hooks/types';
-import { useApplications } from '../../../../hooks/useApplications';
+import Button from '@/components/ui/Button';
+import type { JobApplication, Resume, ComparisonResult } from '@/types';
+import { useApplications } from '@/hooks/useApplications';
 import { 
   ArrowLeft, 
   RotateCcw, 

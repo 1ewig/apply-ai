@@ -1,5 +1,5 @@
 import { CheckCircle2, AlertTriangle, Info, ListChecks } from 'lucide-react';
-import type { ActionItem } from '@/hooks/types';
+import type { ActionItem } from '@/types';
 
 interface ActionItemsProps {
   items: ActionItem[];

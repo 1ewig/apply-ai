@@ -8,7 +8,7 @@ import { api } from 'convex/_generated/api';
 import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
 import { useRunAnalysis } from '@/hooks/useRunAnalysis';
-import type { ComparisonResult } from '@/hooks/types';
+import type { ComparisonResult } from '@/types';
 
 import MatchAnalysisDetail from './MatchAnalysisDetail';
 

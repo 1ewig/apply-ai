@@ -1,5 +1,5 @@
 import { CheckCircle2, AlertTriangle, FileSpreadsheet, Plus } from 'lucide-react';
-import type { EnhancedKeyword } from '@/hooks/types';
+import type { EnhancedKeyword } from '@/types';
 
 interface KeywordCoverageProps {
   matchedKeywords: EnhancedKeyword[];

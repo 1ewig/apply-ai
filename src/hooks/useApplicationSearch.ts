@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { JobApplication } from './types';
+import { JobApplication } from '@/types';
 
 export function useApplicationSearch(jobs: JobApplication[]) {
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import type { ScoreBreakdown as ScoreBreakdownType } from '@/hooks/types';
+import type { ScoreBreakdown as ScoreBreakdownType } from '@/types';
 import { BarChart3 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

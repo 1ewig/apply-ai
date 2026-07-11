@@ -6,7 +6,7 @@ import { useResumes } from '@/hooks/useResumes';
 import ResumeTemplates from './ResumeTemplates';
 import ResumeFormModal from './ResumeFormModal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import type { Resume } from '@/hooks/types';
+import type { Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 export default function ResumeTemplatesClient() {

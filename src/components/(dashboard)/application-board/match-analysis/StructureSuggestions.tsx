@@ -1,5 +1,5 @@
 import { ArrowUpDown, Plus, Trash2, Maximize2, Minimize2, Hash, RefreshCw, AlertTriangle } from 'lucide-react';
-import type { StructureSuggestion } from '@/hooks/types';
+import type { StructureSuggestion } from '@/types';
 
 interface StructureSuggestionsProps {
   suggestions: StructureSuggestion[];

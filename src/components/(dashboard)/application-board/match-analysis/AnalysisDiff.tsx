@@ -1,5 +1,5 @@
 import { ArrowUp, ArrowDown, Minus, GitCompare } from 'lucide-react';
-import type { ComparisonResult } from '@/hooks/types';
+import type { ComparisonResult } from '@/types';
 
 interface AnalysisDiffProps {
   previous: ComparisonResult;

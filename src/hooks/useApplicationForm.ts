@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { JobApplication, Resume } from './types';
+import { JobApplication, Resume } from '@/types';
 
 export function useApplicationForm(
   isOpen: boolean,

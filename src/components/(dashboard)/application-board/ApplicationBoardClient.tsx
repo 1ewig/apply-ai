@@ -14,7 +14,7 @@ import { useSubmitApplication } from '@/hooks/useSubmitApplication';
 import ApplicationsBoard from './ApplicationsBoard';
 import AddApplicationModal from './AddApplicationModal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import type { JobApplication } from '@/hooks/types';
+import type { JobApplication } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 export default function ApplicationBoardClient() {

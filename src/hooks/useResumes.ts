@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "convex/_generated/api";
-import { Resume } from "./types";
+import { Resume } from "@/types";
 
 export function useResumes() {
   const resumesRaw = useQuery(api.resumes.list);

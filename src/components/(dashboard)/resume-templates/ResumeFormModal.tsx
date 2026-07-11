@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '@/components/ui/Button';
-import type { Resume } from '@/hooks/types';
+import type { Resume } from '@/types';
 import { useResumeForm } from '@/hooks/useResumeForm';
 import { Loader2 } from 'lucide-react';
 

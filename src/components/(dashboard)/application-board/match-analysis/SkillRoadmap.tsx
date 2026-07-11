@@ -1,5 +1,5 @@
 import { GraduationCap, BookOpen } from 'lucide-react';
-import type { SkillRecommendation } from '@/hooks/types';
+import type { SkillRecommendation } from '@/types';
 
 interface SkillRoadmapProps {
   recommendations: SkillRecommendation[];

@@ -1,7 +1,7 @@
 "use client";
 
 import Button from '@/components/ui/Button';
-import type { JobApplication, Resume } from '@/hooks/types';
+import type { JobApplication, Resume } from '@/types';
 import { Plus, Search, Sparkles } from 'lucide-react';
 import JobCard from './JobCard';
 import SearchFilterBar from './SearchFilterBar';

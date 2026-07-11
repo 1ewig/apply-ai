@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "convex/_generated/api";
-import { JobApplication } from "./types";
+import { JobApplication } from "@/types";
 
 export function useApplications() {
   const jobsRaw = useQuery(api.applications.list);

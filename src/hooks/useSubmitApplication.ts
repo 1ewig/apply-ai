@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
-import type { JobApplication } from './types';
+import type { JobApplication } from '@/types';
 
 interface AddJobData {
   company: string;

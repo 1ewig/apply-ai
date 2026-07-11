@@ -1,7 +1,7 @@
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import type { JobApplication, Resume } from '@/hooks/types';
+import type { JobApplication, Resume } from '@/types';
 import { Sparkles, Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-react';
 
 function getStatusBadge(status: JobApplication['status']) {

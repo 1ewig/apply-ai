@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button';
-import type { Resume } from '@/hooks/types';
+import type { Resume } from '@/types';
 import { Plus, FileText } from 'lucide-react';
 import ResumeCard from './ResumeCard';
 

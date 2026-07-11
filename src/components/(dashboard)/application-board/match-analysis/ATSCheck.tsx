@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { AlertTriangle, XCircle, Info, FileText } from 'lucide-react';
-import type { AtsCheck } from '@/hooks/types';
+import type { AtsCheck } from '@/types';
 
 interface AtsCheckProps {
   atsCheck?: AtsCheck;
