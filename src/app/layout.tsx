@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
+import ConvexClientProvider from "@/providers/ConvexClientProvider";
 import "@/index.css";
 
 const bricolageGrotesque = Bricolage_Grotesque({
