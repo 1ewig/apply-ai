@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-import { useAnalysisStore } from '@/hooks/useAnalysisStore';
+import { useAnalysisStore } from '@/store/useAnalysisStore';
 import type { JobApplication } from './types';
 
 interface AddJobData {

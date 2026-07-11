@@ -15,7 +15,7 @@ import ApplicationsBoard from './ApplicationsBoard';
 import AddApplicationModal from './AddApplicationModal';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import type { JobApplication } from '../../../hooks/types';
-import { useAnalysisStore } from '../../../hooks/useAnalysisStore';
+import { useAnalysisStore } from '@/store/useAnalysisStore';
 
 export default function ApplicationBoardClient() {
   const router = useRouter();

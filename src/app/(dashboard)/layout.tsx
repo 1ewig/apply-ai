@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { Menu } from 'lucide-react';
-import { useAnalysisStore } from '@/hooks/useAnalysisStore';
+import { useAnalysisStore } from '@/store/useAnalysisStore';
 import Sidebar from '@/components/(dashboard)/Sidebar';
 import AnalysisLoadingOverlay from '@/components/(dashboard)/application-board/AnalysisLoadingOverlay';
 import ErrorToast from '@/components/(dashboard)/ErrorToast';
