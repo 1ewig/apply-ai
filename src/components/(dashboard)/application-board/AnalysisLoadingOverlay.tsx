@@ -5,7 +5,6 @@ import { Sparkle } from 'lucide-react';
 
 interface AnalysisLoadingOverlayProps {
   isLoading: boolean;
-  loadingPhase: number;
   phases: string[];
 }
 

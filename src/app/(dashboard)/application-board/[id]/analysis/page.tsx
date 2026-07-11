@@ -3,14 +3,14 @@
 import { useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from 'convex/react';
-import { api } from '../../../../../../convex/_generated/api';
+import { api } from 'convex/_generated/api';
 
-import { useApplications } from '../../../../../hooks/useApplications';
-import { useResumes } from '../../../../../hooks/useResumes';
-import { useRunAnalysis } from '../../../../../hooks/useRunAnalysis';
-import type { ComparisonResult } from '../../../../../hooks/types';
+import { useApplications } from '@/hooks/useApplications';
+import { useResumes } from '@/hooks/useResumes';
+import { useRunAnalysis } from '@/hooks/useRunAnalysis';
+import type { ComparisonResult } from '@/hooks/types';
 
-import MatchAnalysisDetail from '../../../../../components/(dashboard)/application-board/match-analysis/MatchAnalysisDetail';
+import MatchAnalysisDetail from '@/components/(dashboard)/application-board/match-analysis/MatchAnalysisDetail';
 
 interface AnalysisQueryResult {
   currentResult: ComparisonResult;
