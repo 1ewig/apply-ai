@@ -23,7 +23,7 @@ export default function ApplicationBoardClient() {
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
   const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
 
-  const { jobs, addJob, updateJob, deleteJob } = useApplications();
+  const { jobs, isLoading, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
@@ -65,6 +65,7 @@ export default function ApplicationBoardClient() {
     <>
       <ApplicationsBoard
         jobs={jobs}
+        isLoading={isLoading}
         filteredJobs={filteredJobs}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}

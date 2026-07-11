@@ -3,8 +3,9 @@ import { api } from "../../convex/_generated/api";
 import { JobApplication } from "./types";
 
 export function useApplications() {
-  const jobsRaw = useQuery(api.applications.list) || [];
-  const jobs = jobsRaw.map((j) => ({ ...j, id: j._id })) as JobApplication[];
+  const jobsRaw = useQuery(api.applications.list);
+  const isLoading = jobsRaw === undefined;
+  const jobs = (jobsRaw || []).map((j) => ({ ...j, id: j._id })) as JobApplication[];
 
   const convexAddJob = useMutation(api.applications.add);
   const convexUpdateJob = useMutation(api.applications.update);
@@ -22,5 +23,5 @@ export function useApplications() {
     return convexDeleteJob({ id });
   };
 
-  return { jobs, addJob, updateJob, deleteJob };
+  return { jobs, isLoading, addJob, updateJob, deleteJob };
 }
