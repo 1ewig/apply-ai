@@ -9,7 +9,7 @@ interface ResumeFormData {
 interface UseResumeFormOptions {
   isOpen: boolean;
   editingResume?: { name: string; content: string; isDefault: boolean } | null;
-  onSubmit: (data: ResumeFormData) => void;
+  onSubmit: (data: ResumeFormData) => void | Promise<void>;
   onClose: () => void;
 }
 
@@ -17,6 +17,7 @@ export function useResumeForm({ isOpen, editingResume, onSubmit, onClose }: UseR
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [isDefault, setIsDefault] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -32,16 +33,24 @@ export function useResumeForm({ isOpen, editingResume, onSubmit, onClose }: UseR
     }
   }, [isOpen, editingResume]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name || !content) return;
-    onSubmit({ name, content, isDefault });
-    onClose();
+    setIsSubmitting(true);
+    try {
+      await onSubmit({ name, content, isDefault });
+      onClose();
+    } catch (err) {
+      console.error('Failed to submit resume form:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return {
     name, setName,
     content, setContent,
     isDefault, setIsDefault,
+    isSubmitting,
     handleSubmit,
   };
 }

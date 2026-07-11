@@ -5,6 +5,7 @@ import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '../../ui/Button';
 import type { Resume } from '../../../hooks/types';
 import { useResumeForm } from '../../../hooks/useResumeForm';
+import { Loader2 } from 'lucide-react';
 
 interface ResumeFormModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ interface ResumeFormModalProps {
 export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResume }: ResumeFormModalProps) {
   const isEditing = !!editingResume;
 
-  const { name, setName, content, setContent, isDefault, setIsDefault, handleSubmit } = useResumeForm({
+  const { name, setName, content, setContent, isDefault, setIsDefault, isSubmitting, handleSubmit } = useResumeForm({
     isOpen,
     editingResume,
     onSubmit,
@@ -98,11 +99,20 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
 
               {/* Bottom actions (Sticky/Fixed) */}
               <div className="flex justify-end gap-2 px-6 py-3 border-t border-[var(--border)] bg-[var(--bg-page)] shrink-0">
-                <Button variant="outline" size="sm" type="button" onClick={onClose}>
+                <Button variant="outline" size="sm" type="button" onClick={onClose} disabled={isSubmitting}>
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" type="submit">
-                  {isEditing ? 'Save Changes' : 'Save Template'}
+                <Button variant="primary" size="sm" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-1.5">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      Saving...
+                    </span>
+                  ) : isEditing ? (
+                    'Save Changes'
+                  ) : (
+                    'Save Template'
+                  )}
                 </Button>
               </div>
             </form>

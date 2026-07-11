@@ -42,6 +42,7 @@ export default function AddApplicationModal({
     customResumeContent, setCustomResumeContent,
     analyzeImmediately, setAnalyzeImmediately,
     handleResumeTemplateChange,
+    isSubmitting,
     handleSubmit,
   } = useApplicationForm(isOpen, editingJob, resumes, onSubmit, onClose);
   const { isLoading } = useAnalysisStore();
@@ -212,20 +213,20 @@ export default function AddApplicationModal({
 
               {/* Bottom actions (Sticky/Fixed) */}
               <div className="flex justify-end gap-2 px-6 py-3 border-t border-[var(--border)] bg-[var(--bg-page)] shrink-0">
-                <Button variant="outline" size="sm" type="button" onClick={onClose}>
+                <Button variant="outline" size="sm" type="button" onClick={onClose} disabled={isLoading || isSubmitting}>
                   Cancel
                 </Button>
                 <Button
                   variant="primary"
                   size="sm"
                   type="submit"
-                  disabled={(isLoading) || (!customResumeContent.trim() && analyzeImmediately)}
+                  disabled={isLoading || isSubmitting || (!customResumeContent.trim() && analyzeImmediately)}
                 >
-                  {isLoading ? (
-                    <>
+                  {isLoading || isSubmitting ? (
+                    <span className="flex items-center gap-1.5">
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      Analyzing...
-                    </>
+                      {isLoading ? 'Analyzing...' : 'Saving...'}
+                    </span>
                   ) : editingJob
                     ? 'Save Changes'
                     : 'Start AI Match'}

@@ -14,7 +14,7 @@ export function useApplicationForm(
     selectedResumeId: string;
     customResumeContent: string;
     analyzeImmediately: boolean;
-  }) => void,
+  }) => void | Promise<void>,
   onClose: () => void,
 ) {
   const [company, setCompany] = useState('');
@@ -25,6 +25,7 @@ export function useApplicationForm(
   const [selectedResumeId, setSelectedResumeId] = useState('');
   const [customResumeContent, setCustomResumeContent] = useState('');
   const [analyzeImmediately, setAnalyzeImmediately] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -64,19 +65,26 @@ export function useApplicationForm(
     }
   };
 
-  const handleSubmit = () => {
-    onSubmit({
-      company: company.trim() || 'Unnamed Company',
-      role: role.trim() || 'Unnamed Role',
-      status,
-      url,
-      jobDescription,
-      selectedResumeId,
-      customResumeContent,
-      analyzeImmediately,
-    });
-    if (!analyzeImmediately) {
-      onClose();
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      await onSubmit({
+        company: company.trim() || 'Unnamed Company',
+        role: role.trim() || 'Unnamed Role',
+        status,
+        url,
+        jobDescription,
+        selectedResumeId,
+        customResumeContent,
+        analyzeImmediately,
+      });
+      if (!analyzeImmediately) {
+        onClose();
+      }
+    } catch (err) {
+      console.error('Failed to submit application form:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -90,6 +98,7 @@ export function useApplicationForm(
     customResumeContent, setCustomResumeContent,
     analyzeImmediately, setAnalyzeImmediately,
     handleResumeTemplateChange,
+    isSubmitting,
     handleSubmit,
   };
 }
