@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery } from 'convex/react';
-import { api } from 'convex/_generated/api';
+import { useQuery } from '@tanstack/react-query';
+import { getAnalysisAction } from '@/app/actions/applications';
 
 import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
@@ -26,7 +26,11 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
-  const analysisData = useQuery(api.applications.getAnalysis, { applicationId: id as any }) as AnalysisQueryResult | undefined;
+  const { data: analysisData } = useQuery({
+    queryKey: ['analysis', id],
+    queryFn: async () => await getAnalysisAction(id as any),
+    enabled: !!id,
+  }) as { data: AnalysisQueryResult | undefined };
 
   const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
     const data = await runAnalysis(jobId, resumeContent, jobDesc);

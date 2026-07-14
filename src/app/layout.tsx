@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import ConvexClientProvider from "@/providers/ConvexClientProvider";
+import QueryProvider from "@/providers/QueryProvider";
 import "@/index.css";
 
 const bricolageGrotesque = Bricolage_Grotesque({
@@ -52,9 +52,9 @@ export default function RootLayout({
           <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         </head>
         <body className={`${bricolageGrotesque.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}>
-          <ConvexClientProvider>
+          <QueryProvider>
             {children}
-          </ConvexClientProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

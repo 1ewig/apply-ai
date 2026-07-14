@@ -1,30 +1,63 @@
-import { useQuery, useMutation } from "convex/react";
-import { api } from "convex/_generated/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Resume } from "@/types";
+import {
+  listResumesAction,
+  addResumeAction,
+  updateResumeAction,
+  deleteResumeAction,
+} from "@/app/actions/resumes";
 
 export function useResumes() {
-  const resumesRaw = useQuery(api.resumes.list);
-  const isLoading = resumesRaw === undefined;
+  const queryClient = useQueryClient();
+
+  const { data: resumesRaw, isLoading } = useQuery({
+    queryKey: ["resumes"],
+    queryFn: async () => await listResumesAction(),
+  });
+
   const resumes = (resumesRaw || []).map((r) => ({ ...r, id: r._id })) as Resume[];
 
-  const convexAddResume = useMutation(api.resumes.add);
-  const convexUpdateResume = useMutation(api.resumes.update);
-  const convexDeleteResume = useMutation(api.resumes.remove);
+  const addResumeMutation = useMutation({
+    mutationFn: async (resume: Omit<Resume, 'id' | 'updatedAt'>) => {
+      return await addResumeAction(resume);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+    },
+  });
 
-  const addResume = (resume: Omit<Resume, 'id' | 'updatedAt'>) => {
-    return convexAddResume({ ...resume });
+  const updateResumeMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: any; updates: Partial<Resume> }) => {
+      return await updateResumeAction({ id, ...updates });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+    },
+  });
+
+  const deleteResumeMutation = useMutation({
+    mutationFn: async (id: any) => {
+      return await deleteResumeAction(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+    },
+  });
+
+  const addResume = async (resume: Omit<Resume, 'id' | 'updatedAt'>) => {
+    return await addResumeMutation.mutateAsync(resume);
   };
 
-  const updateResume = (id: any, updates: Partial<Resume>) => {
-    return convexUpdateResume({ id, ...updates });
+  const updateResume = async (id: any, updates: Partial<Resume>) => {
+    return await updateResumeMutation.mutateAsync({ id, updates });
   };
 
-  const deleteResume = (id: any) => {
-    return convexDeleteResume({ id });
+  const deleteResume = async (id: any) => {
+    return await deleteResumeMutation.mutateAsync(id);
   };
 
-  const setDefaultResume = (id: any) => {
-    return convexUpdateResume({ id, isDefault: true });
+  const setDefaultResume = async (id: any) => {
+    return await updateResumeMutation.mutateAsync({ id, updates: { isDefault: true } });
   };
 
   return { resumes, isLoading, addResume, updateResume, deleteResume, setDefaultResume };

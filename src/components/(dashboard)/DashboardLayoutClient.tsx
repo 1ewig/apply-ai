@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
+import { storeUserAction } from '@/app/actions/users';
 import { Menu } from 'lucide-react';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import Sidebar from '@/components/(dashboard)/Sidebar';
@@ -12,11 +11,10 @@ import ErrorToast from '@/components/(dashboard)/ErrorToast';
 export default function DashboardLayoutClient({ children }: { children: React.ReactNode }) {
   const { isLoading, phases, error, clearError } = useAnalysisStore();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const storeUser = useMutation(api.users.storeUser);
 
   useEffect(() => {
-    storeUser().catch((err: any) => console.error('Error syncing user in layout:', err));
-  }, [storeUser]);
+    storeUserAction().catch((err: any) => console.error('Error syncing user in layout:', err));
+  }, []);
 
   return (
     <>
