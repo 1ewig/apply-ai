@@ -54,9 +54,12 @@ export default function AnalysisPageClient({ id }: { id: string }) {
 
   if (analysisData === undefined) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 space-y-4">
-        <div className="w-10 h-10 rounded-full border-4 border-slate-100 border-t-[var(--accent)] animate-spin"></div>
-        <p className="text-xs text-[var(--text-muted)]">Loading match analysis report...</p>
+      <div className="flex flex-col items-center justify-center py-32">
+        <div className="relative w-12 h-12 mb-4">
+          <div className="absolute inset-0 rounded-full border-2 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin" />
+          <div className="absolute inset-1.5 rounded-full border-2 border-t-[var(--accent-yellow)] border-r-transparent border-b-[var(--accent)] border-l-transparent animate-spin [animation-direction:reverse] [animation-duration:1s]" />
+        </div>
+        <p className="text-sm font-medium text-[var(--text-muted)] animate-pulse">Loading match analysis report...</p>
       </div>
     );
   }

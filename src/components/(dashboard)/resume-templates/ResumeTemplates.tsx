@@ -35,38 +35,13 @@ export default function ResumeTemplates({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading ? (
-          Array.from({ length: 3 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 space-y-4 shadow-sm animate-pulse min-h-[220px] flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-2 flex-1">
-                    <div className="w-4 h-4 bg-slate-200 dark:bg-slate-800 rounded-md animate-pulse"></div>
-                    <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-2/3"></div>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="w-5 h-5 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
-                    <div className="w-5 h-5 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
-                  </div>
-                </div>
-
-                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/3 mt-3"></div>
-
-                <div className="mt-4 p-3 bg-slate-100 dark:bg-slate-900 rounded-xl space-y-2 border border-[var(--border)]">
-                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-full"></div>
-                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-5/6"></div>
-                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-4/5"></div>
-                </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-[var(--border)] flex justify-between items-center">
-                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
-                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
-              </div>
+          <div className="col-span-full flex flex-col items-center justify-center py-20 w-full">
+            <div className="relative w-12 h-12 mb-4">
+              <div className="absolute inset-0 rounded-full border-2 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin" />
+              <div className="absolute inset-1.5 rounded-full border-2 border-t-[var(--accent-yellow)] border-r-transparent border-b-[var(--accent)] border-l-transparent animate-spin [animation-direction:reverse] [animation-duration:1s]" />
             </div>
-          ))
+            <p className="text-sm font-medium text-[var(--text-muted)] animate-pulse">Loading resumes...</p>
+          </div>
         ) : (
           resumes.map((resume) => (
             <ResumeCard

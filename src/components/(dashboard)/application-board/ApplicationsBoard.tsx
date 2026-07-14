@@ -82,33 +82,13 @@ export default function ApplicationsBoard({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading ? (
-          Array.from({ length: 3 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] p-6 space-y-4 shadow-sm animate-pulse"
-            >
-              <div className="flex justify-between items-start">
-                <div className="space-y-2 flex-1">
-                  <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-lg w-2/3"></div>
-                  <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/2"></div>
-                </div>
-                <div className="h-8 w-16 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
-              </div>
-              
-              <div className="space-y-2 pt-2">
-                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-4/5"></div>
-                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/3"></div>
-              </div>
-              
-              <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
-                <div className="h-7 w-20 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
-                <div className="flex gap-2">
-                  <div className="h-7 w-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
-                  <div className="h-7 w-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
-                </div>
-              </div>
+          <div className="col-span-full flex flex-col items-center justify-center py-20">
+            <div className="relative w-12 h-12 mb-4">
+              <div className="absolute inset-0 rounded-full border-2 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin" />
+              <div className="absolute inset-1.5 rounded-full border-2 border-t-[var(--accent-yellow)] border-r-transparent border-b-[var(--accent)] border-l-transparent animate-spin [animation-direction:reverse] [animation-duration:1s]" />
             </div>
-          ))
+            <p className="text-sm font-medium text-[var(--text-muted)] animate-pulse">Loading job applications...</p>
+          </div>
         ) : (
           filteredJobs.map((job) => (
             <JobCard
