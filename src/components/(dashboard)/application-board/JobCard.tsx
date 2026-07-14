@@ -2,7 +2,7 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import type { JobApplication, Resume } from '@/types';
-import { Sparkles, Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-react';
+import { Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-react';
 
 function getStatusBadge(status: JobApplication['status']) {
   switch (status) {
@@ -74,7 +74,6 @@ export default function JobCard({
             </span>
             {job.matchScore !== undefined ? (
               <span className="text-sm font-extrabold text-emerald-600 flex items-center gap-1 mt-0.5">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600/10" />
                 {job.matchScore}% Match
               </span>
             ) : (
