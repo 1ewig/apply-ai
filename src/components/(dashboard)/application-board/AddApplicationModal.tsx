@@ -47,6 +47,13 @@ export default function AddApplicationModal({
   } = useApplicationForm(isOpen, editingJob, resumes, onSubmit, onClose);
   const { isLoading } = useAnalysisStore();
 
+  const hasChanges = !editingJob || (
+    (company || '').trim() !== (editingJob.company || '').trim() ||
+    (role || '').trim() !== (editingJob.role || '').trim() ||
+    (status || 'wishlist') !== (editingJob.status || 'wishlist') ||
+    (url || '').trim() !== (editingJob.url || '').trim()
+  );
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -213,14 +220,21 @@ export default function AddApplicationModal({
 
               {/* Bottom actions (Sticky/Fixed) */}
               <div className="flex justify-end gap-2 px-6 py-3 border-t border-[var(--border)] bg-[var(--bg-page)] shrink-0">
-                <Button variant="outline" size="sm" type="button" onClick={onClose} disabled={isLoading || isSubmitting}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={onClose}
+                  disabled={isLoading || isSubmitting}
+                  className="hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
+                >
                   Cancel
                 </Button>
                 <Button
                   variant="primary"
                   size="sm"
                   type="submit"
-                  disabled={isLoading || isSubmitting || (!customResumeContent.trim() && analyzeImmediately)}
+                  disabled={isLoading || isSubmitting || !hasChanges || (!customResumeContent.trim() && analyzeImmediately)}
                 >
                   {isLoading || isSubmitting ? (
                     <span className="flex items-center gap-1.5">

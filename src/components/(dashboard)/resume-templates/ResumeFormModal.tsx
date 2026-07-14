@@ -24,6 +24,12 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
     onClose,
   });
 
+  const hasChanges = !editingResume || (
+    (name || '').trim() !== (editingResume.name || '').trim() ||
+    (content || '').trim() !== (editingResume.content || '').trim() ||
+    isDefault !== editingResume.isDefault
+  );
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -99,10 +105,17 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
 
               {/* Bottom actions (Sticky/Fixed) */}
               <div className="flex justify-end gap-2 px-6 py-3 border-t border-[var(--border)] bg-[var(--bg-page)] shrink-0">
-                <Button variant="outline" size="sm" type="button" onClick={onClose} disabled={isSubmitting}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                  className="hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
+                >
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" type="submit" disabled={isSubmitting}>
+                <Button variant="primary" size="sm" type="submit" disabled={isSubmitting || !hasChanges}>
                   {isSubmitting ? (
                     <span className="flex items-center gap-1.5">
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
