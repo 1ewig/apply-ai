@@ -14,7 +14,7 @@
 | `GROQ_API_KEY` | Yes | [Groq Console](https://console.groq.com) → API Keys |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk Dashboard → API Keys |
 | `CLERK_SECRET_KEY` | Yes | Clerk Dashboard → API Keys |
-| `CLERK_JWT_ISSUER_DOMAIN` | Yes | Clerk Dashboard → Configure → JWT Templates → Convex template → **Issuer** |
+| `CLERK_FRONTEND_API_URL` | Yes | Clerk Dashboard → Integrations → Convex → **Frontend API URL** |
 | `NEXT_PUBLIC_CONVEX_URL` | Yes | `npx convex deploy` output |
 | `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | `npx convex deploy` output |
 | `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | No | Default: `/sign-in` |
@@ -37,8 +37,8 @@ npm install
 
 1. Go to [Clerk Dashboard](https://dashboard.clerk.com) and create a new application
 2. Under **API Keys**, copy `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`
-3. Under **Configure → JWT Templates**, click **+ New Template**, select **Convex**, and save
-4. Open the Convex template and copy the **Issuer** URL — this is your `CLERK_JWT_ISSUER_DOMAIN`
+3. Under **Integrations**, select **Convex** (or go to `https://dashboard.clerk.com/apps/setup/convex`) and click **Activate Convex integration**
+4. Copy the **Frontend API URL** — this is your `CLERK_FRONTEND_API_URL`
 
 ### 3. Set Up Groq
 
@@ -64,7 +64,7 @@ Copy both URLs from the output.
 GROQ_API_KEY="gsk_your_groq_key"
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_your_clerk_key"
 CLERK_SECRET_KEY="sk_test_your_clerk_secret"
-CLERK_JWT_ISSUER_DOMAIN="https://your-project.clerk.accounts.dev"
+CLERK_FRONTEND_API_URL="https://your-project.clerk.accounts.dev"
 NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 NEXT_PUBLIC_CONVEX_SITE_URL="https://your-project.convex.site"
 NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
@@ -121,7 +121,7 @@ Push to your GitHub repo — Vercel auto-deploys the main branch by default.
 
 | Problem | Likely Fix |
 |---|---|
-| Auth fails / "Invalid JWT" | Verify `CLERK_JWT_ISSUER_DOMAIN` matches the Issuer in Clerk's Convex JWT template exactly |
+| Auth fails / "Invalid JWT" | Verify `CLERK_FRONTEND_API_URL` matches the Frontend API URL in Clerk's Convex integration exactly |
 | Convex calls fail with 401 | Check `NEXT_PUBLIC_CONVEX_URL` is the correct deployment URL |
 | Clerk login redirects to localhost | Add your Vercel domain to Clerk → Redirect URLs |
 | 500 on resume comparison | Verify `GROQ_API_KEY` is set and has quota available |

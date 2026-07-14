@@ -1,7 +1,7 @@
 # ApplyAI
 
 > A production-grade, full-stack AI job application tracker & resume tailoring workspace.
-> Built with Next.js 15, React 19, Convex, Clerk, Groq Llama 3.3 70b, Zod, Zustand, Tailwind v4, and Framer Motion.
+> Built with Next.js 16, React 19, Convex, Clerk, Groq Llama 3.3 70b, Zod, Zustand, Tailwind v4, and Framer Motion.
 
 ApplyAI helps job seekers organize their pipelines, manage resume templates, and leverage deep LLM evaluations to tailor their CV to target job descriptions in real time.
 
@@ -11,7 +11,7 @@ ApplyAI helps job seekers organize their pipelines, manage resume templates, and
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                     Next.js 15 (App Router)                  │
+│                     Next.js 16 (App Router)                  │
 │  React 19 · Tailwind v4 · Framer Motion · Lucide Icons      │
 └──┬────────────────────────┬──────────────────┬───────────────┘
    │                        │                  │
@@ -39,7 +39,7 @@ ApplyAI helps job seekers organize their pipelines, manage resume templates, and
 
 ### Why This Stack
 
-- **Next.js 15 + React 19** — App Router, Server Components, API routes, Middleware-level access protection, optimized asset pipeline, seamless Vercel deployment.
+- **Next.js 16 + React 19** — App Router, Server Components, API routes, Middleware-level access protection, optimized asset pipeline, seamless Vercel deployment.
 - **Clerk v7** — Zero-boilerplate auth with pre-built components (SignIn, SignUp, UserButton), JWT integration with Convex, and middleware route protection.
 - **Convex** — Reactive serverless database with persistent WebSocket sync. UI updates instantly when data changes — no polling, no manual refetches.
 - **Groq + Llama 3.3 70b** — LPU-accelerated inference generates deep structured resume analysis in under a second.
@@ -111,7 +111,7 @@ Copy `.env.example` to `.env.local` and fill in your credentials:
 | `GROQ_API_KEY` | [Groq Console](https://console.groq.com) → API Keys |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | [Clerk Dashboard](https://dashboard.clerk.com) → API Keys |
 | `CLERK_SECRET_KEY` | Same |
-| `CLERK_JWT_ISSUER_DOMAIN` | Clerk Dashboard → Configure → JWT Templates → Convex template → Issuer |
+| `CLERK_FRONTEND_API_URL` | Clerk Dashboard → Integrations → Convex → Frontend API URL |
 | `NEXT_PUBLIC_CONVEX_URL` | Printed by `npx convex dev` |
 | `NEXT_PUBLIC_CONVEX_SITE_URL` | Printed by `npx convex dev` |
 

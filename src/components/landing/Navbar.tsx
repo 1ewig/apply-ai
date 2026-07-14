@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Show, UserButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
+import { Authenticated, Unauthenticated } from "convex/react";
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { ArrowRight, Sun, Moon } from 'lucide-react';
@@ -97,14 +98,14 @@ export default function Navbar({
             </>
           ) : (
             <>
-              <Show when="signed-out">
+              <Unauthenticated>
                 <Link href="/sign-in">
                   <Button variant="primary" size="sm">
                     Sign In
                   </Button>
                 </Link>
-              </Show>
-              <Show when="signed-in">
+              </Unauthenticated>
+              <Authenticated>
                 <Link href="/application-board">
                   <Button variant="outline" size="sm" className="group">
                     Go to Dashboard
@@ -112,7 +113,7 @@ export default function Navbar({
                   </Button>
                 </Link>
                 <UserButton />
-              </Show>
+              </Authenticated>
             </>
           )}
         </div>
@@ -160,14 +161,14 @@ export default function Navbar({
             ))}
           </div>
           <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-[var(--border)]">
-            <Show when="signed-out">
+            <Unauthenticated>
               <Link href="/sign-in">
                 <Button variant="primary" size="md" className="w-full" onClick={() => setMobileOpen(false)}>
                   Sign In
                 </Button>
               </Link>
-            </Show>
-            <Show when="signed-in">
+            </Unauthenticated>
+            <Authenticated>
               <Link href="/application-board">
                 <Button variant="outline" size="md" className="w-full group mb-2" onClick={() => setMobileOpen(false)}>
                   Go to Dashboard
@@ -177,7 +178,7 @@ export default function Navbar({
               <div className="flex justify-center py-2">
                 <UserButton showName />
               </div>
-            </Show>
+            </Authenticated>
           </div>
         </div>
       )}

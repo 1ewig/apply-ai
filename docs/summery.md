@@ -21,7 +21,7 @@
 | `next` | ^16.2.9 | Framework — App Router, API routes, Turbopack bundler |
 | `react` / `react-dom` | 19.2.6 | UI library |
 | `@clerk/nextjs` | ^7.3.7 | Auth — sign-in/sign-up components, middleware, JWT |
-| `convex` | 1.39.1 | Database — reactive queries, mutations, real-time sync |
+| `convex` | ^1.42.1 | Database — reactive queries, mutations, real-time sync |
 | `ai` | ^6.0.184 | Vercel AI SDK — `generateText()` for structured LLM calls |
 | `@ai-sdk/groq` | ^3.0.39 | Groq provider — `llama-3.3-70b-versatile` inference |
 | `zod` | ^4.4.3 | Schema validation — LLM output parsing, API contracts |
@@ -131,7 +131,7 @@ User → Clerk UI (SignIn/SignUp) → Clerk JWT → ConvexProviderWithClerk
 ```
 
 - Clerk handles session management and JWT generation
-- Convex validates Clerk JWTs via `auth.config.js` (JWT issuer domain)
+- Convex validates Clerk JWTs via `auth.config.ts` (JWT issuer domain)
 - Every Convex query/mutation calls `ctx.auth.getUserIdentity()` to isolate user data
 - The API route (`/api/compare`) checks Clerk session first, falls back to API key header
 
@@ -175,7 +175,7 @@ Client (useRunAnalysis) → POST /api/compare { resumeText, jobDescription }
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Client — Clerk frontend |
 | `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | Yes | Client — `/sign-in` |
 | `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | Yes | Client — `/sign-up` |
-| `CLERK_JWT_ISSUER_DOMAIN` | Yes | Convex auth.config.js |
+| `CLERK_FRONTEND_API_URL` | Yes | Convex auth.config.ts |
 | `NEXT_PUBLIC_CONVEX_URL` | Yes | Convex client provider |
 | `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | Convex client provider |
 | `API_KEY` | No | API route fallback auth |
