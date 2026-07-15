@@ -14,6 +14,7 @@ interface ApplicationsBoardProps {
   statusFilter: string;
   onStatusFilterChange: (value: string) => void;
   resumes: Resume[];
+  isAnalyzingId: string | null;
   onAddJobClick: () => void;
   onEditJobClick: (job: JobApplication) => void;
   onMatchClick: (job: JobApplication) => void;
@@ -31,6 +32,7 @@ export default function ApplicationsBoard({
   statusFilter,
   onStatusFilterChange,
   resumes,
+  isAnalyzingId,
   onAddJobClick,
   onEditJobClick,
   onMatchClick,
@@ -95,6 +97,7 @@ export default function ApplicationsBoard({
               key={job.id}
               job={job}
               resumes={resumes}
+              isCurrentlyAnalyzing={isAnalyzingId === job.id}
               onEditJobClick={onEditJobClick}
               onMatchClick={onMatchClick}
               onViewAnalysisClick={onViewAnalysisClick}

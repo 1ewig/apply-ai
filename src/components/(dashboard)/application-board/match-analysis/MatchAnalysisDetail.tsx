@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale, contentSlideUp, accordionExpand } from '@/utils/animations';
 import Button from '@/components/ui/Button';
 import type { JobApplication, Resume, ComparisonResult } from '@/types';
-import { useApplications } from '@/hooks/useApplications';
 import { 
   ArrowLeft, 
   RotateCcw, 
@@ -13,7 +12,6 @@ import {
   ChevronUp, 
   Sparkles, 
   Briefcase, 
-  CheckCircle2, 
   AlertTriangle, 
   FileText, 
   BookOpen, 
@@ -42,6 +40,7 @@ interface MatchAnalysisDetailProps {
   onTogglePrepItem: (index: number) => void;
   onBackClick: () => void;
   onReRunAnalysis: (jobId: string, resumeContent: string, jobDesc: string) => void;
+  onSaveChanges: (id: string, data: Partial<JobApplication>) => Promise<unknown>;
 }
 
 export default function MatchAnalysisDetail({
@@ -53,25 +52,22 @@ export default function MatchAnalysisDetail({
   onTogglePrepItem,
   onBackClick,
   onReRunAnalysis,
+  onSaveChanges,
 }: MatchAnalysisDetailProps) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>('summary');
   const [isSaving, setIsSaving] = useState(false);
 
-  const { updateJob } = useApplications();
-
   const result = job.analysisResult;
   const canReRun = resumeForReRun && job.jobDescription;
 
-  // Local state tracking
   const [wipResumeContent, setWipResumeContent] = useState('');
   const [acceptedIndexes, setAcceptedIndexes] = useState<Set<number>>(new Set());
   const [rejectedIndexes, setRejectedIndexes] = useState<Set<number>>(new Set());
   const [addedKeywords, setAddedKeywords] = useState<Set<string>>(new Set());
   const [showResumePreview, setShowResumePreview] = useState(false);
 
-  // Sync state if job changes
   useEffect(() => {
     if (job) {
       setWipResumeContent(job.customResumeContent || resumeForReRun?.content || '');
@@ -92,7 +88,6 @@ export default function MatchAnalysisDetail({
     );
   }
 
-  // Recalculate score and level dynamically on client
   const originalScore = result.score;
   const acceptedCount = acceptedIndexes.size;
   const keywordsCount = addedKeywords.size;
@@ -107,7 +102,6 @@ export default function MatchAnalysisDetail({
 
   const hasChanges = wipResumeContent.trim() !== (job.customResumeContent || resumeForReRun?.content || '').trim();
 
-  // Handlers
   const handleAcceptSuggestion = (index: number, original: string, suggested: string) => {
     const normalizedWip = wipResumeContent.replace(/\r\n/g, '\n');
     const normalizedOriginal = original.replace(/\r\n/g, '\n');
@@ -196,7 +190,7 @@ export default function MatchAnalysisDetail({
   const handleSaveChanges = async () => {
     setIsSaving(true);
     try {
-      await updateJob(job.id, {
+      await onSaveChanges(job.id, {
         customResumeContent: wipResumeContent,
         matchScore: simulatedScore,
       });
@@ -235,7 +229,6 @@ export default function MatchAnalysisDetail({
 
   return (
     <motion.div {...contentSlideUp} className="space-y-6 max-w-4xl mx-auto pb-24">
-      {/* Header card */}
       <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -260,7 +253,6 @@ export default function MatchAnalysisDetail({
         </div>
       </div>
 
-      {/* Main Score Overview */}
       <div id="overview" className="scroll-mt-6">
         <ScoreBreakdown
           overallScore={simulatedScore}
@@ -269,10 +261,8 @@ export default function MatchAnalysisDetail({
         />
       </div>
 
-      {/* Accordion Group */}
       <div className="border border-[var(--border)] rounded-3xl overflow-hidden bg-[var(--bg-surface)] shadow-[var(--shadow-card)]">
         
-        {/* Accordion Item 1: Summary & Strengths */}
         <div>
           <button
             onClick={() => toggleAccordion('summary')}
@@ -313,7 +303,6 @@ export default function MatchAnalysisDetail({
           </AnimatePresence>
         </div>
 
-        {/* Accordion Item 2: Resume Wording Suggestions */}
         <div>
           <button
             onClick={() => toggleAccordion('wording')}
@@ -357,7 +346,6 @@ export default function MatchAnalysisDetail({
                   onEdit={handleEditSuggestion}
                 />
 
-                {/* Local Resume Preview Toggle */}
                 <div className="border border-[var(--border)] rounded-2xl bg-[var(--bg-surface)] p-4">
                   <button
                     onClick={() => setShowResumePreview(!showResumePreview)}
@@ -383,7 +371,6 @@ export default function MatchAnalysisDetail({
           </AnimatePresence>
         </div>
 
-        {/* Accordion Item 3: Keyword & ATS Check */}
         <div>
           <button
             onClick={() => toggleAccordion('keywords')}
@@ -433,7 +420,6 @@ export default function MatchAnalysisDetail({
           </AnimatePresence>
         </div>
 
-        {/* Accordion Item 4: Action Roadmap */}
         <div>
           <button
             onClick={() => toggleAccordion('roadmap')}
@@ -480,7 +466,6 @@ export default function MatchAnalysisDetail({
           </AnimatePresence>
         </div>
 
-        {/* Accordion Item 5: Interview Prep & Cover Letter */}
         <div>
           <button
             onClick={() => toggleAccordion('interview')}
@@ -518,7 +503,6 @@ export default function MatchAnalysisDetail({
 
       </div>
 
-      {/* Floating Action Banner */}
       {hasChanges && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--bg-surface)] border border-[var(--border)] shadow-[var(--shadow-float)] rounded-2xl p-4 flex items-center justify-between gap-6 max-w-lg w-full animate-fade-up">
           <div className="text-left">
@@ -536,7 +520,6 @@ export default function MatchAnalysisDetail({
         </div>
       )}
 
-      {/* Re-run Confirm Modal */}
       <AnimatePresence>
         {showConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -566,7 +549,6 @@ export default function MatchAnalysisDetail({
         )}
       </AnimatePresence>
 
-      {/* Save Success Modal */}
       <AnimatePresence>
         {showSaveSuccess && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

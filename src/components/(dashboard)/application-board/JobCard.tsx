@@ -1,9 +1,10 @@
+"use client";
+
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import type { JobApplication, Resume } from '@/types';
 import { Trash2, Play, Search, ExternalLink, Pencil, Loader2 } from 'lucide-react';
-import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 function getStatusBadge(status: JobApplication['status']) {
   switch (status) {
@@ -23,6 +24,7 @@ function getStatusBadge(status: JobApplication['status']) {
 interface JobCardProps {
   job: JobApplication;
   resumes: Resume[];
+  isCurrentlyAnalyzing: boolean;
   onEditJobClick: (job: JobApplication) => void;
   onMatchClick: (job: JobApplication) => void;
   onViewAnalysisClick: (jobId: string) => void;
@@ -33,14 +35,13 @@ interface JobCardProps {
 export default function JobCard({
   job,
   resumes,
+  isCurrentlyAnalyzing,
   onEditJobClick,
   onMatchClick,
   onViewAnalysisClick,
   onUpdateJobStatus,
   onDeleteJob,
 }: JobCardProps) {
-  const { isLoading, analyzingJobId } = useAnalysisStore();
-  const isCurrentlyAnalyzing = isLoading && analyzingJobId === job.id;
   const badgeDetails = getStatusBadge(job.status);
 
   return (

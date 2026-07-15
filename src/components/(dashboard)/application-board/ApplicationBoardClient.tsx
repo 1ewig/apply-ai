@@ -7,6 +7,7 @@ import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
 import { useRunAnalysis } from '@/hooks/useRunAnalysis';
 import { useApplicationSearch } from '@/hooks/useApplicationSearch';
+import { useApplicationForm } from '@/hooks/useApplicationForm';
 import { useSubmitApplication } from '@/hooks/useSubmitApplication';
 
 import ApplicationsBoard from './ApplicationsBoard';
@@ -28,7 +29,7 @@ export default function ApplicationBoardClient() {
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
   const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router });
-  const { setError } = useAnalysisStore();
+  const { isLoading: analysisLoading, analyzingJobId, setError } = useAnalysisStore();
 
   useEffect(() => {
     setMounted(true);
@@ -58,6 +59,8 @@ export default function ApplicationBoardClient() {
     setIsAddJobOpen(false);
     setEditingJob(null);
   }, []);
+
+  const applicationForm = useApplicationForm(isAddJobOpen, editingJob, resumes, (data) => handleAddJobSubmit({ ...data, editingJobId: editingJob?.id }), handleCloseAddJob);
 
   const handleViewAnalysis = useCallback((jobId: string) => {
     router.push(`/application-board/${jobId}/analysis`);
@@ -132,6 +135,7 @@ export default function ApplicationBoardClient() {
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
         resumes={resumes}
+        isAnalyzingId={analyzingJobId}
         onAddJobClick={handleAddJob}
         onEditJobClick={handleEditJob}
         onMatchClick={handleMatchClick}
@@ -145,7 +149,25 @@ export default function ApplicationBoardClient() {
         onClose={handleCloseAddJob}
         resumes={resumes}
         editingJob={editingJob}
-        onSubmit={(data) => handleAddJobSubmit({ ...data, editingJobId: editingJob?.id })}
+        company={applicationForm.company}
+        onCompanyChange={applicationForm.setCompany}
+        role={applicationForm.role}
+        onRoleChange={applicationForm.setRole}
+        status={applicationForm.status}
+        onStatusChange={applicationForm.setStatus}
+        url={applicationForm.url}
+        onUrlChange={applicationForm.setUrl}
+        jobDescription={applicationForm.jobDescription}
+        onJobDescriptionChange={applicationForm.setJobDescription}
+        selectedResumeId={applicationForm.selectedResumeId}
+        customResumeContent={applicationForm.customResumeContent}
+        onCustomResumeContentChange={applicationForm.setCustomResumeContent}
+        analyzeImmediately={applicationForm.analyzeImmediately}
+        onAnalyzeImmediatelyChange={applicationForm.setAnalyzeImmediately}
+        onResumeTemplateChange={applicationForm.handleResumeTemplateChange}
+        isSubmitting={applicationForm.isSubmitting}
+        isLoading={analysisLoading}
+        onSubmit={applicationForm.handleSubmit}
       />
 
       <ConfirmDialog

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { useResumes } from '@/hooks/useResumes';
+import { useResumeForm } from '@/hooks/useResumeForm';
 import ResumeTemplates from './ResumeTemplates';
 import ResumeFormModal from './ResumeFormModal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -49,6 +50,13 @@ export default function ResumeTemplatesClient() {
     }
   };
 
+  const resumeForm = useResumeForm({
+    isOpen: isAddResumeOpen || !!editingResume,
+    editingResume,
+    onSubmit: handleSubmit,
+    onClose: handleClose,
+  });
+
   const handleSetDefault = async (id: string) => {
     try {
       await setDefaultResume(id);
@@ -85,8 +93,15 @@ export default function ResumeTemplatesClient() {
       <ResumeFormModal
         isOpen={isAddResumeOpen || !!editingResume}
         onClose={handleClose}
-        onSubmit={handleSubmit}
+        onSubmit={resumeForm.handleSubmit}
         editingResume={editingResume}
+        name={resumeForm.name}
+        onNameChange={resumeForm.setName}
+        content={resumeForm.content}
+        onContentChange={resumeForm.setContent}
+        isDefault={resumeForm.isDefault}
+        onIsDefaultChange={resumeForm.setIsDefault}
+        isSubmitting={resumeForm.isSubmitting}
       />
 
       <ConfirmDialog

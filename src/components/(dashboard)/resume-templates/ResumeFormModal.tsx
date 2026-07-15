@@ -4,25 +4,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { backdropFade, modalSpringScale } from '@/utils/animations';
 import Button from '@/components/ui/Button';
 import type { Resume } from '@/types';
-import { useResumeForm } from '@/hooks/useResumeForm';
 import { Loader2 } from 'lucide-react';
 
 interface ResumeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { name: string; content: string; isDefault: boolean }) => void;
+  onSubmit: () => void;
   editingResume?: Resume | null;
+  name: string;
+  onNameChange: (value: string) => void;
+  content: string;
+  onContentChange: (value: string) => void;
+  isDefault: boolean;
+  onIsDefaultChange: (value: boolean) => void;
+  isSubmitting: boolean;
 }
 
-export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResume }: ResumeFormModalProps) {
+export default function ResumeFormModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingResume,
+  name,
+  onNameChange,
+  content,
+  onContentChange,
+  isDefault,
+  onIsDefaultChange,
+  isSubmitting,
+}: ResumeFormModalProps) {
   const isEditing = !!editingResume;
-
-  const { name, setName, content, setContent, isDefault, setIsDefault, isSubmitting, handleSubmit } = useResumeForm({
-    isOpen,
-    editingResume,
-    onSubmit,
-    onClose,
-  });
 
   const hasChanges = !editingResume || (
     (name || '').trim() !== (editingResume.name || '').trim() ||
@@ -41,7 +52,6 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
             {...modalSpringScale}
             className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-3xl overflow-hidden flex flex-col max-h-[95vh]"
           >
-            {/* Modal Header */}
             <div className="py-4 px-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--bg-page)]">
               <div>
                 <h3 className="font-display font-extrabold text-base text-[var(--text-heading)]">
@@ -61,8 +71,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
               </button>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="flex-1 flex flex-col overflow-hidden text-xs">
-              {/* Scrollable Form Content */}
+            <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="flex-1 flex flex-col overflow-hidden text-xs">
               <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 <div>
                   <label className="block font-semibold text-[var(--text-heading)] mb-1">Template Name *</label>
@@ -70,7 +79,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                     type="text"
                     required
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => onNameChange(e.target.value)}
                     placeholder="e.g. Senior Frontend Dev Resume"
                     maxLength={100}
                     className="w-full p-2.5 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] bg-[var(--input-bg)]"
@@ -82,7 +91,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                   <textarea
                     required
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => onContentChange(e.target.value)}
                     placeholder="Paste the full text of your CV/Resume here..."
                     maxLength={25000}
                     className="w-full p-3 rounded-xl border border-[var(--border)] focus:outline-none focus:border-[var(--accent)] font-mono text-[11px] leading-relaxed resize-none flex-1 min-h-[340px] bg-[var(--input-bg)]"
@@ -94,7 +103,7 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                     type="checkbox"
                     id="modal-isDefault"
                     checked={isDefault}
-                    onChange={(e) => setIsDefault(e.target.checked)}
+                    onChange={(e) => onIsDefaultChange(e.target.checked)}
                     className="w-4 h-4 rounded text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer"
                   />
                   <label htmlFor="modal-isDefault" className="font-medium text-[var(--text-heading)] cursor-pointer selection:bg-transparent">
@@ -103,7 +112,6 @@ export default function ResumeFormModal({ isOpen, onClose, onSubmit, editingResu
                 </div>
               </div>
 
-              {/* Bottom actions (Sticky/Fixed) */}
               <div className="flex justify-end gap-2 px-6 py-3 border-t border-[var(--border)] bg-[var(--bg-page)] shrink-0">
                 <Button
                   variant="outline"

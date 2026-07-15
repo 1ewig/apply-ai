@@ -98,6 +98,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       onTogglePrepItem={(idx) => setExpandedPrepIndex(expandedPrepIndex === idx ? null : idx)}
       onBackClick={() => router.push('/application-board')}
       onReRunAnalysis={handleReRunAnalysis}
+      onSaveChanges={updateJob}
     />
   );
 }
