@@ -9,6 +9,7 @@ import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
 import { useRunAnalysis } from '@/hooks/useRunAnalysis';
 import type { ComparisonResult } from '@/types';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 import MatchAnalysisDetail from './MatchAnalysisDetail';
 
@@ -26,22 +27,29 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
-  const { data: analysisData } = useQuery({
+  const { data: analysisData, isError, error: queryError } = useQuery({
     queryKey: ['analysis', id],
     queryFn: async () => await getAnalysisAction(id as any),
     enabled: !!id,
-  }) as { data: AnalysisQueryResult | undefined };
+  }) as { data: AnalysisQueryResult | undefined; isError: boolean; error: Error | null };
 
   const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
-    const data = await runAnalysis(jobId, resumeContent, jobDesc);
-    if (data) {
-      updateJob(jobId, {
-        matchScore: data.score,
-        analysisResult: data,
-        jobDescription: jobDesc,
-      });
+    try {
+      const data = await runAnalysis(jobId, resumeContent, jobDesc);
+      if (data) {
+        updateJob(jobId, {
+          matchScore: data.score,
+          analysisResult: data,
+          jobDescription: jobDesc,
+        });
+      }
+      return data;
+    } catch (err: any) {
+      console.error('Error re-running analysis:', err);
+      const retryAction = () => handleReRunAnalysis(jobId, resumeContent, jobDesc);
+      useAnalysisStore.getState().setError(err.message || 'Analysis failed.', retryAction);
+      throw err;
     }
-    return data;
   }, [runAnalysis, updateJob]);
 
   if (!job) {

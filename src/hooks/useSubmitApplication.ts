@@ -68,6 +68,28 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
               });
               router.push(`/application-board/${createdJobId}/analysis`);
             }
+          } catch (analysisErr: any) {
+            console.error('Error running immediate analysis:', analysisErr);
+            const retryAction = async () => {
+              startAnalysis();
+              try {
+                const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
+                if (data) {
+                  updateJob(createdJobId, {
+                    matchScore: data.score,
+                    analysisResult: data,
+                    jobDescription: jobData.jobDescription,
+                  });
+                  router.push(`/application-board/${createdJobId}/analysis`);
+                }
+              } catch (retryErr: any) {
+                setError(retryErr.message || 'Analysis failed again.', retryAction);
+              } finally {
+                finishAnalysis();
+              }
+            };
+            setError(analysisErr.message || 'Job created, but AI analysis failed.', retryAction);
+            return;
           } finally {
             finishAnalysis();
           }
@@ -75,9 +97,10 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
       }
     } catch (err: any) {
       console.error('Error saving job application:', err);
-      setError(err.message || 'Failed to save job application.');
+      const lastData = jobData;
+      setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any));
     }
-  }, [addJob, updateJob, runAnalysis, router]);
+  }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis]);
 
   return { handleAddJobSubmit };
 }
