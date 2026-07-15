@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, RotateCcw, X, Loader2 } from 'lucide-react';
+import { AlertTriangle, CheckCircle, RotateCcw, X, Loader2 } from 'lucide-react';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
-interface ErrorToastProps {
-  error: string | null;
+interface ToastProps {
+  message: string | null;
   title?: string | null;
+  type?: 'error' | 'success' | null;
   onDismiss: () => void;
   onRetry?: (() => void) | null;
 }
 
-export default function ErrorToast({ error, title, onDismiss, onRetry }: ErrorToastProps) {
+export default function Toast({ message, title, type = 'error', onDismiss, onRetry }: ToastProps) {
   const [isRetrying, setIsRetrying] = useState(false);
 
   const handleRetry = async () => {
@@ -17,6 +19,10 @@ export default function ErrorToast({ error, title, onDismiss, onRetry }: ErrorTo
     setIsRetrying(true);
     try {
       await onRetry();
+      
+      // If the retry resolves successfully without throwing an error:
+      const setSuccess = useAnalysisStore.getState().setSuccess;
+      setSuccess('The operation was completed successfully.', 'Operation Succeeded');
     } catch (err) {
       console.error('Retry action failed:', err);
     } finally {
@@ -24,9 +30,21 @@ export default function ErrorToast({ error, title, onDismiss, onRetry }: ErrorTo
     }
   };
 
+  // Auto-dismiss for success toasts (5 seconds)
+  useEffect(() => {
+    if (message && type === 'success') {
+      const timer = setTimeout(() => {
+        onDismiss();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message, type, onDismiss]);
+
+  const isSuccess = type === 'success';
+
   return (
     <AnimatePresence>
-      {error && (
+      {message && (
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -34,21 +52,33 @@ export default function ErrorToast({ error, title, onDismiss, onRetry }: ErrorTo
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:max-w-md z-70 pointer-events-auto"
         >
-          <div className="bg-[var(--bg-surface)]/90 backdrop-blur-md border border-rose-500/20 rounded-2xl shadow-[0_10px_30px_rgba(239,68,68,0.15)] p-4 flex gap-3.5 items-start">
-            <div className="w-8 h-8 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-4 h-4 text-rose-500" />
+          <div className={`bg-[var(--bg-surface)]/90 backdrop-blur-md border rounded-2xl p-4 flex gap-3.5 items-start ${
+            isSuccess 
+              ? 'border-emerald-500/20 shadow-[0_10px_30px_rgba(16,185,129,0.15)]' 
+              : 'border-rose-500/20 shadow-[0_10px_30px_rgba(239,68,68,0.15)]'
+          }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
+              isSuccess 
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
+                : 'bg-rose-500/10 border-rose-500/20 text-rose-500'
+            }`}>
+              {isSuccess ? (
+                <CheckCircle className="w-4 h-4" />
+              ) : (
+                <AlertTriangle className="w-4 h-4" />
+              )}
             </div>
             
             <div className="flex-1 min-w-0 pt-0.5">
               <h4 className="text-xs font-bold text-[var(--text-heading)] mb-1">
-                {title || 'Operation Failed'}
+                {title || (isSuccess ? 'Success' : 'Operation Failed')}
               </h4>
               <p className="text-[11px] text-[var(--text-muted)] leading-relaxed mb-3 break-words">
-                {error}
+                {message}
               </p>
               
               <div className="flex items-center gap-3">
-                {onRetry && (
+                {!isSuccess && onRetry && (
                   <button
                     onClick={handleRetry}
                     disabled={isRetrying}

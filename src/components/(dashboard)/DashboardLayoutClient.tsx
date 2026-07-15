@@ -6,10 +6,20 @@ import { Menu } from 'lucide-react';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import Sidebar from '@/components/(dashboard)/Sidebar';
 import AnalysisLoadingOverlay from '@/components/(dashboard)/application-board/AnalysisLoadingOverlay';
-import ErrorToast from '@/components/(dashboard)/ErrorToast';
+import Toast from '@/components/(dashboard)/Toast';
 
 export default function DashboardLayoutClient({ children }: { children: React.ReactNode }) {
-  const { isLoading, phases, error, errorTitle, retryAction, clearError } = useAnalysisStore();
+  const { 
+    isLoading, 
+    phases, 
+    error, 
+    errorTitle, 
+    retryAction, 
+    clearError, 
+    successMessage, 
+    successTitle, 
+    clearSuccess 
+  } = useAnalysisStore();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -24,7 +34,13 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
       />
       <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
         <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
-        <ErrorToast error={error} title={errorTitle} onDismiss={clearError} onRetry={retryAction} />
+        <Toast 
+          message={error || successMessage}
+          title={error ? errorTitle : successTitle}
+          type={error ? 'error' : successMessage ? 'success' : null}
+          onDismiss={error ? clearError : clearSuccess}
+          onRetry={error ? retryAction : null}
+        />
         <div className="md:hidden relative flex items-center justify-center px-4 py-4 border-b border-[var(--border)] bg-[var(--bg-page)]">
           <button
             onClick={() => setMobileSidebarOpen(true)}

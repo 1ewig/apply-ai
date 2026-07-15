@@ -20,10 +20,14 @@ interface AnalysisStore {
   error: string | null;
   errorTitle: string | null;
   retryAction: (() => void) | null;
+  successMessage: string | null;
+  successTitle: string | null;
   startAnalysis: () => void;
   setPhase: (phase: number) => void;
   setError: (error: string | null, retryAction?: (() => void) | null, errorTitle?: string | null) => void;
   clearError: () => void;
+  setSuccess: (message: string | null, title?: string | null) => void;
+  clearSuccess: () => void;
   finishAnalysis: () => void;
 }
 
@@ -34,14 +38,34 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   error: null,
   errorTitle: null,
   retryAction: null,
-  startAnalysis: () => set({ isLoading: true, loadingPhase: 0, error: null, errorTitle: null, retryAction: null }),
+  successMessage: null,
+  successTitle: null,
+  startAnalysis: () => set({ 
+    isLoading: true, 
+    loadingPhase: 0, 
+    error: null, 
+    errorTitle: null, 
+    retryAction: null,
+    successMessage: null,
+    successTitle: null
+  }),
   setPhase: (phase) => set({ loadingPhase: phase }),
   setError: (error, retryAction, errorTitle) => set((state) => ({
     isLoading: false,
     error,
     retryAction: retryAction !== undefined ? retryAction : state.retryAction,
     errorTitle: errorTitle !== undefined ? errorTitle : state.errorTitle,
+    successMessage: null,
+    successTitle: null,
   })),
   clearError: () => set({ error: null, errorTitle: null, retryAction: null }),
+  setSuccess: (message, title) => set({
+    successMessage: message,
+    successTitle: title || 'Success',
+    error: null,
+    errorTitle: null,
+    retryAction: null,
+  }),
+  clearSuccess: () => set({ successMessage: null, successTitle: null }),
   finishAnalysis: () => set({ isLoading: false }),
 }));
