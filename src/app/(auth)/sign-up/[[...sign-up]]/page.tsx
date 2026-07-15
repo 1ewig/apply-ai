@@ -1,5 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
-  return <SignUp routing="hash" />;
+  return <SignUp fallbackRedirectUrl="/application-board" />;
 }
