@@ -155,7 +155,7 @@ export default function Sidebar({ isMobileOpen, onMobileClose }: SidebarProps) {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="absolute left-0 top-0 bottom-0 w-64 bg-[var(--bg-surface)] border-r border-[var(--border)] flex flex-col text-left"
+              className="absolute left-0 top-0 bottom-0 w-64 bg-[var(--bg-surface)] border-r border-[var(--border)] flex flex-col text-left overflow-y-auto"
             >
               <SidebarContent onNavClick={onMobileClose} />
             </motion.aside>
