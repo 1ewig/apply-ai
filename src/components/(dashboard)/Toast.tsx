@@ -13,9 +13,11 @@ interface ToastProps {
 
 export default function Toast({ message, title, type = 'error', onDismiss, onRetry }: ToastProps) {
   const [isRetrying, setIsRetrying] = useState(false);
+  const [interactionCount, setInteractionCount] = useState(0);
 
   const handleRetry = async () => {
     if (!onRetry || isRetrying) return;
+    setInteractionCount(c => c + 1);
     setIsRetrying(true);
     try {
       await onRetry();
@@ -37,7 +39,7 @@ export default function Toast({ message, title, type = 'error', onDismiss, onRet
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [message, onDismiss]);
+  }, [message, onDismiss, interactionCount]);
 
   const isSuccess = type === 'success';
 
