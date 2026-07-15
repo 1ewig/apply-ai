@@ -67,6 +67,7 @@ export default function ResumeTemplatesClient() {
     } catch (err: any) {
       console.error('Failed to set default resume:', err);
       setError(err.message || 'Failed to set default resume.', () => handleSetDefault(id), 'Failed to Update Default Resume');
+      throw err;
     }
   };
 
@@ -78,6 +79,7 @@ export default function ResumeTemplatesClient() {
     } catch (err: any) {
       console.error('Failed to delete resume:', err);
       setError(err.message || 'Failed to delete resume template.', () => handleDelete(id), 'Failed to Delete Resume');
+      throw err;
     } finally {
       setIsDeleting(false);
     }

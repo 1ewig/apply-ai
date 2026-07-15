@@ -105,6 +105,7 @@ export default function ApplicationBoardClient() {
     } catch (err: any) {
       console.error('Failed to update job status:', err);
       setError(err.message || 'Failed to update job status.', () => handleUpdateStatus(id, status), 'Failed to Move Application');
+      throw err;
     }
   }, [updateJob, setError]);
 
@@ -116,6 +117,7 @@ export default function ApplicationBoardClient() {
     } catch (err: any) {
       console.error('Failed to delete job:', err);
       setError(err.message || 'Failed to delete application.', () => handleDeleteJob(id), 'Failed to Delete Application');
+      throw err;
     } finally {
       setIsDeleting(false);
     }
