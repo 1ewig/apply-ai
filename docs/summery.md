@@ -18,7 +18,7 @@
 
 | Package | Version | Purpose |
 |---|---|---|
-| `next` | ^16.2.9 | Framework — App Router, API routes, Turbopack bundler |
+| `next` | ^16.2.10 | Framework — App Router, API routes, Turbopack bundler |
 | `react` / `react-dom` | 19.2.6 | UI library |
 | `@clerk/nextjs` | ^7.3.7 | Auth — sign-in/sign-up components, middleware, JWT |
 | `convex` | ^1.42.1 | Database — reactive queries, mutations, real-time sync |
@@ -58,9 +58,9 @@ src/
 │   ├── page.tsx                 # Landing page (composes all landing sections)
 │   ├── api/compare/route.ts     # POST — Groq LLM comparison endpoint
 │   ├── (auth)/
-│   │   ├── layout.tsx           # Auth layout (centered card)
-│   │   ├── sign-in/page.tsx     # Clerk <SignIn>
-│   │   └── sign-up/page.tsx     # Clerk <SignUp>
+│   │   ├── layout.tsx                   # Auth layout (centered card)
+│   │   ├── sign-in/[[...sign-in]]/page.tsx  # Clerk <SignIn> (catch-all)
+│   │   └── sign-up/[[...sign-up]]/page.tsx  # Clerk <SignUp> (catch-all)
 │   └── (dashboard)/
 │       ├── layout.tsx           # Dashboard shell: Sidebar + loading overlay + error toast
 │       ├── application-board/
@@ -97,7 +97,8 @@ src/
 └── utils/
     ├── cn.ts                    # clsx + tailwind-merge utility
     ├── animations.ts            # Framer Motion variants
-    └── useReveal.ts             # IntersectionObserver scroll reveal hook
+    ├── useReveal.ts             # IntersectionObserver scroll reveal hook
+    └── userFriendlyErrors.ts    # Raw error → plain English mapping
 ```
 
 ---
@@ -107,14 +108,14 @@ src/
 | Route | Type | Access | Description |
 |---|---|---|---|
 | `/` | Static | Public | Landing page (Hero, Features, Pricing, etc.) |
-| `/sign-in` | Static | Public | Clerk sign-in form |
-| `/sign-up` | Static | Public | Clerk sign-up form |
+| `/sign-in/[[...sign-in]]` | Dynamic | Public | Clerk sign-in form (catch-all) |
+| `/sign-up/[[...sign-up]]` | Dynamic | Public | Clerk sign-up form (catch-all) |
 | `/application-board` | Dynamic (client) | Protected | Main job board — list, add, edit, analyze applications |
 | `/application-board/[id]/analysis` | Dynamic (client) | Protected | AI analysis detail for a specific application |
 | `/resume-templates` | Dynamic (client) | Protected | Resume template CRUD |
 | `POST /api/compare` | API | Protected | Groq LLM comparison endpoint |
 
-**Route protection** is handled by `proxy.ts` (Clerk middleware) which guards all `/application-board*`, `/resume-templates*`, and `/api/compare*` paths. Static assets and auth pages are excluded.
+**Route protection** is handled by `proxy.ts` (Clerk middleware — see Auth & Security note below) which guards all `/application-board*`, `/resume-templates*`, and `/api/compare*` paths. Static assets and auth pages are excluded.
 
 ---
 
@@ -123,14 +124,18 @@ src/
 ### Authentication Flow
 
 ```
-User → Clerk UI (SignIn/SignUp) → Clerk JWT → ConvexProviderWithClerk
-                                                      ↓
-                                              Convex WebSocket (authenticated)
-                                                      ↓
-                                         Convex queries filtered by identity.subject
+User → Clerk UI (SignIn/SignUp) → redirect to /application-board
+       (fallbackRedirectUrl="/application-board")
+       ↓
+Clerk JWT → ConvexProviderWithClerk
+              ↓
+      Convex WebSocket (authenticated)
+              ↓
+  Convex queries filtered by identity.subject
 ```
 
 - Clerk handles session management and JWT generation
+- `fallbackRedirectUrl="/application-board"` on `<SignIn>`/`<SignUp>` sends users to the dashboard after auth (the deprecated `afterSignInUrl`/`afterSignUpUrl` props do not exist in Clerk v7)
 - Convex validates Clerk JWTs via `auth.config.ts` (JWT issuer domain)
 - Every Convex query/mutation calls `ctx.auth.getUserIdentity()` to isolate user data
 - The API route (`/api/compare`) checks Clerk session first, falls back to API key header
@@ -192,7 +197,7 @@ Client (useRunAnalysis) → POST /api/compare { resumeText, jobDescription }
 | `bun run build` | Production build (Turbopack) |
 | `bun run start` | Start production server |
 | `npx convex dev` | Start Convex dev server |
-| `npx tsc --noEmit` | Type check |
+| `bun run tsc --noEmit` | Type check |
 
 ---
 
@@ -212,7 +217,10 @@ Client (useRunAnalysis) → POST /api/compare { resumeText, jobDescription }
 - **React Context** — `ThemeProvider` for theme toggle
 
 ### Auth & Security
-- Clerk middleware (`proxy.ts`) protects all routes
+- **`proxy.ts` vs `middleware.ts`:** Next.js 16 dropped the mandatory `middleware.ts` filename. Any file in `src/` can serve as middleware via `config.matcher`. Ours is named `proxy.ts` — this is the intended convention for Next.js 16, **not** a mistake.
+- Clerk middleware (`proxy.ts`) protects `/application-board*`, `/resume-templates*`, and `/api/compare*` via `clerkMiddleware()` + `auth.protect()`
+- Auth pages (`/sign-in`, `/sign-up`) are public — Clerk's `<SignIn>`/`<SignUp>` handle session creation
+- Post-sign-in redirect uses `fallbackRedirectUrl="/application-board"` on the `<SignIn>`/`<SignUp>` components (not the deprecated `afterSignInUrl`)
 - API route authenticates via Clerk `auth()` or API key header fallback
 - Every Convex query/mutation filters by `identity.subject` (multi-tenant isolation)
 - LLM output validated and normalized by Zod at API boundary
@@ -234,6 +242,14 @@ Client (useRunAnalysis) → POST /api/compare { resumeText, jobDescription }
 - Queries are reactive — no manual refetching needed
 - When re-analyzing, old result moves to `previousResult` for diff tracking
 - User sync: `storeUser()` mutation runs on application board mount
+
+### UX Improvements
+- **User-friendly errors:** `toUserFriendlyError()` utility (`src/utils/userFriendlyErrors.ts`) maps raw error messages (network, auth, not-found, timeout, rate-limit, parse) to plain English. Used at all 14 `setError` call sites.
+- **Context-specific success messages:** Each operation (save, delete, status update, set default) passes its own success message. No generic "operation completed" placeholder.
+- **Toast auto-dismiss reset:** The 5s auto-dismiss timer resets when the user clicks "retry" (via `interactionCount` state in `Toast.tsx`).
+- **Disabled button states:** `Button.tsx` applies `disabled:cursor-not-allowed disabled:opacity-50` with hover/active suppression per variant.
+- **Mobile sidebar scroll:** Mobile sidebar panel has `overflow-y-auto` for long menu lists.
+- **Firefox scrollbar:** Theme scrollbar styles (`scrollbar-width: thin`) use the `*` selector instead of `html` so inner scroll containers (dashboard `<main>`) also apply the themed scrollbar.
 
 ---
 
