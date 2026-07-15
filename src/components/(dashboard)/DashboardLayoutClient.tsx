@@ -38,7 +38,7 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
         isMobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
       />
-      <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
+      <main className="flex-1 flex flex-col overflow-y-auto h-dvh relative">
         <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
         <Toast 
           message={displayError || successMessage}
