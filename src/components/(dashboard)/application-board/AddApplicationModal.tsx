@@ -131,7 +131,13 @@ export default function AddApplicationModal({
                       <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value as JobApplication['status'])}
-                        className="w-full p-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+                        className="w-full p-2.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'right 10px center',
+                          backgroundSize: '12px',
+                        }}
                       >
                         <option value="wishlist">Wishlist</option>
                         <option value="applied">Applied</option>
@@ -159,7 +165,13 @@ export default function AddApplicationModal({
                         <select
                           value={selectedResumeId}
                           onChange={(e) => handleResumeTemplateChange(e.target.value)}
-                          className="w-full p-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+                          className="w-full p-2.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'right 10px center',
+                            backgroundSize: '12px',
+                          }}
                         >
                           <option value="">-- Choose Template --</option>
                           {resumes.map((r) => (
