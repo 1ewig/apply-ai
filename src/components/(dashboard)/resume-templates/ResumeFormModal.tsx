@@ -50,7 +50,7 @@ export default function ResumeFormModal({
         >
           <motion.div
             {...modalSpringScale}
-            className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-3xl overflow-hidden flex flex-col max-h-[95vh]"
+            className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full max-w-3xl overflow-hidden flex flex-col max-h-[95dvh]"
           >
             <div className="py-4 px-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--bg-page)]">
               <div>
@@ -86,7 +86,7 @@ export default function ResumeFormModal({
                   />
                 </div>
 
-                <div className="flex-1 flex flex-col min-h-[380px] h-[48vh]">
+                <div className="flex-1 flex flex-col min-h-[380px] h-[48dvh]">
                   <label className="block font-semibold text-[var(--text-heading)] mb-1">Resume Text Content *</label>
                   <textarea
                     required

@@ -73,7 +73,7 @@ export default function AddApplicationModal({
         >
           <motion.div
             {...modalSpringScale}
-            className={`bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full overflow-hidden flex flex-col max-h-[95vh] ${
+            className={`bg-[var(--bg-surface)] rounded-3xl border border-[var(--border)] shadow-[var(--shadow-float)] w-full overflow-hidden flex flex-col max-h-[95dvh] ${
               editingJob ? 'max-w-md' : 'max-w-7xl xl:max-w-[90vw]'
             }`}
           >
@@ -200,7 +200,7 @@ export default function AddApplicationModal({
                           <span className="w-4 h-4 rounded-full bg-[var(--accent)] text-white text-[10px] flex items-center justify-center">2</span>
                           Tailored Resume
                         </h4>
-                        <div className="flex-1 flex flex-col min-h-[380px] h-[48vh]">
+                        <div className="flex-1 flex flex-col min-h-[380px] h-[48dvh]">
                           <label className="block font-semibold text-[var(--text-heading)] mb-1">Your Highlights for this Job</label>
                           <textarea
                             value={customResumeContent}
@@ -217,7 +217,7 @@ export default function AddApplicationModal({
                           <span className="w-4 h-4 rounded-full bg-[var(--accent)] text-white text-[10px] flex items-center justify-center">3</span>
                           Job Description
                         </h4>
-                        <div className="flex-1 flex flex-col min-h-[380px] h-[48vh]">
+                        <div className="flex-1 flex flex-col min-h-[380px] h-[48dvh]">
                           <label className="block font-semibold text-[var(--text-heading)] mb-1">Paste Job Requirements *</label>
                           <textarea
                             required={analyzeImmediately}
