@@ -26,6 +26,12 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
     storeUserAction().catch((err: any) => console.error('Error syncing user in layout:', err));
   }, []);
 
+  // Suppress toast rendering for AI alignment analysis errors (they are handled inline by the full-screen overlay card)
+  const isAnalysisError = errorTitle === 'Failed to Run Alignment Match' || errorTitle === 'Failed to Analyze Alignment';
+  const displayError = isAnalysisError ? null : error;
+  const displayErrorTitle = isAnalysisError ? null : errorTitle;
+  const displayRetryAction = isAnalysisError ? null : retryAction;
+
   return (
     <>
       <Sidebar
@@ -35,11 +41,11 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
       <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
         <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
         <Toast 
-          message={error || successMessage}
-          title={error ? errorTitle : successTitle}
-          type={error ? 'error' : successMessage ? 'success' : null}
-          onDismiss={error ? clearError : clearSuccess}
-          onRetry={error ? retryAction : null}
+          message={displayError || successMessage}
+          title={displayError ? displayErrorTitle : successTitle}
+          type={displayError ? 'error' : successMessage ? 'success' : null}
+          onDismiss={displayError ? clearError : clearSuccess}
+          onRetry={displayError ? displayRetryAction : null}
         />
         <div className="md:hidden relative flex items-center justify-center px-4 py-4 border-b border-[var(--border)] bg-[var(--bg-page)]">
           <button
