@@ -63,10 +63,33 @@ export default function ApplicationBoardClient() {
     router.push(`/application-board/${jobId}/analysis`);
   }, [router]);
 
-  const handleMatchClick = useCallback((job: JobApplication) => {
-    setEditingJob(job);
-    setIsAddJobOpen(true);
-  }, []);
+  const handleMatchClick = useCallback(async (job: JobApplication) => {
+    if (job.jobDescription && job.customResumeContent) {
+      const startAnalysis = useAnalysisStore.getState().startAnalysis;
+      const finishAnalysis = useAnalysisStore.getState().finishAnalysis;
+
+      startAnalysis();
+      try {
+        const data = await runAnalysis(job.id, job.customResumeContent, job.jobDescription);
+        if (data) {
+          await updateJob(job.id, {
+            matchScore: data.score,
+            analysisResult: data,
+          });
+          router.push(`/application-board/${job.id}/analysis`);
+        }
+      } catch (err: any) {
+        console.error('Failed to run alignment analysis:', err);
+        const retryAction = () => handleMatchClick(job);
+        setError(err.message || 'Failed to analyze alignment.', retryAction, 'Failed to Analyze Alignment');
+      } finally {
+        finishAnalysis();
+      }
+    } else {
+      setEditingJob(job);
+      setIsAddJobOpen(true);
+    }
+  }, [runAnalysis, updateJob, router, setError]);
 
   const handleUpdateStatus = useCallback(async (id: string, status: JobApplication['status']) => {
     try {
