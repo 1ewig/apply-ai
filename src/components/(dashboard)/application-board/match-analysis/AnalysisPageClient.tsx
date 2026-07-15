@@ -10,6 +10,7 @@ import { useResumes } from '@/hooks/useResumes';
 import { useRunAnalysis } from '@/hooks/useRunAnalysis';
 import type { ComparisonResult } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
 import MatchAnalysisDetail from './MatchAnalysisDetail';
 
@@ -36,7 +37,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   useEffect(() => {
     if (isError && queryError) {
       useAnalysisStore.getState().setError(
-        queryError.message || 'Failed to load analysis details from database.',
+        toUserFriendlyError(queryError, 'Failed to load analysis details.'),
         () => { refetch(); },
         'Failed to Load Analysis'
       );
@@ -61,7 +62,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       }
       console.error('Error re-running analysis:', err);
       const retryAction = () => handleReRunAnalysis(jobId, resumeContent, jobDesc);
-      useAnalysisStore.getState().setError(err.message || 'Analysis failed.', retryAction, 'Failed to Analyze Alignment');
+      useAnalysisStore.getState().setError(toUserFriendlyError(err, 'Analysis failed. Please try again.'), retryAction, 'Failed to Analyze Alignment');
       throw err;
     }
   }, [runAnalysis, updateJob]);

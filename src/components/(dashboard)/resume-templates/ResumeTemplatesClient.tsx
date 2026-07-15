@@ -9,10 +9,11 @@ import ResumeFormModal from './ResumeFormModal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import type { Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
 export default function ResumeTemplatesClient() {
   const { resumes, isLoading, isError, error, refetch, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
-  const { setError } = useAnalysisStore();
+  const { setError, setSuccess } = useAnalysisStore();
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export default function ResumeTemplatesClient() {
   useEffect(() => {
     if (isError && error) {
       setError(
-        error.message || 'Failed to load resume templates from database.',
+        toUserFriendlyError(error, 'Failed to load resume templates.'),
         () => { refetch(); },
         'Failed to Load Resumes'
       );
@@ -45,9 +46,10 @@ export default function ResumeTemplatesClient() {
         await addResume(data);
       }
       handleClose();
+      setSuccess('Resume saved successfully.', 'Resume Saved');
     } catch (err: any) {
       console.error('Failed to save resume:', err);
-      setError(err.message || 'Failed to save resume template.', () => handleSubmit(data), 'Failed to Save Resume');
+      setError(toUserFriendlyError(err, 'Failed to save resume template.'), () => handleSubmit(data), 'Failed to Save Resume');
       throw err;
     } finally {
       setIsSaving(false);
@@ -64,9 +66,10 @@ export default function ResumeTemplatesClient() {
   const handleSetDefault = async (id: string) => {
     try {
       await setDefaultResume(id);
+      setSuccess('Default resume updated.', 'Default Updated');
     } catch (err: any) {
       console.error('Failed to set default resume:', err);
-      setError(err.message || 'Failed to set default resume.', () => handleSetDefault(id), 'Failed to Update Default Resume');
+      setError(toUserFriendlyError(err, 'Failed to update default resume.'), () => handleSetDefault(id), 'Failed to Update Default Resume');
       throw err;
     }
   };
@@ -76,9 +79,10 @@ export default function ResumeTemplatesClient() {
     try {
       await deleteResume(id);
       setPendingDeleteId(null);
+      setSuccess('Resume deleted successfully.', 'Resume Removed');
     } catch (err: any) {
       console.error('Failed to delete resume:', err);
-      setError(err.message || 'Failed to delete resume template.', () => handleDelete(id), 'Failed to Delete Resume');
+      setError(toUserFriendlyError(err, 'Failed to delete resume template.'), () => handleDelete(id), 'Failed to Delete Resume');
       throw err;
     } finally {
       setIsDeleting(false);

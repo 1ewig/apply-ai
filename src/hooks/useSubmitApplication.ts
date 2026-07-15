@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 import type { JobApplication } from '@/types';
 
 interface AddJobData {
@@ -24,7 +25,7 @@ interface UseSubmitApplicationOptions {
 }
 
 export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange }: UseSubmitApplicationOptions) {
-  const { startAnalysis, finishAnalysis, setError } = useAnalysisStore();
+  const { startAnalysis, finishAnalysis, setError, setSuccess } = useAnalysisStore();
 
   const handleAddJobSubmit = useCallback(async (jobData: {
     company: string;
@@ -46,6 +47,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
           status: jobData.status,
           url: jobData.url || '',
         });
+        setSuccess('Application updated successfully.', 'Application Saved');
       } else {
         const createdJobId = await addJob({
           company: jobData.company,
@@ -89,27 +91,28 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
                   router.push(`/application-board/${createdJobId}/analysis`);
                 }
               } catch (retryErr: any) {
-                setError(retryErr.message || 'Analysis failed again.', retryAction, 'Failed to Run Alignment Match');
+                setError(toUserFriendlyError(retryErr, 'Analysis failed again.'), retryAction, 'Failed to Run Alignment Match');
               } finally {
                 finishAnalysis();
               }
             };
-            setError(analysisErr.message || 'Job created, but AI analysis failed.', retryAction, 'Failed to Run Alignment Match');
+            setError(toUserFriendlyError(analysisErr, 'Job created, but AI analysis failed.'), retryAction, 'Failed to Run Alignment Match');
             return;
           } finally {
             finishAnalysis();
           }
         }
+        setSuccess('Application added successfully.', 'Application Saved');
       }
     } catch (err: any) {
       console.error('Error saving job application:', err);
       const lastData = jobData;
-      setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any), 'Failed to Save Application');
+      setError(toUserFriendlyError(err, 'Failed to save application.'), () => handleAddJobSubmit(lastData as any), 'Failed to Save Application');
       throw err;
     } finally {
       onSavingChange?.(false);
     }
-  }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis, onSavingChange]);
+  }, [addJob, updateJob, runAnalysis, router, setError, setSuccess, startAnalysis, finishAnalysis, onSavingChange]);
 
   return { handleAddJobSubmit };
 }

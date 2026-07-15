@@ -15,6 +15,7 @@ import AddApplicationModal from './AddApplicationModal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import type { JobApplication } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
 export default function ApplicationBoardClient() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function ApplicationBoardClient() {
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
   const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange: setIsSaving });
-  const { isLoading: analysisLoading, analyzingJobId, setError } = useAnalysisStore();
+  const { isLoading: analysisLoading, analyzingJobId, setError, setSuccess } = useAnalysisStore();
 
   useEffect(() => {
     setMounted(true);
@@ -39,7 +40,7 @@ export default function ApplicationBoardClient() {
   useEffect(() => {
     if (isError && error) {
       setError(
-        error.message || 'Failed to load job applications from database.',
+        toUserFriendlyError(error, 'Failed to load job applications.'),
         () => { refetch(); },
         'Failed to Load Applications'
       );
@@ -89,7 +90,7 @@ export default function ApplicationBoardClient() {
         }
         console.error('Failed to run alignment analysis:', err);
         const retryAction = () => handleMatchClick(job);
-        setError(err.message || 'Failed to analyze alignment.', retryAction, 'Failed to Analyze Alignment');
+        setError(toUserFriendlyError(err, 'Failed to analyze alignment.'), retryAction, 'Failed to Analyze Alignment');
       } finally {
         finishAnalysis();
       }
@@ -102,26 +103,28 @@ export default function ApplicationBoardClient() {
   const handleUpdateStatus = useCallback(async (id: string, status: JobApplication['status']) => {
     try {
       await updateJob(id, { status });
+      setSuccess('Status moved successfully.', 'Status Updated');
     } catch (err: any) {
       console.error('Failed to update job status:', err);
-      setError(err.message || 'Failed to update job status.', () => handleUpdateStatus(id, status), 'Failed to Move Application');
+      setError(toUserFriendlyError(err, 'Failed to update application status.'), () => handleUpdateStatus(id, status), 'Failed to Move Application');
       throw err;
     }
-  }, [updateJob, setError]);
+  }, [updateJob, setError, setSuccess]);
 
   const handleDeleteJob = useCallback(async (id: string) => {
     setIsDeleting(true);
     try {
       await deleteJob(id);
       setPendingDeleteJobId(null);
+      setSuccess('Application deleted successfully.', 'Application Removed');
     } catch (err: any) {
       console.error('Failed to delete job:', err);
-      setError(err.message || 'Failed to delete application.', () => handleDeleteJob(id), 'Failed to Delete Application');
+      setError(toUserFriendlyError(err, 'Failed to delete application.'), () => handleDeleteJob(id), 'Failed to Delete Application');
       throw err;
     } finally {
       setIsDeleting(false);
     }
-  }, [deleteJob, setError]);
+  }, [deleteJob, setError, setSuccess]);
 
   if (!mounted) {
     return null;

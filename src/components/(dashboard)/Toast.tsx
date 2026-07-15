@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, CheckCircle, RotateCcw, X, Loader2 } from 'lucide-react';
-import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 interface ToastProps {
   message: string | null;
@@ -21,10 +20,6 @@ export default function Toast({ message, title, type = 'error', onDismiss, onRet
     setIsRetrying(true);
     try {
       await onRetry();
-      
-      // If the retry resolves successfully without throwing an error:
-      const setSuccess = useAnalysisStore.getState().setSuccess;
-      setSuccess('The operation was completed successfully.', 'Operation Succeeded');
     } catch (err) {
       console.error('Retry action failed:', err);
     } finally {

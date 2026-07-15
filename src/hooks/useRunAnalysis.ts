@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
 export function useRunAnalysis() {
   const { startAnalysis, setError, finishAnalysis, setAbortController } = useAnalysisStore();
@@ -36,7 +37,7 @@ export function useRunAnalysis() {
 
       const message = err.name === 'AbortError'
         ? 'Analysis timed out after 60 seconds. Please try again.'
-        : err.message || 'An unexpected error occurred. Please try again.';
+        : toUserFriendlyError(err, 'Analysis failed unexpectedly. Please try again.');
 
       const retryAction = () => runAnalysis(jobId, resumeContent, jobDescription);
       setError(message, retryAction, 'Failed to Analyze Alignment');
