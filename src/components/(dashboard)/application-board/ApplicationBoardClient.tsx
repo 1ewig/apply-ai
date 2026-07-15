@@ -23,12 +23,13 @@ export default function ApplicationBoardClient() {
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
   const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { jobs, isLoading, isError, error, refetch, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
-  const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router });
+  const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange: setIsSaving });
   const { isLoading: analysisLoading, analyzingJobId, setError } = useAnalysisStore();
 
   useEffect(() => {
@@ -165,7 +166,7 @@ export default function ApplicationBoardClient() {
         analyzeImmediately={applicationForm.analyzeImmediately}
         onAnalyzeImmediatelyChange={applicationForm.setAnalyzeImmediately}
         onResumeTemplateChange={applicationForm.handleResumeTemplateChange}
-        isSubmitting={applicationForm.isSubmitting}
+        isSubmitting={applicationForm.isSubmitting || isSaving}
         isLoading={analysisLoading}
         onSubmit={applicationForm.handleSubmit}
       />

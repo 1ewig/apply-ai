@@ -20,9 +20,10 @@ interface UseSubmitApplicationOptions {
   updateJob: (id: string, data: Partial<JobApplication>) => void;
   runAnalysis: (jobId: string, customResumeContent: string, jobDescription: string) => Promise<any>;
   router: AppRouterInstance;
+  onSavingChange?: (saving: boolean) => void;
 }
 
-export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }: UseSubmitApplicationOptions) {
+export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange }: UseSubmitApplicationOptions) {
   const { startAnalysis, finishAnalysis, setError } = useAnalysisStore();
 
   const handleAddJobSubmit = useCallback(async (jobData: {
@@ -36,6 +37,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
     analyzeImmediately: boolean;
     editingJobId?: string;
   }) => {
+    onSavingChange?.(true);
     try {
       if (jobData.editingJobId) {
         await updateJob(jobData.editingJobId, {
@@ -104,8 +106,10 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
       const lastData = jobData;
       setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any), 'Failed to Save Application');
       throw err;
+    } finally {
+      onSavingChange?.(false);
     }
-  }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis]);
+  }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis, onSavingChange]);
 
   return { handleAddJobSubmit };
 }

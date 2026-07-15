@@ -17,6 +17,7 @@ export default function ResumeTemplatesClient() {
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (isError && error) {
@@ -36,6 +37,7 @@ export default function ResumeTemplatesClient() {
   };
 
   const handleSubmit = async (data: { name: string; content: string; isDefault: boolean }) => {
+    setIsSaving(true);
     try {
       if (editingResume) {
         await updateResume(editingResume.id, data);
@@ -47,6 +49,8 @@ export default function ResumeTemplatesClient() {
       console.error('Failed to save resume:', err);
       setError(err.message || 'Failed to save resume template.', () => handleSubmit(data), 'Failed to Save Resume');
       throw err;
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -101,7 +105,7 @@ export default function ResumeTemplatesClient() {
         onContentChange={resumeForm.setContent}
         isDefault={resumeForm.isDefault}
         onIsDefaultChange={resumeForm.setIsDefault}
-        isSubmitting={resumeForm.isSubmitting}
+        isSubmitting={resumeForm.isSubmitting || isSaving}
       />
 
       <ConfirmDialog
