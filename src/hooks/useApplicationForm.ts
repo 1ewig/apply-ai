@@ -87,8 +87,12 @@ export function useApplicationForm(
   };
 
   const handleSubmit = async () => {
-    await formSubmit();
-    if (!values.analyzeImmediately) onClose();
+    try {
+      await formSubmit();
+      if (!values.analyzeImmediately) onClose();
+    } catch (e) {
+      console.error('Job application submission failed:', e);
+    }
   };
 
   return {

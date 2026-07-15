@@ -99,6 +99,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
       console.error('Error saving job application:', err);
       const lastData = jobData;
       setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any));
+      throw err;
     }
   }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis]);
 
