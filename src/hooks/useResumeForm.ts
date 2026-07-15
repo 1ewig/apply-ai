@@ -30,7 +30,11 @@ export function useResumeForm({ isOpen, editingResume, onSubmit, onClose }: UseR
 
   const handleSubmit = async () => {
     if (!values.name || !values.content) return;
-    await formSubmit();
+    try {
+      await formSubmit();
+    } catch (e) {
+      console.error('Resume submission failed:', e);
+    }
   };
 
   return {

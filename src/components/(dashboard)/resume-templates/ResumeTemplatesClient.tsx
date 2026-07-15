@@ -35,6 +35,7 @@ export default function ResumeTemplatesClient() {
     } catch (err: any) {
       console.error('Failed to save resume:', err);
       setError(err.message || 'Failed to save resume template.', () => handleSubmit(data));
+      throw err;
     }
   };
 
