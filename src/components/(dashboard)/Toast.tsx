@@ -30,15 +30,14 @@ export default function Toast({ message, title, type = 'error', onDismiss, onRet
     }
   };
 
-  // Auto-dismiss for success toasts (5 seconds)
   useEffect(() => {
-    if (message && type === 'success') {
+    if (message) {
       const timer = setTimeout(() => {
         onDismiss();
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [message, type, onDismiss]);
+  }, [message, onDismiss]);
 
   const isSuccess = type === 'success';
 
