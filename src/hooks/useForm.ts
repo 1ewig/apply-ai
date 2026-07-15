@@ -19,11 +19,16 @@ export function useForm<T extends Record<string, any>>({
 }: UseFormOptions<T>) {
   const [values, setValues] = useState<T>(defaults);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) return;
-    setValues(initialValues ?? defaults);
-  }, [isOpen, initialValues]);
+    if (isOpen && !prevIsOpen) {
+      setValues(initialValues ?? defaults);
+    } else if (!isOpen && prevIsOpen) {
+      setValues(defaults);
+    }
+    setPrevIsOpen(isOpen);
+  }, [isOpen, prevIsOpen, initialValues, defaults]);
 
   const setField = <K extends keyof T>(key: K, value: T[K]) => {
     setValues((prev) => ({ ...prev, [key]: value }));
