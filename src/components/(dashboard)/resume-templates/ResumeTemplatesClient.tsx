@@ -31,9 +31,32 @@ export default function ResumeTemplatesClient() {
       } else {
         await addResume(data);
       }
+      handleClose();
     } catch (err: any) {
       console.error('Failed to save resume:', err);
-      setError(err.message || 'Failed to save resume template.');
+      setError(err.message || 'Failed to save resume template.', () => handleSubmit(data));
+    }
+  };
+
+  const handleSetDefault = async (id: string) => {
+    try {
+      await setDefaultResume(id);
+    } catch (err: any) {
+      console.error('Failed to set default resume:', err);
+      setError(err.message || 'Failed to set default resume.', () => handleSetDefault(id));
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setIsDeleting(true);
+    try {
+      await deleteResume(id);
+      setPendingDeleteId(null);
+    } catch (err: any) {
+      console.error('Failed to delete resume:', err);
+      setError(err.message || 'Failed to delete resume template.', () => handleDelete(id));
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -45,14 +68,7 @@ export default function ResumeTemplatesClient() {
         onAddResumeClick={() => setIsAddResumeOpen(true)}
         onEditResumeClick={(resume) => setEditingResume(resume)}
         onDeleteResume={(id) => setPendingDeleteId(id)}
-        onSetDefaultResume={async (id) => {
-          try {
-            await setDefaultResume(id);
-          } catch (err: any) {
-            console.error('Failed to set default resume:', err);
-            setError(err.message || 'Failed to set default resume.');
-          }
-        }}
+        onSetDefaultResume={handleSetDefault}
       />
 
       <ResumeFormModal
@@ -68,20 +84,7 @@ export default function ResumeTemplatesClient() {
         message={`Are you sure you want to delete "${pendingDelete?.name || 'this template'}"? This action cannot be undone.`}
         confirmLabel="Delete"
         isLoading={isDeleting}
-        onConfirm={async () => {
-          if (pendingDeleteId) {
-            setIsDeleting(true);
-            try {
-              await deleteResume(pendingDeleteId);
-              setPendingDeleteId(null);
-            } catch (err: any) {
-              console.error('Failed to delete resume:', err);
-              setError(err.message || 'Failed to delete resume template.');
-            } finally {
-              setIsDeleting(false);
-            }
-          }
-        }}
+        onConfirm={() => pendingDeleteId && handleDelete(pendingDeleteId)}
         onCancel={() => setPendingDeleteId(null)}
       />
     </>

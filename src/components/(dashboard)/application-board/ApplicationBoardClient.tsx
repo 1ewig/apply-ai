@@ -58,6 +58,28 @@ export default function ApplicationBoardClient() {
     setIsAddJobOpen(true);
   }, []);
 
+  const handleUpdateStatus = useCallback(async (id: string, status: JobApplication['status']) => {
+    try {
+      await updateJob(id, { status });
+    } catch (err: any) {
+      console.error('Failed to update job status:', err);
+      setError(err.message || 'Failed to update job status.', () => handleUpdateStatus(id, status));
+    }
+  }, [updateJob, setError]);
+
+  const handleDeleteJob = useCallback(async (id: string) => {
+    setIsDeleting(true);
+    try {
+      await deleteJob(id);
+      setPendingDeleteJobId(null);
+    } catch (err: any) {
+      console.error('Failed to delete job:', err);
+      setError(err.message || 'Failed to delete application.', () => handleDeleteJob(id));
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [deleteJob, setError]);
+
   if (!mounted) {
     return null;
   }
@@ -77,7 +99,7 @@ export default function ApplicationBoardClient() {
         onEditJobClick={handleEditJob}
         onMatchClick={handleMatchClick}
         onViewAnalysisClick={handleViewAnalysis}
-        onUpdateJobStatus={(id, status) => updateJob(id, { status })}
+        onUpdateJobStatus={handleUpdateStatus}
         onDeleteJob={(id) => setPendingDeleteJobId(id)}
       />
 
@@ -95,20 +117,7 @@ export default function ApplicationBoardClient() {
         message="Are you sure you want to delete this application? This action cannot be undone."
         confirmLabel="Delete"
         isLoading={isDeleting}
-        onConfirm={async () => {
-          if (pendingDeleteJobId) {
-            setIsDeleting(true);
-            try {
-              await deleteJob(pendingDeleteJobId);
-              setPendingDeleteJobId(null);
-            } catch (err: any) {
-              console.error('Failed to delete job:', err);
-              setError(err.message || 'Failed to delete application.');
-            } finally {
-              setIsDeleting(false);
-            }
-          }
-        }}
+        onConfirm={() => pendingDeleteJobId && handleDeleteJob(pendingDeleteJobId)}
         onCancel={() => setPendingDeleteJobId(null)}
       />
     </>
