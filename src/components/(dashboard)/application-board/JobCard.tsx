@@ -108,7 +108,13 @@ export default function JobCard({
           <select
             value={job.status}
             onChange={(e) => onUpdateJobStatus(job.id, e.target.value as JobApplication['status'])}
-            className="text-[10px] border border-[var(--border)] rounded-lg px-2 py-1 bg-[var(--bg-surface)] text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+            className="text-[10px] border border-[var(--border)] rounded-lg pl-2 pr-5 py-1 bg-[var(--bg-surface)] text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] cursor-pointer appearance-none"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 5px center',
+              backgroundSize: '10px',
+            }}
           >
             <option value="wishlist">Wishlist</option>
             <option value="applied">Applied</option>
