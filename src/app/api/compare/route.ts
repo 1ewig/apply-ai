@@ -156,17 +156,17 @@ export async function POST(request: Request) {
 
     if (!userId) {
       const serverApiKey = process.env.API_KEY;
-      if (serverApiKey && serverApiKey.trim() !== "") {
-        const clientApiKey =
-          request.headers.get("x-api-key") ||
-          request.headers.get("Authorization")?.replace("Bearer ", "");
+      const clientApiKey =
+        request.headers.get("x-api-key") ||
+        request.headers.get("Authorization")?.replace("Bearer ", "");
 
-        if (clientApiKey !== serverApiKey) {
-          return NextResponse.json(
-            { error: "Unauthorized: Invalid or missing API Key or Clerk Session." },
-            { status: 401 }
-          );
-        }
+      const isApiKeyValid = serverApiKey && serverApiKey.trim() !== "" && clientApiKey === serverApiKey;
+
+      if (!isApiKeyValid) {
+        return NextResponse.json(
+          { error: "Unauthorized: Invalid or missing API Key or Clerk Session." },
+          { status: 401 }
+        );
       }
     }
 
