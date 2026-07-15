@@ -38,7 +38,7 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
         isMobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
       />
-      <main className="flex-1 flex flex-col overflow-y-auto h-dvh relative">
+      <main className="flex-1 flex flex-col h-dvh">
         <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
         <Toast 
           message={displayError || successMessage}
@@ -56,7 +56,7 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
           </button>
           <span className="font-display font-extrabold text-base text-[var(--text-heading)]">ApplyAI</span>
         </div>
-        <div className="p-4 md:p-8 flex-1">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </div>
       </main>
