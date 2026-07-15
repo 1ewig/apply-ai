@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useResumes } from '@/hooks/useResumes';
 import ResumeTemplates from './ResumeTemplates';
@@ -10,12 +10,21 @@ import type { Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 export default function ResumeTemplatesClient() {
-  const { resumes, isLoading, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
+  const { resumes, isLoading, isError, error, refetch, addResume, updateResume, deleteResume, setDefaultResume } = useResumes();
   const { setError } = useAnalysisStore();
   const [isAddResumeOpen, setIsAddResumeOpen] = useState(false);
   const [editingResume, setEditingResume] = useState<Resume | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (isError && error) {
+      setError(
+        error.message || 'Failed to load resume templates from database.',
+        () => { refetch(); }
+      );
+    }
+  }, [isError, error, refetch, setError]);
 
   const pendingDelete = pendingDeleteId ? resumes.find((r) => r.id === pendingDeleteId) : null;
 

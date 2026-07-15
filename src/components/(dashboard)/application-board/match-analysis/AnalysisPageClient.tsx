@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getAnalysisAction } from '@/app/actions/applications';
@@ -27,11 +27,20 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
-  const { data: analysisData, isError, error: queryError } = useQuery({
+  const { data: analysisData, isError, error: queryError, refetch } = useQuery({
     queryKey: ['analysis', id],
     queryFn: async () => await getAnalysisAction(id as any),
     enabled: !!id,
-  }) as { data: AnalysisQueryResult | undefined; isError: boolean; error: Error | null };
+  }) as { data: AnalysisQueryResult | undefined; isError: boolean; error: Error | null; refetch: () => any };
+
+  useEffect(() => {
+    if (isError && queryError) {
+      useAnalysisStore.getState().setError(
+        queryError.message || 'Failed to load analysis details from database.',
+        () => { refetch(); }
+      );
+    }
+  }, [isError, queryError, refetch]);
 
   const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
     try {

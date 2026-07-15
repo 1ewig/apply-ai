@@ -10,7 +10,7 @@ import {
 export function useResumes() {
   const queryClient = useQueryClient();
 
-  const { data: resumesRaw, isLoading } = useQuery({
+  const { data: resumesRaw, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["resumes"],
     queryFn: async () => await listResumesAction(),
   });
@@ -60,5 +60,5 @@ export function useResumes() {
     return await updateResumeMutation.mutateAsync({ id, updates: { isDefault: true } });
   };
 
-  return { resumes, isLoading, addResume, updateResume, deleteResume, setDefaultResume };
+  return { resumes, isLoading, isError, error, refetch, addResume, updateResume, deleteResume, setDefaultResume };
 }

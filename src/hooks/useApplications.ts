@@ -10,7 +10,7 @@ import {
 export function useApplications() {
   const queryClient = useQueryClient();
 
-  const { data: jobsRaw, isLoading } = useQuery({
+  const { data: jobsRaw, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => await listApplicationsAction(),
   });
@@ -70,5 +70,5 @@ export function useApplications() {
     return await deleteJobMutation.mutateAsync(id);
   };
 
-  return { jobs, isLoading, addJob, updateJob, deleteJob };
+  return { jobs, isLoading, isError, error, refetch, addJob, updateJob, deleteJob };
 }

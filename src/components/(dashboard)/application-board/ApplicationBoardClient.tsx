@@ -23,7 +23,7 @@ export default function ApplicationBoardClient() {
   const [pendingDeleteJobId, setPendingDeleteJobId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { jobs, isLoading, addJob, updateJob, deleteJob } = useApplications();
+  const { jobs, isLoading, isError, error, refetch, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
   const { runAnalysis } = useRunAnalysis();
@@ -33,6 +33,15 @@ export default function ApplicationBoardClient() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isError && error) {
+      setError(
+        error.message || 'Failed to load job applications from database.',
+        () => { refetch(); }
+      );
+    }
+  }, [isError, error, refetch, setError]);
 
   const handleAddJob = useCallback(() => {
     setEditingJob(null);
