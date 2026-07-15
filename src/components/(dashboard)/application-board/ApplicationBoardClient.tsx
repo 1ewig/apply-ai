@@ -79,6 +79,10 @@ export default function ApplicationBoardClient() {
           router.push(`/application-board/${job.id}/analysis`);
         }
       } catch (err: any) {
+        if (err.name === 'AbortError') {
+          const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
+          if (wasManuallyCanceled) return;
+        }
         console.error('Failed to run alignment analysis:', err);
         const retryAction = () => handleMatchClick(job);
         setError(err.message || 'Failed to analyze alignment.', retryAction, 'Failed to Analyze Alignment');

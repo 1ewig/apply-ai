@@ -22,13 +22,16 @@ interface AnalysisStore {
   retryAction: (() => void) | null;
   successMessage: string | null;
   successTitle: string | null;
-  startAnalysis: () => void;
+  analyzingJobId: string | null;
+  abortController: AbortController | null;
+  startAnalysis: (jobId?: string | null) => void;
   setPhase: (phase: number) => void;
   setError: (error: string | null, retryAction?: (() => void) | null, errorTitle?: string | null) => void;
   clearError: () => void;
   setSuccess: (message: string | null, title?: string | null) => void;
   clearSuccess: () => void;
   finishAnalysis: () => void;
+  setAbortController: (controller: AbortController | null) => void;
 }
 
 export const useAnalysisStore = create<AnalysisStore>((set) => ({
@@ -40,14 +43,17 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   retryAction: null,
   successMessage: null,
   successTitle: null,
-  startAnalysis: () => set({ 
+  analyzingJobId: null,
+  abortController: null,
+  startAnalysis: (jobId) => set({ 
     isLoading: true, 
     loadingPhase: 0, 
     error: null, 
     errorTitle: null, 
     retryAction: null,
     successMessage: null,
-    successTitle: null
+    successTitle: null,
+    analyzingJobId: jobId || null,
   }),
   setPhase: (phase) => set({ loadingPhase: phase }),
   setError: (error, retryAction, errorTitle) => set((state) => ({
@@ -57,15 +63,19 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
     errorTitle: errorTitle !== undefined ? errorTitle : state.errorTitle,
     successMessage: null,
     successTitle: null,
+    analyzingJobId: null,
   })),
-  clearError: () => set({ error: null, errorTitle: null, retryAction: null }),
+  clearError: () => set({ error: null, errorTitle: null, retryAction: null, analyzingJobId: null, abortController: null }),
   setSuccess: (message, title) => set({
     successMessage: message,
     successTitle: title || 'Success',
     error: null,
     errorTitle: null,
     retryAction: null,
+    analyzingJobId: null,
+    abortController: null,
   }),
   clearSuccess: () => set({ successMessage: null, successTitle: null }),
-  finishAnalysis: () => set({ isLoading: false }),
+  finishAnalysis: () => set({ isLoading: false, analyzingJobId: null, abortController: null }),
+  setAbortController: (controller) => set({ abortController: controller }),
 }));

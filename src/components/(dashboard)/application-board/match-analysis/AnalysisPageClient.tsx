@@ -55,6 +55,10 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       }
       return data;
     } catch (err: any) {
+      if (err.name === 'AbortError') {
+        const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
+        if (wasManuallyCanceled) throw err;
+      }
       console.error('Error re-running analysis:', err);
       const retryAction = () => handleReRunAnalysis(jobId, resumeContent, jobDesc);
       useAnalysisStore.getState().setError(err.message || 'Analysis failed.', retryAction, 'Failed to Analyze Alignment');

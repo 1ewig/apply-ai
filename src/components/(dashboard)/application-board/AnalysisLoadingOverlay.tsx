@@ -87,6 +87,10 @@ export default function AnalysisLoadingOverlay({ isLoading, phases }: AnalysisLo
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
+    const abortController = useAnalysisStore.getState().abortController;
+    if (abortController) {
+      abortController.abort();
+    }
     finishAnalysis();
     clearError();
     setVisible(false);

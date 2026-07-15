@@ -57,7 +57,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
         });
 
         if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          startAnalysis();
+          startAnalysis(createdJobId);
           try {
             const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
             if (data) {
@@ -69,9 +69,13 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
               router.push(`/application-board/${createdJobId}/analysis`);
             }
           } catch (analysisErr: any) {
+            if (analysisErr.name === 'AbortError') {
+              const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
+              if (wasManuallyCanceled) return;
+            }
             console.error('Error running immediate analysis:', analysisErr);
             const retryAction = async () => {
-              startAnalysis();
+              startAnalysis(createdJobId);
               try {
                 const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
                 if (data) {

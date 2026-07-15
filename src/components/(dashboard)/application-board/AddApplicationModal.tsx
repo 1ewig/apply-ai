@@ -251,7 +251,7 @@ export default function AddApplicationModal({
                   {isLoading || isSubmitting ? (
                     <span className="flex items-center gap-1.5">
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      {isLoading ? 'Analyzing...' : 'Saving...'}
+                      {analyzeImmediately ? 'Running Analysis...' : 'Saving...'}
                     </span>
                   ) : editingJob
                     ? 'Save Changes'

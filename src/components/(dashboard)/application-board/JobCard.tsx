@@ -2,7 +2,8 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import type { JobApplication, Resume } from '@/types';
-import { Trash2, Play, Search, ExternalLink, Pencil } from 'lucide-react';
+import { Trash2, Play, Search, ExternalLink, Pencil, Loader2 } from 'lucide-react';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 function getStatusBadge(status: JobApplication['status']) {
   switch (status) {
@@ -38,6 +39,8 @@ export default function JobCard({
   onUpdateJobStatus,
   onDeleteJob,
 }: JobCardProps) {
+  const { isLoading, analyzingJobId } = useAnalysisStore();
+  const isCurrentlyAnalyzing = isLoading && analyzingJobId === job.id;
   const badgeDetails = getStatusBadge(job.status);
 
   return (
@@ -72,7 +75,11 @@ export default function JobCard({
             <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">
               AI Compatibility
             </span>
-            {job.matchScore !== undefined ? (
+            {isCurrentlyAnalyzing ? (
+              <span className="text-[10px] text-[var(--accent)] font-semibold animate-pulse flex items-center gap-1 mt-0.5">
+                Evaluating...
+              </span>
+            ) : job.matchScore !== undefined ? (
               <span className="text-sm font-extrabold text-emerald-600 flex items-center gap-1 mt-0.5">
                 {job.matchScore}% Match
               </span>
@@ -83,7 +90,17 @@ export default function JobCard({
             )}
           </div>
 
-          {job.matchScore !== undefined ? (
+          {isCurrentlyAnalyzing ? (
+            <Button
+              disabled
+              variant="outline"
+              size="sm"
+              className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1.5 border-[var(--accent)]/20 text-[var(--text-muted)] bg-[var(--bg-page)]"
+            >
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
+              Evaluating...
+            </Button>
+          ) : job.matchScore !== undefined ? (
             <Button variant="outline" size="sm" onClick={() => onViewAnalysisClick(job.id)} className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1">
               View Report
             </Button>
