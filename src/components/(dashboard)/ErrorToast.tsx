@@ -1,13 +1,29 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, RotateCcw, X } from 'lucide-react';
+import { AlertTriangle, RotateCcw, X, Loader2 } from 'lucide-react';
 
 interface ErrorToastProps {
   error: string | null;
+  title?: string | null;
   onDismiss: () => void;
   onRetry?: (() => void) | null;
 }
 
-export default function ErrorToast({ error, onDismiss, onRetry }: ErrorToastProps) {
+export default function ErrorToast({ error, title, onDismiss, onRetry }: ErrorToastProps) {
+  const [isRetrying, setIsRetrying] = useState(false);
+
+  const handleRetry = async () => {
+    if (!onRetry || isRetrying) return;
+    setIsRetrying(true);
+    try {
+      await onRetry();
+    } catch (err) {
+      console.error('Retry action failed:', err);
+    } finally {
+      setIsRetrying(false);
+    }
+  };
+
   return (
     <AnimatePresence>
       {error && (
@@ -25,7 +41,7 @@ export default function ErrorToast({ error, onDismiss, onRetry }: ErrorToastProp
             
             <div className="flex-1 min-w-0 pt-0.5">
               <h4 className="text-xs font-bold text-[var(--text-heading)] mb-1">
-                Operation Failed
+                {title || 'Operation Failed'}
               </h4>
               <p className="text-[11px] text-[var(--text-muted)] leading-relaxed mb-3 break-words">
                 {error}
@@ -34,16 +50,22 @@ export default function ErrorToast({ error, onDismiss, onRetry }: ErrorToastProp
               <div className="flex items-center gap-3">
                 {onRetry && (
                   <button
-                    onClick={onRetry}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-white text-[10px] font-bold hover:opacity-90 transition-opacity cursor-pointer"
+                    onClick={handleRetry}
+                    disabled={isRetrying}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-white text-[10px] font-bold hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <RotateCcw className="w-3 h-3" />
-                    Try Again
+                    {isRetrying ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <RotateCcw className="w-3 h-3" />
+                    )}
+                    {isRetrying ? 'Retrying...' : 'Try Again'}
                   </button>
                 )}
                 <button
                   onClick={onDismiss}
-                  className="px-3 py-1.5 rounded-lg border border-[var(--border)] text-[10px] text-[var(--text-muted)] font-bold hover:bg-[var(--bg-page)] hover:text-[var(--text-heading)] transition-all cursor-pointer"
+                  disabled={isRetrying}
+                  className="px-3 py-1.5 rounded-lg border border-[var(--border)] text-[10px] text-[var(--text-muted)] font-bold hover:bg-[var(--bg-page)] hover:text-[var(--text-heading)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Dismiss
                 </button>
@@ -52,7 +74,8 @@ export default function ErrorToast({ error, onDismiss, onRetry }: ErrorToastProp
 
             <button
               onClick={onDismiss}
-              className="p-1 rounded-lg hover:bg-[var(--bg-page)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer shrink-0"
+              disabled={isRetrying}
+              className="p-1 rounded-lg hover:bg-[var(--bg-page)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <X className="w-3.5 h-3.5" />
             </button>

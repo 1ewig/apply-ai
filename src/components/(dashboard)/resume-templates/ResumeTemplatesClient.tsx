@@ -21,7 +21,8 @@ export default function ResumeTemplatesClient() {
     if (isError && error) {
       setError(
         error.message || 'Failed to load resume templates from database.',
-        () => { refetch(); }
+        () => { refetch(); },
+        'Failed to Load Resumes'
       );
     }
   }, [isError, error, refetch, setError]);
@@ -43,7 +44,7 @@ export default function ResumeTemplatesClient() {
       handleClose();
     } catch (err: any) {
       console.error('Failed to save resume:', err);
-      setError(err.message || 'Failed to save resume template.', () => handleSubmit(data));
+      setError(err.message || 'Failed to save resume template.', () => handleSubmit(data), 'Failed to Save Resume');
       throw err;
     }
   };
@@ -53,7 +54,7 @@ export default function ResumeTemplatesClient() {
       await setDefaultResume(id);
     } catch (err: any) {
       console.error('Failed to set default resume:', err);
-      setError(err.message || 'Failed to set default resume.', () => handleSetDefault(id));
+      setError(err.message || 'Failed to set default resume.', () => handleSetDefault(id), 'Failed to Update Default Resume');
     }
   };
 
@@ -64,7 +65,7 @@ export default function ResumeTemplatesClient() {
       setPendingDeleteId(null);
     } catch (err: any) {
       console.error('Failed to delete resume:', err);
-      setError(err.message || 'Failed to delete resume template.', () => handleDelete(id));
+      setError(err.message || 'Failed to delete resume template.', () => handleDelete(id), 'Failed to Delete Resume');
     } finally {
       setIsDeleting(false);
     }

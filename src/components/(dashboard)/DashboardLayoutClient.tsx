@@ -9,7 +9,7 @@ import AnalysisLoadingOverlay from '@/components/(dashboard)/application-board/A
 import ErrorToast from '@/components/(dashboard)/ErrorToast';
 
 export default function DashboardLayoutClient({ children }: { children: React.ReactNode }) {
-  const { isLoading, phases, error, retryAction, clearError } = useAnalysisStore();
+  const { isLoading, phases, error, errorTitle, retryAction, clearError } = useAnalysisStore();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
       />
       <main className="flex-1 flex flex-col overflow-y-auto h-screen relative">
         <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
-        <ErrorToast error={error} onDismiss={clearError} onRetry={retryAction} />
+        <ErrorToast error={error} title={errorTitle} onDismiss={clearError} onRetry={retryAction} />
         <div className="md:hidden relative flex items-center justify-center px-4 py-4 border-b border-[var(--border)] bg-[var(--bg-page)]">
           <button
             onClick={() => setMobileSidebarOpen(true)}

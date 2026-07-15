@@ -83,12 +83,12 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
                   router.push(`/application-board/${createdJobId}/analysis`);
                 }
               } catch (retryErr: any) {
-                setError(retryErr.message || 'Analysis failed again.', retryAction);
+                setError(retryErr.message || 'Analysis failed again.', retryAction, 'Failed to Run Alignment Match');
               } finally {
                 finishAnalysis();
               }
             };
-            setError(analysisErr.message || 'Job created, but AI analysis failed.', retryAction);
+            setError(analysisErr.message || 'Job created, but AI analysis failed.', retryAction, 'Failed to Run Alignment Match');
             return;
           } finally {
             finishAnalysis();
@@ -98,7 +98,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router }:
     } catch (err: any) {
       console.error('Error saving job application:', err);
       const lastData = jobData;
-      setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any));
+      setError(err.message || 'Failed to save job application.', () => handleAddJobSubmit(lastData as any), 'Failed to Save Application');
       throw err;
     }
   }, [addJob, updateJob, runAnalysis, router, setError, startAnalysis, finishAnalysis]);

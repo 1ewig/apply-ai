@@ -38,7 +38,8 @@ export default function ApplicationBoardClient() {
     if (isError && error) {
       setError(
         error.message || 'Failed to load job applications from database.',
-        () => { refetch(); }
+        () => { refetch(); },
+        'Failed to Load Applications'
       );
     }
   }, [isError, error, refetch, setError]);
@@ -72,7 +73,7 @@ export default function ApplicationBoardClient() {
       await updateJob(id, { status });
     } catch (err: any) {
       console.error('Failed to update job status:', err);
-      setError(err.message || 'Failed to update job status.', () => handleUpdateStatus(id, status));
+      setError(err.message || 'Failed to update job status.', () => handleUpdateStatus(id, status), 'Failed to Move Application');
     }
   }, [updateJob, setError]);
 
@@ -83,7 +84,7 @@ export default function ApplicationBoardClient() {
       setPendingDeleteJobId(null);
     } catch (err: any) {
       console.error('Failed to delete job:', err);
-      setError(err.message || 'Failed to delete application.', () => handleDeleteJob(id));
+      setError(err.message || 'Failed to delete application.', () => handleDeleteJob(id), 'Failed to Delete Application');
     } finally {
       setIsDeleting(false);
     }

@@ -30,7 +30,7 @@ export function useRunAnalysis() {
         : err.message || 'An unexpected error occurred. Please try again.';
 
       const retryAction = () => runAnalysis(jobId, resumeContent, jobDescription);
-      setError(message, retryAction);
+      setError(message, retryAction, 'Failed to Analyze Alignment');
       throw err;
     } finally {
       finishAnalysis();

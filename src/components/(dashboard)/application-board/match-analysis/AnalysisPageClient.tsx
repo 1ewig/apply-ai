@@ -37,7 +37,8 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     if (isError && queryError) {
       useAnalysisStore.getState().setError(
         queryError.message || 'Failed to load analysis details from database.',
-        () => { refetch(); }
+        () => { refetch(); },
+        'Failed to Load Analysis'
       );
     }
   }, [isError, queryError, refetch]);
@@ -56,7 +57,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     } catch (err: any) {
       console.error('Error re-running analysis:', err);
       const retryAction = () => handleReRunAnalysis(jobId, resumeContent, jobDesc);
-      useAnalysisStore.getState().setError(err.message || 'Analysis failed.', retryAction);
+      useAnalysisStore.getState().setError(err.message || 'Analysis failed.', retryAction, 'Failed to Analyze Alignment');
       throw err;
     }
   }, [runAnalysis, updateJob]);
