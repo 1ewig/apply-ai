@@ -43,7 +43,7 @@ export default function ApplicationsBoard({
 }: ApplicationsBoardProps) {
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 md:pb-0">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div className="text-center sm:text-left">
           <h2 className="font-display font-extrabold text-xl md:text-2xl text-[var(--text-heading)]">Applications</h2>
