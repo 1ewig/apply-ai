@@ -14,19 +14,19 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center font-medium transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
+    'inline-flex items-center justify-center font-medium transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
 
   const variants = {
     primary:
-      'bg-[var(--accent)] text-white rounded-full hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]',
+      'bg-[var(--accent)] text-white rounded-full hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:hover:scale-100 disabled:active:scale-100',
     ghost:
-      'text-[var(--text-body)] hover:text-[var(--text-heading)] rounded-full',
+      'text-[var(--text-body)] hover:text-[var(--text-heading)] rounded-full disabled:hover:text-[var(--text-body)]',
     outline:
-      'border border-[var(--border)] rounded-full hover:bg-[var(--bg-page)] text-[var(--text-heading)]',
+      'border border-[var(--border)] rounded-full hover:bg-[var(--bg-page)] text-[var(--text-heading)] disabled:hover:bg-transparent',
     'white-outline':
-      'border border-white/30 rounded-full hover:bg-white/10 text-white',
+      'border border-white/30 rounded-full hover:bg-white/10 text-white disabled:hover:bg-transparent',
     danger:
-      'bg-rose-500/90 text-white rounded-full hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]',
+      'bg-rose-500/90 text-white rounded-full hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:hover:scale-100 disabled:active:scale-100',
   };
 
   const sizes = {

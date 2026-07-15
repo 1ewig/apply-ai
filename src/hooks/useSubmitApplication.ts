@@ -101,8 +101,9 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
           } finally {
             finishAnalysis();
           }
+        } else {
+          setSuccess('Application added successfully.', 'Application Saved');
         }
-        setSuccess('Application added successfully.', 'Application Saved');
       }
     } catch (err: any) {
       console.error('Error saving job application:', err);
