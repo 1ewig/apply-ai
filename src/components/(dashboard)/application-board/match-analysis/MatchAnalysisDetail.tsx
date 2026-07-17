@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
-import AgentTailoringSession from './AgentTailoringSession';
 
 interface MatchAnalysisDetailProps {
   job: JobApplication;
@@ -117,5 +116,5 @@ export default function MatchAnalysisDetail({
     }
   }, [job?.id, activeSessionId, resumeForReRun?.content, initializeSession, proposeEdit, job]);
 
-  return <AgentTailoringSession onBackClick={onBackClick} />;
+  return null;
 }
