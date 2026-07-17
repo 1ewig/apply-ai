@@ -1,4 +1,4 @@
-import DashboardLayoutClient from '@/components/(dashboard)/DashboardLayoutClient';
+import DashboardLayoutClient from './DashboardLayoutClient';
 
 export const metadata = {
   title: 'Dashboard | ApplyAI',
