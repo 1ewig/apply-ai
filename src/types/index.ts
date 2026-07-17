@@ -1,22 +1,6 @@
-import type {
-  ComparisonResult,
-  EnhancedKeyword,
-  ScoreBreakdown,
-  StructureSuggestion,
-  SkillRecommendation,
-  ActionItem,
-  AtsCheck,
-} from "../ai/schemas";
+import type { SessionBlueprint } from "../ai/agent";
 
-export type {
-  ComparisonResult,
-  EnhancedKeyword,
-  ScoreBreakdown,
-  StructureSuggestion,
-  SkillRecommendation,
-  ActionItem,
-  AtsCheck,
-};
+export type ComparisonResult = SessionBlueprint;
 
 export interface JobApplication {
   id: string;

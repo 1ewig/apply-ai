@@ -49,7 +49,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       const data = await runAnalysis(jobId, resumeContent, jobDesc);
       if (data) {
         updateJob(jobId, {
-          matchScore: data.score,
+          matchScore: data.overallScore,
           analysisResult: data,
           jobDescription: jobDesc,
         });

@@ -66,7 +66,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
             const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
             if (data) {
               updateJob(createdJobId, {
-                matchScore: data.score,
+                matchScore: data.overallScore,
                 analysisResult: data,
                 jobDescription: jobData.jobDescription,
               });
@@ -84,7 +84,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
                 const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
                 if (data) {
                   updateJob(createdJobId, {
-                    matchScore: data.score,
+                    matchScore: data.overallScore,
                     analysisResult: data,
                     jobDescription: jobData.jobDescription,
                   });
