@@ -98,7 +98,7 @@ export default function AgentTailoringSession({ onBackClick }: AgentTailoringSes
   };
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--bg-surface)] text-[var(--text-body)]">
+    <div className="flex h-screen overflow-hidden bg-[var(--bg-surface)] text-[var(--text-body)]">
       {/* 1. LEFT SIDEBAR (22% width) - Task & Score List */}
       <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-opacity-30 bg-[var(--bg-dark-gray)]">
         {/* Header */}
