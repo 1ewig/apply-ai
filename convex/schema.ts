@@ -11,20 +11,16 @@ const agentTask = v.object({
   status: v.string(),
 });
 
-const jdExtract = v.object({
-  roleTitle: v.string(),
-  mustHaveKeywords: v.array(v.string()),
-  niceToHaveKeywords: v.array(v.string()),
-  seniorityLevel: v.string(),
-  coreResponsibilities: v.array(v.string()),
-  companyContext: v.string(),
+const resumeSection = v.object({
+  heading: v.string(),
+  content: v.string(),
 });
 
 const comparisonResult = v.object({
   overallScore: v.number(),
   readinessTier: v.string(),
   tasks: v.array(agentTask),
-  jdExtract: jdExtract,
+  parsedResume: v.array(resumeSection),
   quickWins: v.array(v.string()),
   blockers: v.array(v.string()),
 });

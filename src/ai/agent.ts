@@ -24,21 +24,17 @@ export const agentTaskSchema = z.object({
 });
 export type AgentTask = z.infer<typeof agentTaskSchema>;
 
-export const jdExtractSchema = z.object({
-  roleTitle: z.string(),
-  mustHaveKeywords: z.array(z.string()),
-  niceToHaveKeywords: z.array(z.string()),
-  seniorityLevel: z.string(),
-  coreResponsibilities: z.array(z.string()),
-  companyContext: z.string(),
+export const resumeSectionSchema = z.object({
+  heading: z.string(),
+  content: z.string(),
 });
-export type JdExtract = z.infer<typeof jdExtractSchema>;
+export type ResumeSection = z.infer<typeof resumeSectionSchema>;
 
 export const sessionBlueprintSchema = z.object({
   overallScore: z.number().min(0).max(100),
   readinessTier: z.enum(['poor', 'fair', 'good', 'strong']),
   tasks: z.array(agentTaskSchema),
-  jdExtract: jdExtractSchema,
+  parsedResume: z.array(resumeSectionSchema),
   quickWins: z.array(z.string()),
   blockers: z.array(z.string()),
 });

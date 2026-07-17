@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import AnalysisSidebar, { SidebarTask } from '@/components/(dashboard)/application-board/match-analysis/AnalysisSidebar';
+import AnalysisRightSidebar from '@/components/(dashboard)/application-board/match-analysis/AnalysisRightSidebar';
 
 interface AnalysisLayoutClientProps {
   id: string;
@@ -19,6 +21,10 @@ export default function AnalysisLayoutClient({ children }: AnalysisLayoutClientP
   const rejectedEditsLog = useAnalysisStore((s) => s.rejectedEditsLog);
   const updateTaskStatus = useAnalysisStore((s) => s.updateTaskStatus);
   const undoLastEdit = useAnalysisStore((s) => s.undoLastEdit);
+  const parsedResume = useAnalysisStore((s) => s.parsedResume);
+
+  // Manage right sidebar collapse/expand locally in container layout
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
 
   const handleBackClick = () => {
     router.push('/application-board');
@@ -30,7 +36,7 @@ export default function AnalysisLayoutClient({ children }: AnalysisLayoutClientP
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--bg-surface)] text-[var(--text-body)] w-full">
-      {/* Renders presentational sidebar component with passed props */}
+      {/* 1. Renders presentational left task sidebar */}
       <AnalysisSidebar
         taskPlan={taskPlan}
         overallScore={overallScore}
@@ -41,10 +47,17 @@ export default function AnalysisLayoutClient({ children }: AnalysisLayoutClientP
         onUndoLastEdit={undoLastEdit}
       />
 
-      {/* Main content slot where Chat & Reference panels render */}
+      {/* 2. Main content page slot */}
       <div className="flex-1 flex overflow-hidden min-w-0">
         {children}
       </div>
+
+      {/* 3. Renders presentational right active files sidebar */}
+      <AnalysisRightSidebar
+        parsedResume={parsedResume}
+        isOpen={rightSidebarOpen}
+        onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
+      />
     </div>
   );
 }

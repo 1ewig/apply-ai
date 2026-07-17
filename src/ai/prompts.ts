@@ -21,14 +21,12 @@ Based on this analysis, you must output a structured JSON object representing th
       "needsUserInput": boolean (true if the task requires input the candidate hasn't provided in the resume)
     }
   ],
-  "jdExtract": {
-    "roleTitle": "Cleaned role title (e.g., Senior Frontend Engineer)",
-    "mustHaveKeywords": ["up to 10 critical required skills/technologies/methodologies from the JD"],
-    "niceToHaveKeywords": ["up to 10 preferred or bonus skills/technologies/methodologies"],
-    "seniorityLevel": "Junior | Mid | Senior | Lead | Executive",
-    "coreResponsibilities": ["up to 5 key responsibilities summarized"],
-    "companyContext": "A brief one-line description of the company and context"
-  },
+  "parsedResume": [
+    {
+      "heading": "Section heading in UPPERCASE (e.g., 'SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION', 'PROJECTS')",
+      "content": "Cleaned full text content of this section, preserving line breaks and formatting exactly as provided"
+    }
+  ],
   "quickWins": ["List of quick wins that can be resolved with minimal effort or auto-applied"],
   "blockers": ["List of blockers where critical information is missing to fulfill the role requirements"]
 }
@@ -36,7 +34,10 @@ Based on this analysis, you must output a structured JSON object representing th
 Rules for tasks list generation:
 - Limit tasks to a focused set of 3 to 6 high-impact tasks. Do not overwhelm the candidate.
 - Assign all tasks to specific uppercase sections like 'SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION', or 'GENERAL'.
-- Ensure the tasks represent a step-by-step plan targeting the most critical gaps.`;
+- Ensure the tasks represent a step-by-step plan targeting the most critical gaps.
+- Ensure that 100% of the candidate's original resume content (every job description bullet, school, certification, and detail) is parsed and returned inside the 'parsedResume' array. Do not truncate, summarize, or omit any details during this formatting transition.
+- Normalize all parsedResume headings to UPPERCASE strings: 'HEADER' (for name/contact info), 'SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION', 'PROJECTS', 'CERTIFICATIONS'.
+- Under 'content' for each section, preserve line breaks, newlines (\n), lists, and markdown formatting exactly (do not flatten lists or remove newlines between experiences).`;
 
 export function buildComparePrompt(resumeText: string, jobDescription: string): string {
   return `Resume/CV:

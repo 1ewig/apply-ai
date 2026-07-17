@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AgentTask, JdExtract, ResumeEdit } from '@/ai/agent';
+import { AgentTask, ResumeEdit } from '@/ai/agent';
 
 const LOADING_PHASES = [
   'Initializing ApplyAI secure analyzer...',
@@ -52,7 +52,7 @@ interface AnalysisStore {
   rejectedEditsLog: string[];
   overallScore: number;
   readinessTier: 'poor' | 'fair' | 'good' | 'strong' | null;
-  jdExtract: JdExtract | null;
+  parsedResume: { heading: string; content: string }[];
   quickWins: string[];
   blockers: string[];
   chatMessages: ChatMessage[];
@@ -74,11 +74,12 @@ interface AnalysisStore {
       overallScore: number;
       readinessTier: 'poor' | 'fair' | 'good' | 'strong';
       tasks: AgentTask[];
-      jdExtract: JdExtract;
+      parsedResume: { heading: string; content: string }[];
       quickWins: string[];
       blockers: string[];
     },
-    initialResumeSections: Record<string, string>
+    roleTitle?: string,
+    companyName?: string
   ) => void;
   updateTaskStatus: (taskId: string, status: AgentTask['status']) => void;
   proposeEdit: (edit: ResumeEdit) => void;
@@ -111,7 +112,7 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   rejectedEditsLog: [],
   overallScore: 0,
   readinessTier: null,
-  jdExtract: null,
+  parsedResume: [],
   quickWins: [],
   blockers: [],
   chatMessages: [],
@@ -162,23 +163,28 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   setAbortController: (controller) => set({ abortController: controller }),
 
   // New session tailoring actions
-  initializeSession: (sessionId, blueprint, initialResumeSections) =>
+  initializeSession: (sessionId, blueprint, roleTitle, companyName) =>
     set({
       activeSessionId: sessionId,
       overallScore: blueprint.overallScore,
       readinessTier: blueprint.readinessTier,
       taskPlan: blueprint.tasks,
-      jdExtract: blueprint.jdExtract,
+      parsedResume: blueprint.parsedResume,
       quickWins: blueprint.quickWins,
       blockers: blueprint.blockers,
-      resumeSections: initialResumeSections,
+      resumeSections: (blueprint.parsedResume || []).reduce((acc, sec) => {
+        acc[sec.heading.toUpperCase()] = sec.content;
+        return acc;
+      }, {} as Record<string, string>),
       editHistory: [],
       rejectedEditsLog: [],
       chatMessages: [
         {
           id: 'welcome-message',
           role: 'assistant' as const,
-          content: `Hi! I've analyzed your resume against the job description for **${blueprint.jdExtract.roleTitle}** at **${blueprint.jdExtract.companyContext}**.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`,
+          content: roleTitle && companyName
+            ? `Hi! I've analyzed your resume against the job description for **${roleTitle}** at **${companyName}**.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`
+            : `Hi! I've analyzed your resume against the job description.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`,
           type: 'agent-text' as const,
         },
       ],

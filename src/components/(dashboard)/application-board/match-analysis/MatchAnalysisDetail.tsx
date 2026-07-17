@@ -27,25 +27,7 @@ export default function MatchAnalysisDetail({
 
   useEffect(() => {
     if (job && job.id !== activeSessionId) {
-      // Determine resume sections map (flat or split by common headers)
       const rawResume = job.customResumeContent || resumeForReRun?.content || '';
-      const initialSections: Record<string, string> = {};
-
-      if (rawResume.includes('EXPERIENCE') || rawResume.includes('Experience')) {
-        // Split by standard section headers for richer UI segmentation
-        const parts = rawResume.split(/(?=SUMMARY|EXPERIENCE|SKILLS|EDUCATION|Summary|Experience|Skills|Education)/i);
-        parts.forEach((part) => {
-          const match = part.match(/^(SUMMARY|EXPERIENCE|SKILLS|EDUCATION|Summary|Experience|Skills|Education)/i);
-          if (match) {
-            const heading = match[0].trim().toUpperCase();
-            initialSections[heading] = part.replace(/^[^\n]*\n/, '').trim();
-          } else {
-            initialSections['GENERAL'] = (initialSections['GENERAL'] || '') + '\n' + part.trim();
-          }
-        });
-      } else {
-        initialSections['RESUME'] = rawResume;
-      }
 
       // Check if job has direct blueprint results, otherwise load fallback mockblueprint for testing
       const blueprint = (job.analysisResult as any)?.tasks
@@ -82,23 +64,25 @@ export default function MatchAnalysisDetail({
                 status: 'needs_input' as const,
               },
             ],
-            jdExtract: {
-              roleTitle: job.role || 'Software Engineer',
-              mustHaveKeywords: ['React', 'TypeScript', 'Node.js', 'Docker'],
-              niceToHaveKeywords: ['Kubernetes', 'Next.js', 'Convex'],
-              seniorityLevel: 'Senior',
-              coreResponsibilities: [
-                'Design robust reactive architectures',
-                'Write clean and testable TypeScript code',
-                'Deploy services containerized via Docker',
-              ],
-              companyContext: job.company || 'ApplyAI Inc.',
-            },
+            parsedResume: [
+              {
+                heading: 'SUMMARY',
+                content: 'Results-driven software developer with expertise in building responsive applications.',
+              },
+              {
+                heading: 'EXPERIENCE',
+                content: 'Software Engineer @ ApplyAI Inc. (2024-Present)\n- Developed software features.\n- Collaborated with product teams to design web application interfaces.',
+              },
+              {
+                heading: 'SKILLS',
+                content: 'Languages: JavaScript, HTML, CSS, SQL.\nFrameworks: React, Next.js, Node.js.',
+              },
+            ],
             quickWins: ['Add React & TypeScript to skills section'],
             blockers: ['No clear years of experience mentioned in resume for Kubernetes'],
           };
 
-      initializeSession(job.id, blueprint, initialSections);
+      initializeSession(job.id, blueprint, job.role, job.company);
 
       // Trigger initial proposed edits simulation for Task 1
       setTimeout(() => {
