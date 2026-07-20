@@ -93,7 +93,7 @@ export default function AnalysisSidebar({
   const [winsOpen, setWinsOpen] = useState(false);
 
   return (
-    <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)]/50 backdrop-blur-md shrink-0 h-full overflow-hidden select-none">
+    <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)]/50 backdrop-blur-sm shrink-0 h-full overflow-hidden select-none">
       {/* Header */}
       <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center gap-3 bg-[var(--bg-card)]/30 shrink-0">
         <Button variant="ghost" size="sm" onClick={onBackClick} className="rounded-full hover:bg-[var(--border)] transition">
@@ -187,7 +187,7 @@ export default function AnalysisSidebar({
               {taskPlan.map((task) => (
                 <div 
                   key={task.id} 
-                  className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-surface)]/20 hover:scale-[1.01] transition-all duration-200 flex items-start justify-between gap-3"
+                  className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-surface)]/20 hover:-translate-y-px transition-all duration-200 flex items-start justify-between gap-3"
                 >
                   <div className="flex gap-2.5 items-start min-w-0">
                     <span className="mt-0.5 shrink-0">{getSeverityIcon(task.severity)}</span>
@@ -227,10 +227,11 @@ export default function AnalysisSidebar({
             <AnimatePresence>
               {blockersOpen && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  exit={{ opacity: 0, scaleY: 0 }}
+                  transition={{ duration: 0.18, ease: 'easeInOut' }}
+                  style={{ transformOrigin: 'top' }}
                   className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
                 >
                   <div className="p-3.5 space-y-2 text-left">
@@ -268,10 +269,11 @@ export default function AnalysisSidebar({
             <AnimatePresence>
               {winsOpen && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  exit={{ opacity: 0, scaleY: 0 }}
+                  transition={{ duration: 0.18, ease: 'easeInOut' }}
+                  style={{ transformOrigin: 'top' }}
                   className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
                 >
                   <div className="p-3.5 space-y-2 text-left">

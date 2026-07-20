@@ -79,7 +79,7 @@ export default function AnalysisRightSidebar({
   return (
     <aside className="w-[28%] border-l border-[var(--border)] flex flex-col bg-[var(--bg-card)] shrink-0 h-full overflow-hidden animate-fade-left">
       {/* Header Controls */}
-      <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--bg-surface)]/40 backdrop-blur-md select-none shrink-0">
+      <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--bg-surface)]/40 backdrop-blur-sm select-none shrink-0">
         <div className="relative flex p-1 bg-[var(--bg-main)] border border-[var(--border)] rounded-xl gap-1">
           {/* Animated Background Pill */}
           <div className="absolute inset-y-1 transition-all duration-300 ease-out bg-[var(--bg-card)] border border-[var(--border)] rounded-lg shadow-sm"
@@ -124,7 +124,7 @@ export default function AnalysisRightSidebar({
               parsedResume.map((section, idx) => (
                 <div 
                   key={idx} 
-                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 text-left hover:border-[var(--accent)]/30 hover:scale-[1.01] transition-all duration-300"
+                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 text-left hover:border-[var(--accent)]/30 transition-colors duration-200"
                 >
                   <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
                     <h4 className="text-[10px] font-extrabold text-[var(--text-heading)] tracking-wider uppercase font-mono">
@@ -139,7 +139,7 @@ export default function AnalysisRightSidebar({
               ))
             ) : (
               <div className="text-center py-16 text-xs text-[var(--text-muted)] select-none">
-                <FileText className="w-8 h-8 mx-auto mb-2 text-[var(--border)] animate-pulse" />
+                <FileText className="w-8 h-8 mx-auto mb-2 text-[var(--border)]" />
                 No structured resume data available. Parse resume step is active...
               </div>
             )}
@@ -147,7 +147,7 @@ export default function AnalysisRightSidebar({
         ) : jdExtract ? (
           <div className="space-y-5 text-left">
             {/* Role & Seniority */}
-            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
               <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Target Role</h4>
               <div>
                 <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
@@ -162,7 +162,7 @@ export default function AnalysisRightSidebar({
 
             {/* Company Context */}
             {jdExtract.companyContext && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Company Context</h4>
                 <p className="text-xs text-[var(--text-body)] leading-relaxed">{jdExtract.companyContext}</p>
               </div>
@@ -170,7 +170,7 @@ export default function AnalysisRightSidebar({
 
             {/* Must-have Keywords */}
             {jdExtract.mustHaveKeywords && jdExtract.mustHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Must-Have Core Skills</h4>
                 <div className="flex flex-wrap gap-1.5 pt-1.5">
                   {jdExtract.mustHaveKeywords.map((kw) => (
@@ -184,7 +184,7 @@ export default function AnalysisRightSidebar({
 
             {/* Nice-to-have Keywords */}
             {jdExtract.niceToHaveKeywords && jdExtract.niceToHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Nice-To-Have Skills</h4>
                 <div className="flex flex-wrap gap-1.5 pt-1.5">
                   {jdExtract.niceToHaveKeywords.map((kw) => (
@@ -198,7 +198,7 @@ export default function AnalysisRightSidebar({
 
             {/* Core Responsibilities */}
             {jdExtract.coreResponsibilities && jdExtract.coreResponsibilities.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Core Responsibilities</h4>
                 <div className="space-y-2 pt-1">
                   {jdExtract.coreResponsibilities.map((r, i) => (
@@ -213,7 +213,7 @@ export default function AnalysisRightSidebar({
 
             {/* Required Qualifications */}
             {jdExtract.requiredQualifications && jdExtract.requiredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Required Qualifications</h4>
                 <div className="space-y-2 pt-1">
                   {jdExtract.requiredQualifications.map((q, i) => (
@@ -228,7 +228,7 @@ export default function AnalysisRightSidebar({
 
             {/* Preferred Qualifications */}
             {jdExtract.preferredQualifications && jdExtract.preferredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
                 <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Preferred Qualifications</h4>
                 <div className="space-y-2 pt-1">
                   {jdExtract.preferredQualifications.map((q, i) => (
@@ -243,7 +243,7 @@ export default function AnalysisRightSidebar({
           </div>
         ) : (
           <div className="text-center py-16 text-xs text-[var(--text-muted)] select-none">
-            <Briefcase className="w-8 h-8 mx-auto mb-2 text-[var(--border)] animate-pulse" />
+            <Briefcase className="w-8 h-8 mx-auto mb-2 text-[var(--border)]" />
             No job description extract available. Extract step is active...
           </div>
         )}
