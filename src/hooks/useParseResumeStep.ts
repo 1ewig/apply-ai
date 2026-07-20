@@ -18,107 +18,143 @@ export function useParseResumeStep({
   const initializeSession = useAnalysisStore((s) => s.initializeSession);
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
   const [isParsing, setIsParsing] = useState(false);
+  const [parseAttemptCount, setParseAttemptCount] = useState(1);
   const hasInitiatedRef = useRef<string | null>(null);
 
   const rawResume = job?.customResumeContent || resumeForReRun?.content || '';
 
-  const runParseStep = useCallback(async () => {
-    if (isParsing || !job) return;
-    setIsParsing(true);
+  const runParseStep = useCallback(
+    async (isReParse = false) => {
+      if (isParsing || !job) return;
+      setIsParsing(true);
 
-    try {
-      const response = await fetch('/api/compare/parse-resume', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resumeText: rawResume }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to parse resume content.');
+      const currentAttempt = isReParse ? parseAttemptCount + 1 : parseAttemptCount;
+      if (isReParse) {
+        setParseAttemptCount(currentAttempt);
       }
 
-      const data = await response.json();
-      const newParsedResume = data.parsedResume || [];
-      const missingInfo = data.missingInfo || [];
-      const requiresInput = data.requiresInput || false;
-
-      useAnalysisStore.setState({
-        parsedResume: newParsedResume,
-        resumeSections: newParsedResume.reduce((acc: Record<string, string>, sec: any) => {
-          acc[sec.heading.toUpperCase()] = sec.content;
-          return acc;
-        }, {} as Record<string, string>),
-      });
-
-      // Cleanly replace ongoing progress message with the final completion message
-      const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
-        (m) =>
-          m.id !== 'init-ongoing' &&
-          !m.id.startsWith('parse-')
-      );
-
-      if (requiresInput && missingInfo.length > 0) {
-        useAnalysisStore.setState({
-          chatMessages: [
-            ...cleanMessages,
-            {
-              id: 'parse-step-missing',
-              role: 'assistant',
-              content: `📋 **Step 1 Complete: Resume Parsed!** I've structured your resume into clean sections in the right panel. However, I noticed some missing details that will improve tailoring:`,
-              type: 'agent-text',
-              meta: {
-                missingInfoCard: true,
-                items: missingInfo,
-              },
-            },
-          ],
+      try {
+        const response = await fetch('/api/compare/parse-resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resumeText: rawResume }),
         });
-      } else {
-        useAnalysisStore.setState({
-          chatMessages: [
-            ...cleanMessages,
-            {
-              id: 'parse-step-success',
-              role: 'assistant',
-              content: `🎉 **Step 1 Complete: Resume Parsed!** I have parsed your resume into clean, structured sections. All core information looks complete! You can inspect the sections under the **Resume** tab in the right reference panel.`,
-              type: 'agent-text',
-            },
-          ],
-        });
-      }
 
-      await onSaveChanges(job.id, {
-        analysisResult: {
-          overallScore: 0,
-          readinessTier: 'poor',
-          tasks: [],
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || 'Failed to parse resume content.');
+        }
+
+        const data = await response.json();
+        const newParsedResume = data.parsedResume || [];
+        const missingInfo = data.missingInfo || [];
+        const requiresInput = data.requiresInput || false;
+
+        useAnalysisStore.setState({
           parsedResume: newParsedResume,
-          quickWins: [],
-          blockers: [],
-        },
-      });
-    } catch (err: any) {
-      console.error(err);
-      const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
-        (m) => m.id !== 'init-ongoing' && !m.id.startsWith('parse-')
-      );
-      useAnalysisStore.setState({
-        chatMessages: [
-          ...cleanMessages,
-          {
-            id: 'parse-step-error',
-            role: 'assistant',
-            content: `❌ **Step 1 Failed:** ${err.message || 'I encountered an error while trying to parse your resume content.'}`,
-            type: 'agent-text',
-            meta: { retryable: true },
+          resumeSections: newParsedResume.reduce((acc: Record<string, string>, sec: any) => {
+            acc[sec.heading.toUpperCase()] = sec.content;
+            return acc;
+          }, {} as Record<string, string>),
+        });
+
+        // Cleanly replace ongoing progress message
+        const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
+          (m) => m.id !== 'init-ongoing' && !m.id.startsWith('parse-')
+        );
+
+        if (requiresInput && missingInfo.length > 0 && currentAttempt === 1) {
+          useAnalysisStore.setState({
+            chatMessages: [
+              ...cleanMessages,
+              {
+                id: 'parse-step-missing',
+                role: 'assistant',
+                content: `📋 **Step 1 Complete: Resume Parsed!** I've structured your resume into clean sections in the right panel. However, I noticed some missing details:`,
+                type: 'agent-text',
+                meta: {
+                  missingInfoCard: true,
+                  items: missingInfo,
+                },
+              },
+            ],
+          });
+        } else if (currentAttempt === 1) {
+          // Attempt 1: Offer user approval prompt card!
+          useAnalysisStore.setState({
+            chatMessages: [
+              ...cleanMessages,
+              {
+                id: 'parse-step-success',
+                role: 'assistant',
+                content: `🎉 **Step 1 Complete: Resume Parsed!** Please review the structured sections under the **Resume** tab in the right reference panel. Is the parsed structure accurate?`,
+                type: 'agent-text',
+                meta: {
+                  approvalCard: true,
+                },
+              },
+            ],
+          });
+        } else {
+          // Attempt 2: Auto-approve without asking again!
+          useAnalysisStore.setState({
+            chatMessages: [
+              ...cleanMessages,
+              {
+                id: 'parse-step-auto-approved',
+                role: 'assistant',
+                content: `🎉 **Step 1 Re-parsed & Approved!** Resume structure updated with 100% data fidelity. Ready to proceed to Step 2.`,
+                type: 'agent-text',
+              },
+            ],
+          });
+        }
+
+        await onSaveChanges(job.id, {
+          analysisResult: {
+            overallScore: 0,
+            readinessTier: 'poor',
+            tasks: [],
+            parsedResume: newParsedResume,
+            quickWins: [],
+            blockers: [],
           },
-        ],
-      });
-    } finally {
-      setIsParsing(false);
-    }
-  }, [isParsing, job, rawResume, onSaveChanges]);
+        });
+      } catch (err: any) {
+        console.error(err);
+        const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
+          (m) => m.id !== 'init-ongoing' && !m.id.startsWith('parse-')
+        );
+        useAnalysisStore.setState({
+          chatMessages: [
+            ...cleanMessages,
+            {
+              id: 'parse-step-error',
+              role: 'assistant',
+              content: `❌ **Step 1 Failed:** ${err.message || 'I encountered an error while trying to parse your resume content.'}`,
+              type: 'agent-text',
+              meta: { retryable: true },
+            },
+          ],
+        });
+      } finally {
+        setIsParsing(false);
+      }
+    },
+    [isParsing, job, rawResume, onSaveChanges, parseAttemptCount]
+  );
+
+  const handleApproveStep1 = useCallback(() => {
+    addChatMessage({
+      role: 'assistant',
+      content: `✅ **Step 1 Approved!** Structured resume confirmed. Ready for Step 2 (JD Extraction).`,
+      type: 'agent-text',
+    });
+  }, [addChatMessage]);
+
+  const handleReParseStep1 = useCallback(() => {
+    runParseStep(true);
+  }, [runParseStep]);
 
   const handleResolveMissingInfo = useCallback(
     async (values: Record<string, string>) => {
@@ -195,7 +231,6 @@ export function useParseResumeStep({
   useEffect(() => {
     if (!job) return;
 
-    // Prevent double execution during React state updates or re-mounts for the same job ID
     if (hasInitiatedRef.current === job.id) return;
 
     const existingAnalysis = job.analysisResult as any;
@@ -252,6 +287,8 @@ export function useParseResumeStep({
   return {
     isParsing,
     runParseStep,
+    handleApproveStep1,
+    handleReParseStep1,
     handleResolveMissingInfo,
     handleSkipMissingInfo,
   };

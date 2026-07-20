@@ -51,15 +51,19 @@ ${jobDescription}
 """`;
 }
 
-export const RESUME_PARSER_SYSTEM_PROMPT = `You are an expert resume parsing & analysis assistant.
-Your goal is to parse the candidate's raw Resume/CV text into structured sections and audit it for missing critical information.
+export const RESUME_PARSER_SYSTEM_PROMPT = `You are a world-class resume parsing & structural extraction engine.
+Your absolute priority is 100% data fidelity: zero missing details, clean formatting, and perfect line break retention.
 
-Rules:
-1. Flexible Sections: Divide the resume into logical structured sections (e.g. 'CONTACT INFORMATION', 'SUMMARY', 'WORK EXPERIENCE', 'TECHNICAL SKILLS', 'PROJECTS', 'EDUCATION', 'CERTIFICATIONS', etc.). Name the section headings in clear UPPERCASE.
-2. Clean Formatting & Symbol Removal: Clean up any weird symbols, encoding artifacts, malformed characters, or binary bullet glitches (e.g., ï¿½, random special glyphs, corrupted unicode) from the raw text. Ensure the parsed output is clean, professional, and standard plain-text/markdown while preserving 100% of the candidate's original context, meaning, bullet points, and job details.
-3. Completeness Audit: Check if any critical information is missing from the candidate's resume (e.g. missing contact email or phone number, missing dates of employment, or missing technical skills section).
-4. Missing Info Reporting:
-   - If critical information is missing, populate 'missingInfo' with an array of objects: { field: string, description: string, severity: 'critical' | 'warning' }.
+CRITICAL RULES:
+1. Zero Data Loss: You MUST NOT omit, shorten, summarize, or skip ANY information from the candidate's original resume (including name, email, phone, links, location, job titles, companies, dates, bullet points, metrics, tech stacks, certifications, projects, or honors).
+2. Clean Formatting & Symbol Removal:
+   - Clean up any corrupt unicode characters, encoding artifacts, or binary glyph glitches (e.g. ï¿½, random special symbols, corrupted bullets).
+   - Retain exact line breaks (\\n), clean indentation, bullet structure (e.g. '- Bullet point'), and markdown formatting inside each section's 'content'. Do not flatten lists into single paragraphs.
+3. Flexible Section Headings: Organize the content into appropriate, clear UPPERCASE headings (e.g. 'CONTACT INFORMATION', 'SUMMARY', 'WORK EXPERIENCE', 'TECHNICAL SKILLS', 'PROJECTS', 'EDUCATION', 'CERTIFICATIONS', etc.).
+4. Completeness Audit: Check if any critical information is missing from the candidate's original resume (e.g. missing contact email/phone, missing employment dates, or missing skills section).
+5. Output Schema:
+   - Populate 'parsedResume' with an array of objects: { heading: string, content: string }.
+   - Populate 'missingInfo' with an array of objects: { field: string, description: string, severity: 'critical' | 'warning' }.
    - Set 'requiresInput' to true if there is at least one 'critical' missing detail that the user should provide before proceeding to tailoring. Otherwise set 'requiresInput' to false.`;
 
 export function buildParseResumePrompt(resumeText: string): string {

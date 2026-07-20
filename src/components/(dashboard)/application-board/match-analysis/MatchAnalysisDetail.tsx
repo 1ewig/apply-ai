@@ -8,6 +8,7 @@ import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import { useParseResumeStep } from '@/hooks/useParseResumeStep';
 import Button from '@/components/ui/Button';
 import MissingInfoCard from './MissingInfoCard';
+import ApprovalCard from './ApprovalCard';
 import ChatInputBar from './ChatInputBar';
 
 interface MatchAnalysisDetailProps {
@@ -38,6 +39,8 @@ export default function MatchAnalysisDetail({
   const {
     isParsing,
     runParseStep,
+    handleApproveStep1,
+    handleReParseStep1,
     handleResolveMissingInfo,
     handleSkipMissingInfo,
   } = useParseResumeStep({
@@ -163,6 +166,14 @@ export default function MatchAnalysisDetail({
                   </p>
                 </div>
 
+                {/* Presentational Approval Prompt Card */}
+                {msg.meta?.approvalCard && (
+                  <ApprovalCard
+                    onApprove={handleApproveStep1}
+                    onReParse={handleReParseStep1}
+                  />
+                )}
+
                 {/* Presentational Missing Info Prompt Card */}
                 {msg.meta?.missingInfoCard && (
                   <MissingInfoCard
@@ -177,7 +188,7 @@ export default function MatchAnalysisDetail({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={runParseStep}
+                    onClick={() => runParseStep(false)}
                     className="text-xs flex items-center gap-1.5 cursor-pointer mt-1 bg-[var(--bg-card)] border-[var(--border)] text-[var(--accent)] hover:text-white select-none"
                   >
                     <RotateCcw className="w-3 h-3" />
