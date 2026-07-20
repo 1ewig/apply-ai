@@ -78,7 +78,7 @@ export function useParseResumeStep({
             {
               id: `parse-missing-${Date.now()}`,
               role: 'assistant',
-              content: `📋 **Step 1 Parsed!** I've organized your resume into flexible sections in the right panel. However, I noticed some missing details that will improve tailoring:`,
+              content: `📋 **Step 1 Complete: Resume Parsed!** I've structured your resume into clean sections in the right panel. However, I noticed some missing details that will improve tailoring:`,
               type: 'agent-text',
               meta: {
                 missingInfoCard: true,
@@ -94,7 +94,7 @@ export function useParseResumeStep({
             {
               id: `parse-success-${Date.now()}`,
               role: 'assistant',
-              content: `🎉 **Step 1 Complete!** I have parsed your resume into flexible sections. All core information looks complete! View the **Resume** tab in the right panel to check your structured sections.`,
+              content: `🎉 **Step 1 Complete: Resume Parsed!** I have parsed your resume into clean, structured sections. All core information looks complete! You can inspect the sections under the **Resume** tab in the right reference panel.`,
               type: 'agent-text',
             },
           ],
@@ -226,9 +226,15 @@ export function useParseResumeStep({
       useAnalysisStore.setState({
         chatMessages: [
           {
-            id: 'init-msg',
+            id: 'init-ack',
             role: 'assistant',
-            content: `Hello! I've loaded your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\n**Step 1: Parsing your resume text...**`,
+            content: `Hello! I've received your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**. Let's tailor your resume to maximize your match rate.`,
+            type: 'agent-text',
+          },
+          {
+            id: 'init-ongoing',
+            role: 'assistant',
+            content: `🔍 **Step 1 in progress:** I am currently parsing your resume content and cleaning up formatting into structured sections...`,
             type: 'agent-text',
           },
         ],

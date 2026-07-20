@@ -56,7 +56,7 @@ Your goal is to parse the candidate's raw Resume/CV text into structured section
 
 Rules:
 1. Flexible Sections: Divide the resume into logical structured sections (e.g. 'CONTACT INFORMATION', 'SUMMARY', 'WORK EXPERIENCE', 'TECHNICAL SKILLS', 'PROJECTS', 'EDUCATION', 'CERTIFICATIONS', etc.). Name the section headings in clear UPPERCASE.
-2. 100% Content Preservation: Do not truncate, summarize, or omit original content inside sections. Preserve line breaks (\\n) and bullet points exactly.
+2. Clean Formatting & Symbol Removal: Clean up any weird symbols, encoding artifacts, malformed characters, or binary bullet glitches (e.g., ï¿½, random special glyphs, corrupted unicode) from the raw text. Ensure the parsed output is clean, professional, and standard plain-text/markdown while preserving 100% of the candidate's original context, meaning, bullet points, and job details.
 3. Completeness Audit: Check if any critical information is missing from the candidate's resume (e.g. missing contact email or phone number, missing dates of employment, or missing technical skills section).
 4. Missing Info Reporting:
    - If critical information is missing, populate 'missingInfo' with an array of objects: { field: string, description: string, severity: 'critical' | 'warning' }.
