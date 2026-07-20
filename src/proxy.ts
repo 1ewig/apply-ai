@@ -14,7 +14,6 @@ export default clerkMiddleware(async (auth, req) => {
     await auth.protect();
   }
 }, { 
-  debug: true,
   clockSkewInMs: 30000
 });
 
