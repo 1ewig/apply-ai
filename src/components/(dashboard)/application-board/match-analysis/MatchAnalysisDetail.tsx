@@ -199,6 +199,23 @@ export default function MatchAnalysisDetail({
     }, 800);
   };
 
+  const renderMessageContent = (text: string, isUser: boolean) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong 
+            key={i} 
+            className={`font-semibold ${isUser ? 'text-white' : 'text-[var(--text-heading)]'}`}
+          >
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <section className="flex-1 flex flex-col bg-[var(--bg-main)] min-w-0 h-full overflow-hidden">
       {/* Header bar */}
@@ -223,7 +240,7 @@ export default function MatchAnalysisDetail({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse text-right' : 'text-left'}`}
+              className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
             >
               {/* Avatar */}
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 ${
@@ -237,14 +254,12 @@ export default function MatchAnalysisDetail({
               </div>
 
               {/* Text content box */}
-              <div className="flex-1">
-                <div className={`p-4 rounded-2xl text-xs leading-relaxed ${
-                  msg.role === 'user' 
-                    ? 'bg-[var(--accent)] text-white rounded-tr-none' 
-                    : 'bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)]'
-                }`}>
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
-                </div>
+              <div className={`p-4 rounded-2xl text-xs leading-relaxed text-left max-w-max ${
+                msg.role === 'user' 
+                  ? 'bg-[var(--accent)] text-white rounded-tr-none' 
+                  : 'bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)]'
+              }`}>
+                <p className="whitespace-pre-wrap">{renderMessageContent(msg.content, msg.role === 'user')}</p>
               </div>
             </motion.div>
           ))}
@@ -258,11 +273,9 @@ export default function MatchAnalysisDetail({
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 bg-gradient-to-tr from-[var(--accent)] to-[var(--accent-cyan)] text-white">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <div className="flex-1">
-                <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
-                  <span className="animate-pulse">Parsing your resume...</span>
-                </div>
+              <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2 max-w-max">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
+                <span className="animate-pulse">Parsing your resume...</span>
               </div>
             </motion.div>
           )}
