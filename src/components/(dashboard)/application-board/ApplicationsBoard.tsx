@@ -17,7 +17,6 @@ interface ApplicationsBoardProps {
   isAnalyzingId: string | null;
   onAddJobClick: () => void;
   onEditJobClick: (job: JobApplication) => void;
-  onMatchClick: (job: JobApplication) => void;
   onViewAnalysisClick: (jobId: string) => void;
   onUpdateJobStatus: (id: string, status: JobApplication['status']) => void;
   onDeleteJob: (id: string) => void;
@@ -35,7 +34,6 @@ export default function ApplicationsBoard({
   isAnalyzingId,
   onAddJobClick,
   onEditJobClick,
-  onMatchClick,
   onViewAnalysisClick,
   onUpdateJobStatus,
   onDeleteJob,
@@ -96,10 +94,8 @@ export default function ApplicationsBoard({
             <JobCard
               key={job.id}
               job={job}
-              resumes={resumes}
               isCurrentlyAnalyzing={isAnalyzingId === job.id}
               onEditJobClick={onEditJobClick}
-              onMatchClick={onMatchClick}
               onViewAnalysisClick={onViewAnalysisClick}
               onUpdateJobStatus={onUpdateJobStatus}
               onDeleteJob={onDeleteJob}

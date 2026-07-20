@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 
 import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
-import { useRunAnalysis } from '@/hooks/useRunAnalysis';
 import { useApplicationSearch } from '@/hooks/useApplicationSearch';
 import { useApplicationForm } from '@/hooks/useApplicationForm';
 import { useSubmitApplication } from '@/hooks/useSubmitApplication';
@@ -29,8 +28,7 @@ export default function ApplicationBoardClient() {
   const { jobs, isLoading, isError, error, refetch, addJob, updateJob, deleteJob } = useApplications();
   const { resumes } = useResumes();
   const { searchTerm, setSearchTerm, statusFilter, setStatusFilter, filteredJobs } = useApplicationSearch(jobs);
-  const { runAnalysis } = useRunAnalysis();
-  const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange: setIsSaving });
+  const { handleAddJobSubmit } = useSubmitApplication({ addJob, updateJob, router, onSavingChange: setIsSaving });
   const { isLoading: analysisLoading, analyzingJobId, setError, setSuccess } = useAnalysisStore();
 
   useEffect(() => {
@@ -67,38 +65,6 @@ export default function ApplicationBoardClient() {
   const handleViewAnalysis = useCallback((jobId: string) => {
     router.push(`/application-board/${jobId}/analysis`);
   }, [router]);
-
-  const handleMatchClick = useCallback(async (job: JobApplication) => {
-    if (job.jobDescription && job.customResumeContent) {
-      const startAnalysis = useAnalysisStore.getState().startAnalysis;
-      const finishAnalysis = useAnalysisStore.getState().finishAnalysis;
-
-      startAnalysis();
-      try {
-        const data = await runAnalysis(job.id, job.customResumeContent, job.jobDescription);
-        if (data) {
-          await updateJob(job.id, {
-            matchScore: data.overallScore,
-            analysisResult: data,
-          });
-          router.push(`/application-board/${job.id}/analysis`);
-        }
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
-          const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
-          if (wasManuallyCanceled) return;
-        }
-        console.error('Failed to run alignment analysis:', err);
-        const retryAction = () => handleMatchClick(job);
-        setError(toUserFriendlyError(err, 'Failed to analyze alignment.'), retryAction, 'Failed to Analyze Alignment');
-      } finally {
-        finishAnalysis();
-      }
-    } else {
-      setEditingJob(job);
-      setIsAddJobOpen(true);
-    }
-  }, [runAnalysis, updateJob, router, setError]);
 
   const handleUpdateStatus = useCallback(async (id: string, status: JobApplication['status']) => {
     try {
@@ -144,7 +110,6 @@ export default function ApplicationBoardClient() {
         isAnalyzingId={analyzingJobId}
         onAddJobClick={handleAddJob}
         onEditJobClick={handleEditJob}
-        onMatchClick={handleMatchClick}
         onViewAnalysisClick={handleViewAnalysis}
         onUpdateJobStatus={handleUpdateStatus}
         onDeleteJob={(id) => setPendingDeleteJobId(id)}

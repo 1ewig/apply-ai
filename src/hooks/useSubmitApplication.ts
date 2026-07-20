@@ -19,12 +19,11 @@ interface AddJobData {
 interface UseSubmitApplicationOptions {
   addJob: (data: AddJobData) => Promise<string>;
   updateJob: (id: string, data: Partial<JobApplication>) => void;
-  runAnalysis: (jobId: string, customResumeContent: string, jobDescription: string) => Promise<any>;
   router: AppRouterInstance;
   onSavingChange?: (saving: boolean) => void;
 }
 
-export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, onSavingChange }: UseSubmitApplicationOptions) {
+export function useSubmitApplication({ addJob, updateJob, router, onSavingChange }: UseSubmitApplicationOptions) {
   const { startAnalysis, finishAnalysis, setError, setSuccess } = useAnalysisStore();
 
   const handleAddJobSubmit = useCallback(async (jobData: {
@@ -74,7 +73,7 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
     } finally {
       onSavingChange?.(false);
     }
-  }, [addJob, updateJob, runAnalysis, router, setError, setSuccess, startAnalysis, finishAnalysis, onSavingChange]);
+  }, [addJob, updateJob, router, setError, setSuccess, startAnalysis, finishAnalysis, onSavingChange]);
 
   return { handleAddJobSubmit };
 }

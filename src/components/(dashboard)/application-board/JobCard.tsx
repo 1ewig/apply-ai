@@ -23,10 +23,8 @@ function getStatusBadge(status: JobApplication['status']) {
 
 interface JobCardProps {
   job: JobApplication;
-  resumes: Resume[];
   isCurrentlyAnalyzing: boolean;
   onEditJobClick: (job: JobApplication) => void;
-  onMatchClick: (job: JobApplication) => void;
   onViewAnalysisClick: (jobId: string) => void;
   onUpdateJobStatus: (id: string, status: JobApplication['status']) => void;
   onDeleteJob: (id: string) => void;
@@ -34,10 +32,8 @@ interface JobCardProps {
 
 export default function JobCard({
   job,
-  resumes,
   isCurrentlyAnalyzing,
   onEditJobClick,
-  onMatchClick,
   onViewAnalysisClick,
   onUpdateJobStatus,
   onDeleteJob,
@@ -101,20 +97,9 @@ export default function JobCard({
               <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
               Evaluating...
             </Button>
-          ) : job.matchScore !== undefined ? (
+          ) : (
             <Button variant="outline" size="sm" onClick={() => onViewAnalysisClick(job.id)} className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1">
               View Report
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onMatchClick(job)}
-              disabled={resumes.length === 0}
-              className="text-[10px] px-3 py-1 font-semibold flex items-center gap-1 border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/10"
-            >
-              <Play className="w-3 h-3 fill-current" />
-              Evaluate
             </Button>
           )}
         </div>
