@@ -12,13 +12,25 @@ async function getAuthToken() {
 }
 
 export async function listApplicationsAction() {
-  const token = await getAuthToken();
-  return await fetchQuery(api.applications.list, {}, { token });
+  try {
+    const token = await getAuthToken();
+    if (!token) return [];
+    return await fetchQuery(api.applications.list, {}, { token });
+  } catch (err) {
+    console.error("Error in listApplicationsAction:", err);
+    return [];
+  }
 }
 
 export async function getAnalysisAction(applicationId: Id<"applications">) {
-  const token = await getAuthToken();
-  return await fetchQuery(api.applications.getAnalysis, { applicationId }, { token });
+  try {
+    const token = await getAuthToken();
+    if (!token) return null;
+    return await fetchQuery(api.applications.getAnalysis, { applicationId }, { token });
+  } catch (err) {
+    console.error("Error in getAnalysisAction:", err);
+    return null;
+  }
 }
 
 export async function addApplicationAction(args: {
