@@ -13,13 +13,7 @@ import ChatInputBar from './ChatInputBar';
 
 interface MatchAnalysisDetailProps {
   job: JobApplication;
-  previousAnalysisResult?: any;
-  resumes: Resume[];
   resumeForReRun?: Resume;
-  expandedPrepIndex: number | null;
-  onTogglePrepItem: (index: number) => void;
-  onBackClick: () => void;
-  onReRunAnalysis: (jobId: string, resumeContent: string, jobDesc: string) => void;
   onSaveChanges: (id: string, data: Partial<JobApplication>) => Promise<unknown>;
 }
 

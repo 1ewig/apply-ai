@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAnalysisAction } from '@/app/actions/applications';
 
@@ -20,9 +19,6 @@ interface AnalysisQueryResult {
 }
 
 export default function AnalysisPageClient({ id }: { id: string }) {
-  const router = useRouter();
-  const [expandedPrepIndex, setExpandedPrepIndex] = useState<number | null>(null);
-
   const { jobs, updateJob } = useApplications();
   const { resumes } = useResumes();
   const { runAnalysis } = useRunAnalysis();
@@ -92,13 +88,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   return (
     <MatchAnalysisDetail
       job={{ ...job, analysisResult: analysisData?.currentResult ?? undefined }}
-      previousAnalysisResult={analysisData?.previousResult ?? undefined}
-      resumes={resumes}
       resumeForReRun={resumeForReRun}
-      expandedPrepIndex={expandedPrepIndex}
-      onTogglePrepItem={(idx) => setExpandedPrepIndex(expandedPrepIndex === idx ? null : idx)}
-      onBackClick={() => router.push('/application-board')}
-      onReRunAnalysis={handleReRunAnalysis}
       onSaveChanges={updateJob}
     />
   );

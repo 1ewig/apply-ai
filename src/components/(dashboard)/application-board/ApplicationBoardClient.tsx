@@ -78,7 +78,7 @@ export default function ApplicationBoardClient() {
         const data = await runAnalysis(job.id, job.customResumeContent, job.jobDescription);
         if (data) {
           await updateJob(job.id, {
-            matchScore: data.score,
+            matchScore: data.overallScore,
             analysisResult: data,
           });
           router.push(`/application-board/${job.id}/analysis`);

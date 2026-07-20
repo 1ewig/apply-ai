@@ -7,23 +7,11 @@ import {
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
-export interface SidebarTask {
-  id: string;
-  title: string;
-  section: string;
-  severity: 'critical' | 'warning' | 'info';
-  estimatedClicks: number;
-  needsUserInput: boolean;
-  status: 'active' | 'completed' | 'pending' | 'needs_input' | 'skipped';
-}
-
 interface AnalysisSidebarProps {
-  taskPlan?: SidebarTask[];
   overallScore?: number;
   editHistoryCount?: number;
   rejectedEditsCount?: number;
   onBackClick?: () => void;
-  onTaskClick?: (taskId: string, currentStatus: string) => void;
   onUndoLastEdit?: () => void;
 }
 
