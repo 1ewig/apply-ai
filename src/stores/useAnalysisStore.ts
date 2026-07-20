@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AgentTask, ResumeEdit } from '@/ai/agent';
+import { AgentTask, ResumeEdit } from '@/agent/types';
 
 const LOADING_PHASES = [
   'Initializing ApplyAI secure analyzer...',

@@ -34,7 +34,7 @@ export function useParseResumeStep({
       }
 
       try {
-        const response = await fetch('/api/compare/parse-resume', {
+        const response = await fetch('/api/parse-resume', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ resumeText: rawResume }),

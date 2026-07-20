@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { parseResume } from "@/ai/provider";
-import { normalizeAiError } from "@/ai/errors";
+import { parseResume } from "@/agent/provider";
+import { normalizeAiError } from "@/agent/errors";
 
 export async function POST(request: Request) {
   try {

@@ -5,7 +5,7 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/application-board(.*)",
   "/resume-templates(.*)",
-  "/api/compare/parse-resume"
+  "/api/parse-resume"
 ]);
 
 // 2. Protect routes with edge middleware logic

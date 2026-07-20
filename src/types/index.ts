@@ -1,4 +1,4 @@
-import type { SessionBlueprint } from "../ai/agent";
+import type { SessionBlueprint } from "../agent/types";
 
 export type ComparisonResult = SessionBlueprint;
 

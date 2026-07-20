@@ -7,7 +7,7 @@ import {
 import { 
   resumeSectionSchema,
   ResumeSection 
-} from './agent';
+} from './types';
 
 const missingInfoItemSchema = z.object({
   field: z.string(),
