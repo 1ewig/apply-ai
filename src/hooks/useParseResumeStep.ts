@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
@@ -18,33 +18,13 @@ export function useParseResumeStep({
   const initializeSession = useAnalysisStore((s) => s.initializeSession);
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
   const [isParsing, setIsParsing] = useState(false);
+  const hasInitiatedRef = useRef<string | null>(null);
 
   const rawResume = job?.customResumeContent || resumeForReRun?.content || '';
 
   const runParseStep = useCallback(async () => {
     if (isParsing || !job) return;
     setIsParsing(true);
-
-    const currentMessages = useAnalysisStore.getState().chatMessages;
-    const filteredMessages = currentMessages.filter(
-      (m) =>
-        !m.id.startsWith('parse-error-') &&
-        !m.id.startsWith('parse-progress-') &&
-        !m.id.startsWith('parse-success-') &&
-        !m.id.startsWith('parse-missing-')
-    );
-
-    useAnalysisStore.setState({
-      chatMessages: [
-        ...filteredMessages,
-        {
-          id: `parse-progress-${Date.now()}`,
-          role: 'assistant',
-          content: `🔄 **Parsing resume into flexible categories...**`,
-          type: 'agent-text',
-        },
-      ],
-    });
 
     try {
       const response = await fetch('/api/compare/parse-resume', {
@@ -71,12 +51,19 @@ export function useParseResumeStep({
         }, {} as Record<string, string>),
       });
 
+      // Cleanly replace ongoing progress message with the final completion message
+      const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
+        (m) =>
+          m.id !== 'init-ongoing' &&
+          !m.id.startsWith('parse-')
+      );
+
       if (requiresInput && missingInfo.length > 0) {
         useAnalysisStore.setState({
           chatMessages: [
-            ...useAnalysisStore.getState().chatMessages.filter((m) => !m.id.startsWith('parse-progress-')),
+            ...cleanMessages,
             {
-              id: `parse-missing-${Date.now()}`,
+              id: 'parse-step-missing',
               role: 'assistant',
               content: `📋 **Step 1 Complete: Resume Parsed!** I've structured your resume into clean sections in the right panel. However, I noticed some missing details that will improve tailoring:`,
               type: 'agent-text',
@@ -90,9 +77,9 @@ export function useParseResumeStep({
       } else {
         useAnalysisStore.setState({
           chatMessages: [
-            ...useAnalysisStore.getState().chatMessages.filter((m) => !m.id.startsWith('parse-progress-')),
+            ...cleanMessages,
             {
-              id: `parse-success-${Date.now()}`,
+              id: 'parse-step-success',
               role: 'assistant',
               content: `🎉 **Step 1 Complete: Resume Parsed!** I have parsed your resume into clean, structured sections. All core information looks complete! You can inspect the sections under the **Resume** tab in the right reference panel.`,
               type: 'agent-text',
@@ -113,11 +100,14 @@ export function useParseResumeStep({
       });
     } catch (err: any) {
       console.error(err);
+      const cleanMessages = useAnalysisStore.getState().chatMessages.filter(
+        (m) => m.id !== 'init-ongoing' && !m.id.startsWith('parse-')
+      );
       useAnalysisStore.setState({
         chatMessages: [
-          ...useAnalysisStore.getState().chatMessages.filter((m) => !m.id.startsWith('parse-progress-')),
+          ...cleanMessages,
           {
-            id: `parse-error-${Date.now()}`,
+            id: 'parse-step-error',
             role: 'assistant',
             content: `❌ **Step 1 Failed:** ${err.message || 'I encountered an error while trying to parse your resume content.'}`,
             type: 'agent-text',
@@ -205,8 +195,13 @@ export function useParseResumeStep({
   useEffect(() => {
     if (!job) return;
 
+    // Prevent double execution during React state updates or re-mounts for the same job ID
+    if (hasInitiatedRef.current === job.id) return;
+
     const existingAnalysis = job.analysisResult as any;
     const parsedResume = existingAnalysis?.parsedResume || [];
+
+    hasInitiatedRef.current = job.id;
 
     initializeSession(
       job.id,
