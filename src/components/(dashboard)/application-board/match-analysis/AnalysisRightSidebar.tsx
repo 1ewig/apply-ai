@@ -5,7 +5,6 @@ import {
   FileText, 
   ChevronRight, 
   ChevronLeft,
-  Sparkles,
   Briefcase
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -29,7 +28,6 @@ interface JdExtract {
 interface AnalysisRightSidebarProps {
   parsedResume: ResumeSection[];
   jdExtract?: JdExtract | null;
-  jobDescription?: string;
   isOpen: boolean;
   onToggle: () => void;
 }
@@ -37,7 +35,6 @@ interface AnalysisRightSidebarProps {
 export default function AnalysisRightSidebar({
   parsedResume,
   jdExtract,
-  jobDescription = '',
   isOpen,
   onToggle,
 }: AnalysisRightSidebarProps) {
@@ -104,15 +101,6 @@ export default function AnalysisRightSidebar({
       <div className="flex-1 overflow-y-auto p-5 custom-scrollbar">
         {activeTab === 'resume' ? (
           <div className="space-y-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Active Resume Sections</h3>
-              {parsedResume && parsedResume.length > 0 && (
-                <span className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/25 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> Structuring active
-                </span>
-              )}
-            </div>
-
             {parsedResume && parsedResume.length > 0 ? (
               parsedResume.map((section, idx) => (
                 <div key={idx} className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
@@ -226,22 +214,11 @@ export default function AnalysisRightSidebar({
               </div>
             )}
           </div>
-        ) : parsedResume.length === 0 ? (
-          <div className="space-y-4 text-left">
-            <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase mb-4">Job Description</h3>
-            {jobDescription ? (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30">
-                <pre className="text-xs text-[var(--text-body)] font-sans whitespace-pre-wrap leading-relaxed">
-                  {jobDescription}
-                </pre>
-              </div>
-            ) : (
-              <div className="text-center py-16 text-xs text-[var(--text-muted)]">
-                No job description content available.
-              </div>
-            )}
+        ) : (
+          <div className="text-center py-16 text-xs text-[var(--text-muted)]">
+            No job description extract available. Extract step is active...
           </div>
-        ) : null}
+        )}
       </div>
     </aside>
   );

@@ -180,6 +180,7 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
       }, {} as Record<string, string>),
       editHistory: [],
       rejectedEditsLog: [],
+      jdExtract: null,
       chatMessages: [
         {
           id: 'welcome-message',

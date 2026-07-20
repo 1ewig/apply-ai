@@ -15,8 +15,6 @@ interface AnalysisLayoutClientProps {
 export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutClientProps) {
   const router = useRouter();
   const { jobs } = useApplications();
-  const job = jobs.find((j) => j.id === id);
-  const jobDescription = job?.jobDescription;
 
   // Use individual selectors to avoid unnecessary re-renders per coding standards
   const overallScore = useAnalysisStore((s) => s.overallScore);
@@ -53,7 +51,6 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
       <AnalysisRightSidebar
         parsedResume={parsedResume}
         jdExtract={jdExtract}
-        jobDescription={jobDescription}
         isOpen={rightSidebarOpen}
         onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
       />
