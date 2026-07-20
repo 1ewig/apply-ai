@@ -40,6 +40,34 @@ export const sessionBlueprintSchema = z.object({
 });
 export type SessionBlueprint = z.infer<typeof sessionBlueprintSchema>;
 
+export const jdExtractSchema = z.object({
+  roleTitle: z.string(),
+  mustHaveKeywords: z.array(z.string()).max(10),
+  niceToHaveKeywords: z.array(z.string()).max(10),
+  seniorityLevel: z.enum(['entry', 'mid', 'senior', 'lead', 'executive']),
+  coreResponsibilities: z.array(z.string()).max(5),
+  companyContext: z.string(),
+  requiredQualifications: z.array(z.string()).max(8),
+  preferredQualifications: z.array(z.string()).max(5),
+});
+export type JdExtract = z.infer<typeof jdExtractSchema>;
+
+export const matchAnalysisSchema = z.object({
+  overallScore: z.number().min(0).max(100),
+  readinessTier: z.enum(['poor', 'fair', 'good', 'strong']),
+  scoreBreakdown: z.object({
+    keywordMatch: z.number().min(0).max(100),
+    experienceAlignment: z.number().min(0).max(100),
+    skillsCoverage: z.number().min(0).max(100),
+    educationFit: z.number().min(0).max(100),
+  }),
+  matchedKeywords: z.array(z.string()),
+  missingKeywords: z.array(z.string()),
+  strengths: z.array(z.string()),
+  gaps: z.array(z.string()),
+});
+export type MatchAnalysis = z.infer<typeof matchAnalysisSchema>;
+
 export interface ResumeEdit {
   id: string;
   sessionId: string;

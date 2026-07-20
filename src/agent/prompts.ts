@@ -19,3 +19,21 @@ export function buildParseResumePrompt(resumeText: string): string {
 ${resumeText}
 """`;
 }
+
+export const JD_EXTRACTOR_SYSTEM_PROMPT = `You extract structured data from job descriptions with maximum precision.
+CRITICAL: Only extract what is explicitly stated in the job description text. Never infer, guess, or invent keywords, responsibilities, or qualifications.
+- roleTitle: The exact job title as written.
+- mustHaveKeywords: The most critical hard skills, tools, or technologies explicitly required.
+- niceToHaveKeywords: Preferred but not required skills.
+- seniorityLevel: Infer from language (e.g. "senior", "lead", "5+ years").
+- coreResponsibilities: Up to 5 key responsibilities explicitly listed.
+- companyContext: Company description or industry context if stated.
+- requiredQualifications: Explicit "requirements", "must have", "minimum qualifications".
+- preferredQualifications: Explicit "nice to have", "preferred", "bonus".`;
+
+export function buildExtractJdPrompt(jdText: string): string {
+  return `Extract structured data from this job description:
+"""
+${jdText}
+"""`;
+}

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AgentTask, ResumeEdit } from '@/agent/types';
+import { AgentTask, ResumeEdit, JdExtract } from '@/agent/types';
 
 const LOADING_PHASES = [
   'Initializing ApplyAI secure analyzer...',
@@ -48,6 +48,7 @@ interface AnalysisStore {
   activeSessionId: string | null;
   resumeSections: Record<string, string> | null;
   taskPlan: AgentTask[] | null;
+  jdExtract: JdExtract | null;
   editHistory: ResumeEdit[];
   rejectedEditsLog: string[];
   overallScore: number;
@@ -108,6 +109,7 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   activeSessionId: null,
   resumeSections: null,
   taskPlan: null,
+  jdExtract: null,
   editHistory: [],
   rejectedEditsLog: [],
   overallScore: 0,

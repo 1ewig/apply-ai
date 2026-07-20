@@ -6,6 +6,7 @@ import { Sparkles, User, Compass, Loader2, RotateCcw } from 'lucide-react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import { useParseResumeStep } from '@/hooks/useParseResumeStep';
+import { useExtractJdStep } from '@/hooks/useExtractJdStep';
 import Button from '@/components/ui/Button';
 import MissingInfoCard from './MissingInfoCard';
 import ApprovalCard from './ApprovalCard';
@@ -33,7 +34,7 @@ export default function MatchAnalysisDetail({
   const {
     isParsing,
     runParseStep,
-    handleApproveStep1,
+    handleApproveStep1: originalApproveStep1,
     handleReParseStep1,
     handleResolveMissingInfo,
     handleSkipMissingInfo,
@@ -43,10 +44,20 @@ export default function MatchAnalysisDetail({
     onSaveChanges,
   });
 
+  // Step 2: Extract JD after Step 1 approval
+  const { isExtracting, runExtractJd } = useExtractJdStep({
+    jobDescription: job.jobDescription || '',
+  });
+
+  const handleApproveStep1 = () => {
+    originalApproveStep1();
+    runExtractJd();
+  };
+
   // Auto-scroll chat to bottom
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages, isParsing]);
+  }, [chatMessages, isParsing, isExtracting]);
 
   // Handle user command inputs
   const handleSendCommand = (e: React.FormEvent) => {
@@ -178,7 +189,18 @@ export default function MatchAnalysisDetail({
                 )}
 
                 {/* Presentational Retry Button */}
-                {msg.meta?.retryable && (
+                {msg.meta?.retryable && msg.meta?.retryStep === 'extract-jd' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => runExtractJd()}
+                    className="text-xs flex items-center gap-1.5 cursor-pointer mt-1 bg-[var(--bg-card)] border-[var(--border)] text-[var(--accent)] hover:text-white select-none"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Retry Extraction
+                  </Button>
+                )}
+                {msg.meta?.retryable && !msg.meta?.retryStep && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -205,6 +227,22 @@ export default function MatchAnalysisDetail({
               <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2 max-w-max">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
                 <span className="animate-pulse">Parsing resume into flexible categories...</span>
+              </div>
+            </motion.div>
+          )}
+
+          {isExtracting && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-3 max-w-[85%] text-left"
+            >
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 bg-gradient-to-tr from-[var(--accent)] to-[var(--accent-cyan)] text-white">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2 max-w-max">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
+                <span className="animate-pulse">Extracting job requirements and keywords...</span>
               </div>
             </motion.div>
           )}

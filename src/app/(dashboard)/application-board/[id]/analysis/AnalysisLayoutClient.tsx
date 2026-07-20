@@ -24,6 +24,7 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
   const rejectedEditsLog = useAnalysisStore((s) => s.rejectedEditsLog);
   const undoLastEdit = useAnalysisStore((s) => s.undoLastEdit);
   const parsedResume = useAnalysisStore((s) => s.parsedResume);
+  const jdExtract = useAnalysisStore((s) => s.jdExtract);
 
   // Manage right sidebar collapse/expand locally in container layout
   const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
@@ -51,6 +52,7 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
       {/* 3. Renders presentational right active files sidebar */}
       <AnalysisRightSidebar
         parsedResume={parsedResume}
+        jdExtract={jdExtract}
         jobDescription={jobDescription}
         isOpen={rightSidebarOpen}
         onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
