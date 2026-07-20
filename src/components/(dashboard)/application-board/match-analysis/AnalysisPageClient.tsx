@@ -69,7 +69,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
 
   if (!job) {
     return (
-      <div className="text-center py-16">
+      <div className="flex-1 flex flex-col items-center justify-center h-full w-full bg-[var(--bg-main)]">
         <p className="text-sm text-[var(--text-muted)]">Job not found.</p>
       </div>
     );
@@ -77,7 +77,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
 
   if (analysisData === undefined) {
     return (
-      <div className="flex flex-col items-center justify-center py-32">
+      <div className="flex-1 flex flex-col items-center justify-center h-full w-full bg-[var(--bg-main)]">
         <div className="relative w-12 h-12 mb-4">
           <div className="absolute inset-0 rounded-full border-2 border-t-[var(--accent)] border-r-[var(--accent-cyan)] border-b-transparent border-l-transparent animate-spin" />
           <div className="absolute inset-1.5 rounded-full border-2 border-t-[var(--accent-yellow)] border-r-transparent border-b-[var(--accent)] border-l-transparent animate-spin [animation-direction:reverse] [animation-duration:1s]" />
