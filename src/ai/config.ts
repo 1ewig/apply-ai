@@ -6,7 +6,7 @@ export interface AiConfig {
 }
 
 const DEFAULT_GROQ_MODEL = 'llama-3.3-70b-versatile';
-const DEFAULT_GOOGLE_MODEL = 'gemini-1.5-flash';
+const DEFAULT_GOOGLE_MODEL = 'gemini-3.5-flash-lite';
 
 export function getAiConfig(): AiConfig {
   const provider = (process.env.AI_PROVIDER as AiProvider) || 'groq';

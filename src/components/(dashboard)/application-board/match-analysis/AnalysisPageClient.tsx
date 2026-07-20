@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAnalysisAction } from '@/app/actions/applications';
 
 import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
-import { useRunAnalysis } from '@/hooks/useRunAnalysis';
 import type { ComparisonResult } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
@@ -21,7 +20,6 @@ interface AnalysisQueryResult {
 export default function AnalysisPageClient({ id }: { id: string }) {
   const { jobs, updateJob } = useApplications();
   const { resumes } = useResumes();
-  const { runAnalysis } = useRunAnalysis();
 
   const job = jobs.find((j) => j.id === id);
   const { data: analysisData, isError, error: queryError, refetch } = useQuery({
@@ -39,29 +37,6 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       );
     }
   }, [isError, queryError, refetch]);
-
-  const handleReRunAnalysis = useCallback(async (jobId: string, resumeContent: string, jobDesc: string) => {
-    try {
-      const data = await runAnalysis(jobId, resumeContent, jobDesc);
-      if (data) {
-        updateJob(jobId, {
-          matchScore: data.overallScore,
-          analysisResult: data,
-          jobDescription: jobDesc,
-        });
-      }
-      return data;
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
-        if (wasManuallyCanceled) throw err;
-      }
-      console.error('Error re-running analysis:', err);
-      const retryAction = () => handleReRunAnalysis(jobId, resumeContent, jobDesc);
-      useAnalysisStore.getState().setError(toUserFriendlyError(err, 'Analysis failed. Please try again.'), retryAction, 'Failed to Analyze Alignment');
-      throw err;
-    }
-  }, [runAnalysis, updateJob]);
 
   if (!job) {
     return (
