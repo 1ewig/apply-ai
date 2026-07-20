@@ -6,7 +6,6 @@ import { Menu } from 'lucide-react';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/(dashboard)/Sidebar';
-import AnalysisLoadingOverlay from '@/components/(dashboard)/application-board/AnalysisLoadingOverlay';
 import Toast from '@/components/(dashboard)/Toast';
 
 export default function DashboardLayoutClient({ children }: { children: React.ReactNode }) {
@@ -45,7 +44,6 @@ export default function DashboardLayoutClient({ children }: { children: React.Re
         />
       )}
       <main className="flex-1 flex flex-col h-dvh">
-        <AnalysisLoadingOverlay isLoading={isLoading} phases={phases} />
         <Toast 
           message={displayError || successMessage}
           title={displayError ? displayErrorTitle : successTitle}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, User, Send, Compass, Loader2 } from 'lucide-react';
+import { Sparkles, User, Send, Compass, Loader2, RotateCcw } from 'lucide-react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import Button from '@/components/ui/Button';
@@ -40,6 +40,95 @@ export default function MatchAnalysisDetail({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, isParsing]);
 
+  // Execute parsing step
+  const runParseStep = async () => {
+    if (isParsing) return;
+    setIsParsing(true);
+
+    const rawResume = job.customResumeContent || resumeForReRun?.content || '';
+
+    // Clear previous error messages if we are retrying
+    const currentMessages = useAnalysisStore.getState().chatMessages;
+    const filteredMessages = currentMessages.filter(
+      (m) => !m.id.startsWith('parse-error-') && !m.id.startsWith('parse-progress-') && !m.id.startsWith('parse-success-')
+    );
+
+    useAnalysisStore.setState({
+      chatMessages: [
+        ...filteredMessages,
+        {
+          id: `parse-progress-${Date.now()}`,
+          role: 'assistant',
+          content: `🔄 **Parsing your resume...**`,
+          type: 'agent-text',
+        }
+      ]
+    });
+
+    try {
+      const response = await fetch('/api/compare/parse-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeText: rawResume }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Failed to parse resume content.');
+      }
+
+      const data = await response.json();
+      const newParsedResume = data.parsedResume || [];
+
+      // Update client Zustand store
+      useAnalysisStore.setState({
+        parsedResume: newParsedResume,
+        resumeSections: newParsedResume.reduce((acc: Record<string, string>, sec: any) => {
+          acc[sec.heading.toUpperCase()] = sec.content;
+          return acc;
+        }, {} as Record<string, string>),
+        chatMessages: [
+          ...useAnalysisStore.getState().chatMessages.filter(m => !m.id.startsWith('parse-progress-')),
+          {
+            id: `parse-success-${Date.now()}`,
+            role: 'assistant',
+            content: `🎉 **Step 1 Complete!** I have successfully parsed your resume into structured sections. You can view the output under the **Resume** tab in the right panel.`,
+            type: 'agent-text',
+          }
+        ]
+      });
+
+      // Persist the parsed resume in Convex database under analysisResult
+      await onSaveChanges(job.id, {
+        analysisResult: {
+          overallScore: 0,
+          readinessTier: 'poor',
+          tasks: [],
+          parsedResume: newParsedResume,
+          quickWins: [],
+          blockers: [],
+        }
+      });
+
+    } catch (err: any) {
+      console.error(err);
+      useAnalysisStore.setState({
+        chatMessages: [
+          ...useAnalysisStore.getState().chatMessages.filter(m => !m.id.startsWith('parse-progress-')),
+          {
+            id: `parse-error-${Date.now()}`,
+            role: 'assistant',
+            content: `❌ **Step 1 Failed:** ${err.message || 'I encountered an error while trying to parse your resume content.'}`,
+            type: 'agent-text',
+            meta: { retryable: true },
+          }
+        ]
+      });
+    } finally {
+      setIsParsing(false);
+    }
+  };
+
   useEffect(() => {
     if (!job) return;
 
@@ -66,83 +155,16 @@ export default function MatchAnalysisDetail({
 
     // If the resume has not been parsed yet, trigger the parse step!
     if (parsedResume.length === 0 && rawResume.trim() && !isParsing) {
-      const runParseStep = async () => {
-        setIsParsing(true);
-
-        // Add welcome message and parsing start message
-        useAnalysisStore.setState({
-          chatMessages: [
-            {
-              id: 'init-msg',
-              role: 'assistant',
-              content: `Hello! I've loaded your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\n**Step 1: Parsing your resume text...**`,
-              type: 'agent-text',
-            }
-          ]
-        });
-
-        try {
-          const response = await fetch('/api/compare/parse-resume', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ resumeText: rawResume }),
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to parse resume content.');
+      useAnalysisStore.setState({
+        chatMessages: [
+          {
+            id: 'init-msg',
+            role: 'assistant',
+            content: `Hello! I've loaded your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\n**Step 1: Parsing your resume text...**`,
+            type: 'agent-text',
           }
-
-          const data = await response.ok ? await response.json() : { parsedResume: [] };
-          const newParsedResume = data.parsedResume || [];
-
-          // Update client Zustand store
-          useAnalysisStore.setState({
-            parsedResume: newParsedResume,
-            resumeSections: newParsedResume.reduce((acc: Record<string, string>, sec: any) => {
-              acc[sec.heading.toUpperCase()] = sec.content;
-              return acc;
-            }, {} as Record<string, string>),
-            chatMessages: [
-              ...useAnalysisStore.getState().chatMessages,
-              {
-                id: `parse-success-${Date.now()}`,
-                role: 'assistant',
-                content: `🎉 **Step 1 Complete!** I have successfully parsed your resume into structured sections. You can view the output under the **Resume** tab in the right panel.`,
-                type: 'agent-text',
-              }
-            ]
-          });
-
-          // Persist the parsed resume in Convex database under analysisResult
-          await onSaveChanges(job.id, {
-            analysisResult: {
-              overallScore: 0,
-              readinessTier: 'poor',
-              tasks: [],
-              parsedResume: newParsedResume,
-              quickWins: [],
-              blockers: [],
-            }
-          });
-
-        } catch (err: any) {
-          console.error(err);
-          useAnalysisStore.setState({
-            chatMessages: [
-              ...useAnalysisStore.getState().chatMessages,
-              {
-                id: `parse-error-${Date.now()}`,
-                role: 'assistant',
-                content: `❌ **Step 1 Failed:** I encountered an error while trying to parse your resume content. Please try again.`,
-                type: 'agent-text',
-              }
-            ]
-          });
-        } finally {
-          setIsParsing(false);
-        }
-      };
-
+        ]
+      });
       runParseStep();
     } else if (parsedResume.length > 0) {
       // If already parsed in past, set welcome message accordingly
@@ -254,12 +276,25 @@ export default function MatchAnalysisDetail({
               </div>
 
               {/* Text content box */}
-              <div className={`p-4 rounded-2xl text-xs leading-relaxed text-left max-w-max ${
-                msg.role === 'user' 
-                  ? 'bg-[var(--accent)] text-white rounded-tr-none' 
-                  : 'bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)]'
-              }`}>
-                <p className="whitespace-pre-wrap">{renderMessageContent(msg.content, msg.role === 'user')}</p>
+              <div className="flex flex-col items-start gap-2">
+                <div className={`p-4 rounded-2xl text-xs leading-relaxed text-left max-w-max ${
+                  msg.role === 'user' 
+                    ? 'bg-[var(--accent)] text-white rounded-tr-none' 
+                    : 'bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)]'
+                }`}>
+                  <p className="whitespace-pre-wrap">{renderMessageContent(msg.content, msg.role === 'user')}</p>
+                </div>
+                {msg.meta?.retryable && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={runParseStep}
+                    className="text-xs flex items-center gap-1.5 cursor-pointer mt-1 bg-[var(--bg-card)] border-[var(--border)] text-[var(--accent)] hover:text-white"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Retry Parsing
+                  </Button>
+                )}
               </div>
             </motion.div>
           ))}
