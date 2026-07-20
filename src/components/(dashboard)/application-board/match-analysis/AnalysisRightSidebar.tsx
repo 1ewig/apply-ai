@@ -226,7 +226,7 @@ export default function AnalysisRightSidebar({
               </div>
             )}
           </div>
-        ) : (
+        ) : parsedResume.length === 0 ? (
           <div className="space-y-4 text-left">
             <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase mb-4">Job Description</h3>
             {jobDescription ? (
@@ -241,7 +241,7 @@ export default function AnalysisRightSidebar({
               </div>
             )}
           </div>
-        )}
+        ) : null}
       </div>
     </aside>
   );

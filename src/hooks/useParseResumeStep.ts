@@ -252,6 +252,10 @@ export function useParseResumeStep({
       job.company
     );
 
+    if (job.jdExtract) {
+      useAnalysisStore.setState({ jdExtract: job.jdExtract });
+    }
+
     if (parsedResume.length === 0 && rawResume.trim() && !isParsing) {
       useAnalysisStore.setState({
         chatMessages: [
