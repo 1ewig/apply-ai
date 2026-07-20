@@ -60,47 +60,8 @@ export function useSubmitApplication({ addJob, updateJob, runAnalysis, router, o
           customResumeContent: jobData.customResumeContent || '',
         });
 
-        if (jobData.analyzeImmediately && jobData.jobDescription && jobData.customResumeContent) {
-          startAnalysis(createdJobId);
-          try {
-            const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
-            if (data) {
-              updateJob(createdJobId, {
-                matchScore: data.overallScore,
-                analysisResult: data,
-                jobDescription: jobData.jobDescription,
-              });
-              router.push(`/application-board/${createdJobId}/analysis`);
-            }
-          } catch (analysisErr: any) {
-            if (analysisErr.name === 'AbortError') {
-              const wasManuallyCanceled = !useAnalysisStore.getState().isLoading;
-              if (wasManuallyCanceled) return;
-            }
-            console.error('Error running immediate analysis:', analysisErr);
-            const retryAction = async () => {
-              startAnalysis(createdJobId);
-              try {
-                const data = await runAnalysis(createdJobId, jobData.customResumeContent, jobData.jobDescription);
-                if (data) {
-                  updateJob(createdJobId, {
-                    matchScore: data.overallScore,
-                    analysisResult: data,
-                    jobDescription: jobData.jobDescription,
-                  });
-                  router.push(`/application-board/${createdJobId}/analysis`);
-                }
-              } catch (retryErr: any) {
-                setError(toUserFriendlyError(retryErr, 'Analysis failed again.'), retryAction, 'Failed to Run Alignment Match');
-              } finally {
-                finishAnalysis();
-              }
-            };
-            setError(toUserFriendlyError(analysisErr, 'Job created, but AI analysis failed.'), retryAction, 'Failed to Run Alignment Match');
-            return;
-          } finally {
-            finishAnalysis();
-          }
+        if (jobData.analyzeImmediately) {
+          router.push(`/application-board/${createdJobId}/analysis`);
         } else {
           setSuccess('Application added successfully.', 'Application Saved');
         }

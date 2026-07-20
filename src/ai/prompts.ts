@@ -50,3 +50,19 @@ Job Description:
 ${jobDescription}
 """`;
 }
+
+export const RESUME_PARSER_SYSTEM_PROMPT = `You are an expert resume parsing assistant.
+Your goal is to parse the candidate's raw Resume/CV text into structured sections.
+
+Rules:
+- Identify sections like SUMMARY, EXPERIENCE, SKILLS, EDUCATION, PROJECTS, CERTIFICATIONS, or HEADER (for name/contact info).
+- Normalize all section headings to UPPERCASE strings: 'HEADER', 'SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION', 'PROJECTS', 'CERTIFICATIONS'. If there is a section that doesn't fit, use a fitting uppercase heading.
+- Do not truncate, summarize, omit, or modify the original content. Ensure 100% of the candidate's original text (every bullet, job, detail, etc.) is preserved inside the output.
+- Under 'content' for each section, preserve line breaks (\\n) and markdown/list formatting exactly. Do not flatten lists.`;
+
+export function buildParseResumePrompt(resumeText: string): string {
+  return `Please parse the following Resume/CV text:
+"""
+${resumeText}
+"""`;
+}

@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, User, Send, Compass, Loader2 } from 'lucide-react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import Button from '@/components/ui/Button';
 
 interface MatchAnalysisDetailProps {
   job: JobApplication;
@@ -19,86 +22,284 @@ interface MatchAnalysisDetailProps {
 export default function MatchAnalysisDetail({
   job,
   resumeForReRun,
-  onBackClick,
+  onSaveChanges,
 }: MatchAnalysisDetailProps) {
-  const initializeSession = useAnalysisStore((state) => state.initializeSession);
-  const proposeEdit = useAnalysisStore((state) => state.proposeEdit);
-  const activeSessionId = useAnalysisStore((state) => state.activeSessionId);
+  const {
+    activeSessionId,
+    chatMessages,
+    initializeSession,
+    addChatMessage,
+  } = useAnalysisStore();
+
+  const [inputVal, setInputVal] = useState('');
+  const [isParsing, setIsParsing] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll chat to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages, isParsing]);
 
   useEffect(() => {
-    if (job && job.id !== activeSessionId) {
-      const rawResume = job.customResumeContent || resumeForReRun?.content || '';
+    if (!job) return;
 
-      // Check if job has direct blueprint results, otherwise load fallback mockblueprint for testing
-      const blueprint = (job.analysisResult as any)?.tasks
-        ? (job.analysisResult as any)
-        : {
-            overallScore: job.matchScore || 65,
-            readinessTier: 'fair' as const,
-            tasks: [
-              {
-                id: 'task-1',
-                title: 'Align experience bullets with must-have keywords',
-                section: 'EXPERIENCE',
-                severity: 'critical' as const,
-                estimatedClicks: 3,
-                needsUserInput: false,
-                status: 'active' as const,
-              },
-              {
-                id: 'task-2',
-                title: 'Optimize professional summary for seniority fit',
-                section: 'SUMMARY',
-                severity: 'warning' as const,
-                estimatedClicks: 2,
-                needsUserInput: false,
-                status: 'pending' as const,
-              },
-              {
-                id: 'task-3',
-                title: 'Add missing Docker and Kubernetes technical skills',
-                section: 'SKILLS',
-                severity: 'critical' as const,
-                estimatedClicks: 1,
-                needsUserInput: true,
-                status: 'needs_input' as const,
-              },
-            ],
-            parsedResume: [
-              {
-                heading: 'SUMMARY',
-                content: 'Results-driven software developer with expertise in building responsive applications.',
-              },
-              {
-                heading: 'EXPERIENCE',
-                content: 'Software Engineer @ ApplyAI Inc. (2024-Present)\n- Developed software features.\n- Collaborated with product teams to design web application interfaces.',
-              },
-              {
-                heading: 'SKILLS',
-                content: 'Languages: JavaScript, HTML, CSS, SQL.\nFrameworks: React, Next.js, Node.js.',
-              },
-            ],
-            quickWins: ['Add React & TypeScript to skills section'],
-            blockers: ['No clear years of experience mentioned in resume for Kubernetes'],
-          };
+    const rawResume = job.customResumeContent || resumeForReRun?.content || '';
 
-      initializeSession(job.id, blueprint, job.role, job.company);
+    // Initialize state from existing job analysis or set up fresh empty state
+    const existingAnalysis = job.analysisResult as any;
+    const parsedResume = existingAnalysis?.parsedResume || [];
 
-      // Trigger initial proposed edits simulation for Task 1
-      setTimeout(() => {
-        proposeEdit({
-          id: 'edit-1',
-          sessionId: job.id,
-          sectionKey: 'EXPERIENCE',
-          beforeContent: 'Developed software features.',
-          afterContent: 'Engineered high-performance React features using TypeScript, boosting responsive page load speed by 25%.',
-          reasoning: 'Quantifies impact and introduces missing must-have keywords (React, TypeScript).',
-          scoreImpact: 8,
-          status: 'proposed',
+    // Initialize Zustand tailoring session
+    initializeSession(
+      job.id,
+      {
+        overallScore: existingAnalysis?.overallScore || 0,
+        readinessTier: existingAnalysis?.readinessTier || 'poor',
+        tasks: existingAnalysis?.tasks || [],
+        parsedResume,
+        quickWins: existingAnalysis?.quickWins || [],
+        blockers: existingAnalysis?.blockers || [],
+      },
+      job.role,
+      job.company
+    );
+
+    // If the resume has not been parsed yet, trigger the parse step!
+    if (parsedResume.length === 0 && rawResume.trim() && !isParsing) {
+      const runParseStep = async () => {
+        setIsParsing(true);
+
+        // Add welcome message and parsing start message
+        useAnalysisStore.setState({
+          chatMessages: [
+            {
+              id: 'init-msg',
+              role: 'assistant',
+              content: `Hello! I've loaded your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\n**Step 1: Parsing your resume text...**`,
+              type: 'agent-text',
+            }
+          ]
         });
-      }, 1500);
-    }
-  }, [job?.id, activeSessionId, resumeForReRun?.content, initializeSession, proposeEdit, job]);
 
-  return null;
+        try {
+          const response = await fetch('/api/compare/parse-resume', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ resumeText: rawResume }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to parse resume content.');
+          }
+
+          const data = await response.ok ? await response.json() : { parsedResume: [] };
+          const newParsedResume = data.parsedResume || [];
+
+          // Update client Zustand store
+          useAnalysisStore.setState({
+            parsedResume: newParsedResume,
+            resumeSections: newParsedResume.reduce((acc: Record<string, string>, sec: any) => {
+              acc[sec.heading.toUpperCase()] = sec.content;
+              return acc;
+            }, {} as Record<string, string>),
+            chatMessages: [
+              ...useAnalysisStore.getState().chatMessages,
+              {
+                id: `parse-success-${Date.now()}`,
+                role: 'assistant',
+                content: `🎉 **Step 1 Complete!** I have successfully parsed your resume into structured sections. You can view the output under the **Resume** tab in the right panel.`,
+                type: 'agent-text',
+              }
+            ]
+          });
+
+          // Persist the parsed resume in Convex database under analysisResult
+          await onSaveChanges(job.id, {
+            analysisResult: {
+              overallScore: 0,
+              readinessTier: 'poor',
+              tasks: [],
+              parsedResume: newParsedResume,
+              quickWins: [],
+              blockers: [],
+            }
+          });
+
+        } catch (err: any) {
+          console.error(err);
+          useAnalysisStore.setState({
+            chatMessages: [
+              ...useAnalysisStore.getState().chatMessages,
+              {
+                id: `parse-error-${Date.now()}`,
+                role: 'assistant',
+                content: `❌ **Step 1 Failed:** I encountered an error while trying to parse your resume content. Please try again.`,
+                type: 'agent-text',
+              }
+            ]
+          });
+        } finally {
+          setIsParsing(false);
+        }
+      };
+
+      runParseStep();
+    } else if (parsedResume.length > 0) {
+      // If already parsed in past, set welcome message accordingly
+      useAnalysisStore.setState({
+        chatMessages: [
+          {
+            id: 'init-msg-parsed',
+            role: 'assistant',
+            content: `Welcome back! I've loaded your structured resume for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\nStep 1 (Parse Resume) is already complete. You can view the parsed sections in the right panel reference.`,
+            type: 'agent-text',
+          }
+        ]
+      });
+    }
+  }, [job?.id]);
+
+  // Handle user inputs / commands
+  const handleSendCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputVal.trim()) return;
+
+    const val = inputVal.trim();
+    setInputVal('');
+
+    // Add user message to timeline
+    addChatMessage({
+      role: 'user',
+      content: val,
+      type: 'user',
+    });
+
+    // Simulate basic reply
+    setTimeout(() => {
+      addChatMessage({
+        role: 'assistant',
+        content: `I received your message: "${val}". We are currently focusing on Step 1 (Parse Resume). Let me know how you would like to proceed.`,
+        type: 'agent-text',
+      });
+    }, 1000);
+  };
+
+  const handleChipClick = (chipText: string) => {
+    addChatMessage({
+      role: 'user',
+      content: chipText,
+      type: 'user',
+    });
+    setTimeout(() => {
+      addChatMessage({
+        role: 'assistant',
+        content: `Checking your resume structure regarding "${chipText}". The parsed sections are visible on the right side.`,
+        type: 'agent-text',
+      });
+    }, 800);
+  };
+
+  return (
+    <section className="flex-1 flex flex-col bg-[var(--bg-main)] min-w-0 h-full overflow-hidden">
+      {/* Header bar */}
+      <div className="px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-surface)] flex justify-between items-center shrink-0">
+        <div className="text-left">
+          <h3 className="text-sm font-semibold flex items-center gap-2 text-[var(--text-heading)]">
+            <Sparkles className="w-4 h-4 text-[var(--accent)]" /> 
+            Agent Tailoring Session
+          </h3>
+          <p className="text-xs text-[var(--text-muted)]">
+            Step 1: Parsing resume sections
+          </p>
+        </div>
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+        <AnimatePresence initial={false}>
+          {chatMessages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse text-right' : 'text-left'}`}
+            >
+              {/* Avatar */}
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 ${
+                msg.role === 'assistant' 
+                  ? 'bg-gradient-to-tr from-[var(--accent)] to-[var(--accent-cyan)] text-white' 
+                  : msg.role === 'system'
+                  ? 'bg-gray-800 text-[var(--text-muted)]'
+                  : 'bg-[var(--accent-yellow)] text-gray-950'
+              }`}>
+                {msg.role === 'assistant' ? <Sparkles className="w-4 h-4" /> : msg.role === 'system' ? <Compass className="w-4 h-4" /> : <User className="w-4 h-4" />}
+              </div>
+
+              {/* Text content box */}
+              <div className="flex-1">
+                <div className={`p-4 rounded-2xl text-xs leading-relaxed ${
+                  msg.role === 'user' 
+                    ? 'bg-[var(--accent)] text-white rounded-tr-none' 
+                    : 'bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)]'
+                }`}>
+                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+          
+          {isParsing && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-3 max-w-[85%] text-left"
+            >
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 bg-gradient-to-tr from-[var(--accent)] to-[var(--accent-cyan)] text-white">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div className="flex-1">
+                <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
+                  <span className="animate-pulse">Parsing your resume...</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div ref={chatEndRef} />
+      </div>
+
+      {/* Input bar */}
+      <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-surface)] space-y-3 shrink-0">
+        <div className="flex gap-2 overflow-x-auto pb-1 text-xs">
+          <button 
+            className="px-3 py-1 rounded-full bg-[var(--border)] hover:bg-gray-600 text-[var(--text-body)] shrink-0 transition cursor-pointer select-none"
+            onClick={() => handleChipClick('Summarize my sections')}
+          >
+            @sections summary
+          </button>
+          <button 
+            className="px-3 py-1 rounded-full bg-[var(--border)] hover:bg-gray-600 text-[var(--text-body)] shrink-0 transition cursor-pointer select-none"
+            onClick={() => handleChipClick('Show parsing details')}
+          >
+            /show details
+          </button>
+        </div>
+
+        <form onSubmit={handleSendCommand} className="flex gap-2">
+          <input 
+            type="text"
+            placeholder="Ask agent, type commands or steer edits..."
+            className="flex-1 bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-[var(--accent)] transition text-[var(--text-body)] placeholder:text-[var(--text-muted)]"
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+          />
+          <Button type="submit" size="sm" className="bg-[var(--accent)] hover:bg-[var(--accent-cyan)] font-semibold rounded-xl select-none">
+            <Send className="w-3.5 h-3.5" />
+          </Button>
+        </form>
+      </div>
+    </section>
+  );
 }

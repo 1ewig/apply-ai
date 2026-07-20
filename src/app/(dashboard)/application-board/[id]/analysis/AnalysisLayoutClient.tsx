@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { useApplications } from '@/hooks/useApplications';
 import AnalysisSidebar, { SidebarTask } from '@/components/(dashboard)/application-board/match-analysis/AnalysisSidebar';
 import AnalysisRightSidebar from '@/components/(dashboard)/application-board/match-analysis/AnalysisRightSidebar';
 
@@ -11,8 +12,11 @@ interface AnalysisLayoutClientProps {
   children: React.ReactNode;
 }
 
-export default function AnalysisLayoutClient({ children }: AnalysisLayoutClientProps) {
+export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutClientProps) {
   const router = useRouter();
+  const { jobs } = useApplications();
+  const job = jobs.find((j) => j.id === id);
+  const jobDescription = job?.jobDescription;
 
   // Use individual selectors to avoid unnecessary re-renders per coding standards
   const taskPlan = useAnalysisStore((s) => s.taskPlan) as SidebarTask[];
@@ -55,6 +59,7 @@ export default function AnalysisLayoutClient({ children }: AnalysisLayoutClientP
       {/* 3. Renders presentational right active files sidebar */}
       <AnalysisRightSidebar
         parsedResume={parsedResume}
+        jobDescription={jobDescription}
         isOpen={rightSidebarOpen}
         onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
       />
