@@ -1,13 +1,44 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   FileText, 
   ChevronRight, 
   ChevronLeft,
-  Briefcase
+  Briefcase,
+  Copy,
+  Check,
+  Sparkles,
+  Award
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { useAnalysisStore } from '@/stores/useAnalysisStore';
+
+// Copy button inline helper component
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="p-1.5 rounded-lg bg-[var(--bg-main)] hover:bg-[var(--border)] text-[var(--text-muted)] hover:text-[var(--accent-cyan)] border border-[var(--border)] transition-all cursor-pointer shrink-0 select-none"
+      title="Copy content"
+    >
+      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+    </button>
+  );
+}
 
 interface ResumeSection {
   heading: string;
@@ -38,52 +69,40 @@ export default function AnalysisRightSidebar({
   isOpen,
   onToggle,
 }: AnalysisRightSidebarProps) {
-  const [activeTab, setActiveTab] = useState<'resume' | 'jd'>('resume');
+  const activeTab = useAnalysisStore((s) => s.rightSidebarTab);
+  const setActiveTab = useAnalysisStore((s) => s.setRightSidebarTab);
 
   if (!isOpen) {
-    return (
-      <div className="w-12 border-l border-[var(--border)] bg-[var(--bg-card)] flex flex-col items-center py-6 gap-6 shrink-0 h-full">
-        {/* Toggle Expand Button */}
-        <Button variant="ghost" size="sm" onClick={onToggle} className="rounded-full">
-          <ChevronLeft className="w-4 h-4 text-[var(--text-body)]" />
-        </Button>
-
-        {/* Vertically oriented Resume icon */}
-        <div className="flex-1 flex flex-col gap-6 justify-center">
-          <button 
-            onClick={onToggle}
-            className="p-2 rounded-lg text-[var(--accent)] bg-[var(--accent)]/10 hover:bg-[var(--border)] transition duration-200"
-            title="Expand Reference Panel"
-          >
-            <FileText className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
     <aside className="w-[28%] border-l border-[var(--border)] flex flex-col bg-[var(--bg-card)] shrink-0 h-full overflow-hidden animate-fade-left">
-      {/* Header controls */}
-      <div className="p-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--bg-dark-gray)]/50">
-        <div className="flex gap-2">
+      {/* Header Controls */}
+      <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--bg-surface)]/40 backdrop-blur-md select-none shrink-0">
+        <div className="relative flex p-1 bg-[var(--bg-main)] border border-[var(--border)] rounded-xl gap-1">
+          {/* Animated Background Pill */}
+          <div className="absolute inset-y-1 transition-all duration-300 ease-out bg-[var(--bg-card)] border border-[var(--border)] rounded-lg shadow-sm"
+            style={{
+              left: activeTab === 'resume' ? '4px' : 'calc(50% + 2px)',
+              width: 'calc(50% - 6px)'
+            }}
+          />
+
           <button
             onClick={() => setActiveTab('resume')}
-            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'resume'
-                ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-heading)] border border-transparent'
+            className={`relative z-10 text-[10px] px-3.5 py-1.5 rounded-lg font-bold transition-colors duration-200 cursor-pointer flex items-center gap-1.5 uppercase tracking-wider ${
+              activeTab === 'resume' ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text-heading)]'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
             Resume
           </button>
+          
           <button
             onClick={() => setActiveTab('jd')}
-            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'jd'
-                ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-heading)] border border-transparent'
+            className={`relative z-10 text-[10px] px-3.5 py-1.5 rounded-lg font-bold transition-colors duration-200 cursor-pointer flex items-center gap-1.5 uppercase tracking-wider ${
+              activeTab === 'jd' ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text-heading)]'
             }`}
           >
             <Briefcase className="w-3.5 h-3.5" />
@@ -91,59 +110,71 @@ export default function AnalysisRightSidebar({
           </button>
         </div>
 
-        {/* Collapse button */}
-        <Button variant="ghost" size="sm" onClick={onToggle} className="rounded-full">
+        {/* Collapse Button */}
+        <Button variant="ghost" size="sm" onClick={onToggle} className="rounded-full hover:bg-[var(--border)] transition">
           <ChevronRight className="w-4 h-4 text-[var(--text-body)]" />
         </Button>
       </div>
 
-      {/* Content area */}
-      <div className="flex-1 overflow-y-auto p-5 custom-scrollbar">
+      {/* Content Area */}
+      <div className="flex-1 overflow-y-auto p-5 custom-scrollbar bg-gradient-to-b from-[var(--bg-card)]/50 to-[var(--bg-main)]/30">
         {activeTab === 'resume' ? (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {parsedResume && parsedResume.length > 0 ? (
               parsedResume.map((section, idx) => (
-                <div key={idx} className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                  <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">
-                    {section.heading}
-                  </h4>
+                <div 
+                  key={idx} 
+                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 text-left hover:border-[var(--accent)]/30 hover:scale-[1.01] transition-all duration-300"
+                >
+                  <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
+                    <h4 className="text-[10px] font-extrabold text-[var(--text-heading)] tracking-wider uppercase font-mono">
+                      {section.heading}
+                    </h4>
+                    <CopyButton text={section.content} />
+                  </div>
                   <pre className="text-xs text-[var(--text-body)] font-sans whitespace-pre-wrap leading-relaxed">
                     {section.content}
                   </pre>
                 </div>
               ))
             ) : (
-              <div className="text-center py-16 text-xs text-[var(--text-muted)]">
+              <div className="text-center py-16 text-xs text-[var(--text-muted)] select-none">
+                <FileText className="w-8 h-8 mx-auto mb-2 text-[var(--border)] animate-pulse" />
                 No structured resume data available. Parse resume step is active...
               </div>
             )}
           </div>
         ) : jdExtract ? (
-          <div className="space-y-6 text-left">
+          <div className="space-y-5 text-left">
             {/* Role & Seniority */}
-            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-              <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Role</h4>
-              <p className="text-sm font-bold text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
-              <span className="inline-block text-[10px] bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded border border-[var(--accent)]/20 capitalize">
-                {jdExtract.seniorityLevel}
-              </span>
+            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+              <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Target Role</h4>
+              <div>
+                <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <Award className="w-3.5 h-3.5 text-[var(--accent-cyan)]" />
+                  <span className="inline-block text-[9px] bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] px-2.5 py-0.5 rounded border border-[var(--accent-cyan)]/20 uppercase font-extrabold tracking-wider">
+                    {jdExtract.seniorityLevel}
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Company Context */}
             {jdExtract.companyContext && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Company</h4>
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Company Context</h4>
                 <p className="text-xs text-[var(--text-body)] leading-relaxed">{jdExtract.companyContext}</p>
               </div>
             )}
 
             {/* Must-have Keywords */}
-            {jdExtract.mustHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Must-have Keywords</h4>
-                <div className="flex flex-wrap gap-1.5 pt-1">
+            {jdExtract.mustHaveKeywords && jdExtract.mustHaveKeywords.length > 0 && (
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Must-Have Core Skills</h4>
+                <div className="flex flex-wrap gap-1.5 pt-1.5">
                   {jdExtract.mustHaveKeywords.map((kw) => (
-                    <span key={kw} className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/25">
+                    <span key={kw} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded border border-emerald-500/25 tracking-wide uppercase font-mono shadow-sm">
                       {kw}
                     </span>
                   ))}
@@ -152,12 +183,12 @@ export default function AnalysisRightSidebar({
             )}
 
             {/* Nice-to-have Keywords */}
-            {jdExtract.niceToHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Nice-to-have</h4>
-                <div className="flex flex-wrap gap-1.5 pt-1">
+            {jdExtract.niceToHaveKeywords && jdExtract.niceToHaveKeywords.length > 0 && (
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Nice-To-Have Skills</h4>
+                <div className="flex flex-wrap gap-1.5 pt-1.5">
                   {jdExtract.niceToHaveKeywords.map((kw) => (
-                    <span key={kw} className="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded border border-yellow-500/25">
+                    <span key={kw} className="text-[9px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded border border-amber-500/25 tracking-wide uppercase font-mono shadow-sm">
                       {kw}
                     </span>
                   ))}
@@ -166,52 +197,53 @@ export default function AnalysisRightSidebar({
             )}
 
             {/* Core Responsibilities */}
-            {jdExtract.coreResponsibilities.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Core Responsibilities</h4>
-                <div className="space-y-1.5 pt-1">
+            {jdExtract.coreResponsibilities && jdExtract.coreResponsibilities.length > 0 && (
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Core Responsibilities</h4>
+                <div className="space-y-2 pt-1">
                   {jdExtract.coreResponsibilities.map((r, i) => (
-                    <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
-                      <span className="text-[var(--accent)] shrink-0">•</span>
+                    <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
+                      <span className="text-[var(--accent-cyan)] shrink-0 font-bold">•</span>
                       <span>{r}</span>
-                    </p>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
 
             {/* Required Qualifications */}
-            {jdExtract.requiredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Required Qualifications</h4>
-                <div className="space-y-1.5 pt-1">
+            {jdExtract.requiredQualifications && jdExtract.requiredQualifications.length > 0 && (
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Required Qualifications</h4>
+                <div className="space-y-2 pt-1">
                   {jdExtract.requiredQualifications.map((q, i) => (
-                    <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
-                      <span className="text-red-400 shrink-0">•</span>
+                    <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
+                      <span className="text-rose-400 shrink-0 font-bold">•</span>
                       <span>{q}</span>
-                    </p>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
 
             {/* Preferred Qualifications */}
-            {jdExtract.preferredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
-                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Preferred Qualifications</h4>
-                <div className="space-y-1.5 pt-1">
+            {jdExtract.preferredQualifications && jdExtract.preferredQualifications.length > 0 && (
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:scale-[1.01] transition-all duration-300">
+                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Preferred Qualifications</h4>
+                <div className="space-y-2 pt-1">
                   {jdExtract.preferredQualifications.map((q, i) => (
-                    <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
-                      <span className="text-[var(--accent-yellow)] shrink-0">•</span>
+                    <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
+                      <span className="text-[var(--accent-yellow)] shrink-0 font-bold">•</span>
                       <span>{q}</span>
-                    </p>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="text-center py-16 text-xs text-[var(--text-muted)]">
+          <div className="text-center py-16 text-xs text-[var(--text-muted)] select-none">
+            <Briefcase className="w-8 h-8 mx-auto mb-2 text-[var(--border)] animate-pulse" />
             No job description extract available. Extract step is active...
           </div>
         )}

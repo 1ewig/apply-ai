@@ -57,6 +57,8 @@ interface AnalysisStore {
   quickWins: string[];
   blockers: string[];
   chatMessages: ChatMessage[];
+  rightSidebarOpen: boolean;
+  rightSidebarTab: 'resume' | 'jd';
 
   // Existing methods
   startAnalysis: (jobId?: string | null) => void;
@@ -90,6 +92,8 @@ interface AnalysisStore {
   undoLastEdit: () => void;
   addChatMessage: (msg: Omit<ChatMessage, 'id'>) => void;
   setChatMessages: (messages: ChatMessage[]) => void;
+  setRightSidebarOpen: (open: boolean) => void;
+  setRightSidebarTab: (tab: 'resume' | 'jd') => void;
 }
 
 export const useAnalysisStore = create<AnalysisStore>((set) => ({
@@ -118,6 +122,8 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
   quickWins: [],
   blockers: [],
   chatMessages: [],
+  rightSidebarOpen: true,
+  rightSidebarTab: 'resume',
 
   // Existing actions
   startAnalysis: (jobId) =>
@@ -406,4 +412,6 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
     })),
 
   setChatMessages: (messages) => set({ chatMessages: messages }),
+  setRightSidebarOpen: (open) => set({ rightSidebarOpen: open }),
+  setRightSidebarTab: (tab) => set({ rightSidebarTab: tab }),
 }));

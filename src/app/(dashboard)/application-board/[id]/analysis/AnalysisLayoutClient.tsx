@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import { useApplications } from '@/hooks/useApplications';
@@ -23,9 +22,12 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
   const undoLastEdit = useAnalysisStore((s) => s.undoLastEdit);
   const parsedResume = useAnalysisStore((s) => s.parsedResume);
   const jdExtract = useAnalysisStore((s) => s.jdExtract);
-
-  // Manage right sidebar collapse/expand locally in container layout
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
+  const readinessTier = useAnalysisStore((s) => s.readinessTier);
+  const taskPlan = useAnalysisStore((s) => s.taskPlan);
+  const quickWins = useAnalysisStore((s) => s.quickWins);
+  const blockers = useAnalysisStore((s) => s.blockers);
+  const rightSidebarOpen = useAnalysisStore((s) => s.rightSidebarOpen);
+  const setRightSidebarOpen = useAnalysisStore((s) => s.setRightSidebarOpen);
 
   const handleBackClick = () => {
     router.push('/application-board');
@@ -40,6 +42,10 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
         rejectedEditsCount={rejectedEditsLog.length}
         onBackClick={handleBackClick}
         onUndoLastEdit={undoLastEdit}
+        readinessTier={readinessTier}
+        taskPlan={taskPlan}
+        quickWins={quickWins}
+        blockers={blockers}
       />
 
       {/* 2. Main content page slot */}

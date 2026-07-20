@@ -1,11 +1,22 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft,
-  Undo
+  Undo,
+  CheckCircle2,
+  Circle,
+  HelpCircle,
+  AlertTriangle,
+  AlertOctagon,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Info
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import type { AgentTask } from '@/agent/types';
 
 interface AnalysisSidebarProps {
   overallScore?: number;
@@ -13,7 +24,59 @@ interface AnalysisSidebarProps {
   rejectedEditsCount?: number;
   onBackClick?: () => void;
   onUndoLastEdit?: () => void;
+  readinessTier?: 'poor' | 'fair' | 'good' | 'strong' | null;
+  taskPlan?: AgentTask[] | null;
+  quickWins?: string[];
+  blockers?: string[];
 }
+
+const getTierStyles = (tier: string) => {
+  switch (tier.toLowerCase()) {
+    case 'strong':
+      return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-emerald-500/5';
+    case 'good':
+      return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25 shadow-cyan-500/5';
+    case 'fair':
+      return 'bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-amber-500/5';
+    case 'poor':
+    default:
+      return 'bg-rose-500/10 text-rose-400 border-rose-500/25 shadow-rose-500/5';
+  }
+};
+
+const getSeverityIcon = (severity: string) => {
+  switch (severity) {
+    case 'critical':
+      return <AlertOctagon className="w-3.5 h-3.5 text-rose-400 shrink-0" />;
+    case 'warning':
+      return <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />;
+    case 'info':
+    default:
+      return <Info className="w-3.5 h-3.5 text-cyan-400 shrink-0" />;
+  }
+};
+
+const getStatusIcon = (status: string) => {
+  switch (status) {
+    case 'completed':
+      return <CheckCircle2 className="w-4 h-4 text-emerald-400 fill-emerald-500/10 shrink-0" />;
+    case 'active':
+    case 'working':
+      return (
+        <div className="relative w-4 h-4 flex items-center justify-center shrink-0">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-40 animate-ping" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+        </div>
+      );
+    case 'needs_input':
+      return <HelpCircle className="w-4 h-4 text-amber-400 shrink-0" />;
+    case 'skipped':
+      return <Circle className="w-4 h-4 text-[var(--text-muted)] opacity-50 shrink-0" />;
+    case 'pending':
+    default:
+      return <Circle className="w-4 h-4 text-[var(--text-muted)] shrink-0" />;
+  }
+};
 
 export default function AnalysisSidebar({
   overallScore = 0,
@@ -21,49 +84,223 @@ export default function AnalysisSidebar({
   rejectedEditsCount = 0,
   onBackClick,
   onUndoLastEdit,
+  readinessTier,
+  taskPlan = [],
+  quickWins = [],
+  blockers = [],
 }: AnalysisSidebarProps) {
+  const [blockersOpen, setBlockersOpen] = useState(false);
+  const [winsOpen, setWinsOpen] = useState(false);
+
   return (
-    <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-dark-gray)]/30 shrink-0">
+    <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)]/50 backdrop-blur-md shrink-0 h-full overflow-hidden select-none">
       {/* Header */}
-      <div className="p-5 border-b border-[var(--border)] flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={onBackClick} className="rounded-full">
+      <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center gap-3 bg-[var(--bg-card)]/30 shrink-0">
+        <Button variant="ghost" size="sm" onClick={onBackClick} className="rounded-full hover:bg-[var(--border)] transition">
           <ArrowLeft className="w-4 h-4 text-[var(--text-body)]" />
         </Button>
         <div className="text-left">
-          <h2 className="font-bold text-sm tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)]">APPLYAI TAILORING</h2>
-          <p className="text-xs text-[var(--text-muted)]">Agentic Session</p>
+          <h2 className="font-extrabold text-xs tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] uppercase">
+            ApplyAI Tailoring
+          </h2>
+          <p className="text-[10px] text-[var(--text-muted)] font-mono">Cockpit Session</p>
         </div>
       </div>
 
-      {/* Match Score Display */}
-      <div className="p-5 border-b border-[var(--border)] bg-[var(--bg-card)]">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-xs font-semibold text-[var(--text-muted)]">Overall Match</span>
-          <span className="text-xs font-bold text-[var(--accent-yellow)]">{overallScore}%</span>
+      {/* Match Score Circular Display */}
+      <div className="p-5 border-b border-[var(--border)] bg-[var(--bg-surface)]/20 flex flex-col items-center gap-4 relative overflow-hidden shrink-0">
+        {/* Decorative subtle background glow */}
+        <div className="absolute w-24 h-24 rounded-full bg-[var(--accent)]/10 filter blur-xl -top-6 -right-6 pointer-events-none" />
+
+        <div className="relative w-28 h-28 flex items-center justify-center">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+            {/* Background track */}
+            <circle
+              cx="50"
+              cy="50"
+              r="41"
+              stroke="var(--border)"
+              strokeWidth="5"
+              fill="transparent"
+            />
+            {/* Progress track */}
+            <motion.circle
+              cx="50"
+              cy="50"
+              r="41"
+              stroke="url(#sidebarScoreGradient)"
+              strokeWidth="7"
+              strokeLinecap="round"
+              fill="transparent"
+              strokeDasharray="257.61"
+              initial={{ strokeDashoffset: 257.61 }}
+              animate={{ strokeDashoffset: 257.61 - (257.61 * overallScore) / 100 }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
+            />
+            <defs>
+              <linearGradient id="sidebarScoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="var(--accent-cyan)" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div className="absolute flex flex-col items-center justify-center">
+            <span className="text-2xl font-display font-black text-[var(--text-heading)] tracking-tight">
+              {overallScore}%
+            </span>
+            <span className="text-[9px] uppercase tracking-wider text-[var(--text-muted)] font-extrabold font-sans">
+              Overall Match
+            </span>
+          </div>
         </div>
-        <div className="h-2 w-full bg-[var(--border)] rounded-full overflow-hidden">
-          <motion.div 
-            className="h-full bg-gradient-to-r from-[var(--accent)] via-[var(--accent-cyan)] to-[var(--accent-yellow)]"
-            initial={{ width: 0 }}
-            animate={{ width: `${overallScore}%` }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          />
-        </div>
-        <div className="mt-3 flex justify-between text-[10px] text-[var(--text-muted)]">
-          <span>Edits: {editHistoryCount} applied</span>
-          <span>Rejected: {rejectedEditsCount}</span>
+
+        {/* Readiness Tier Badge */}
+        {readinessTier && (
+          <div className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border shadow-sm transition ${getTierStyles(readinessTier)}`}>
+            {readinessTier} Match
+          </div>
+        )}
+
+        {/* Edit History KPIs */}
+        <div className="w-full mt-2 grid grid-cols-2 gap-2 text-[10px] text-[var(--text-muted)]">
+          <div className="bg-[var(--bg-main)]/50 px-2 py-2.5 rounded-xl border border-[var(--border)] flex flex-col items-center">
+            <span className="font-extrabold text-sm text-[var(--text-heading)]">{editHistoryCount}</span>
+            <span className="text-[9px] tracking-wide mt-0.5">Edits Applied</span>
+          </div>
+          <div className="bg-[var(--bg-main)]/50 px-2 py-2.5 rounded-xl border border-[var(--border)] flex flex-col items-center">
+            <span className="font-extrabold text-sm text-[var(--text-heading)]">{rejectedEditsCount}</span>
+            <span className="text-[9px] tracking-wide mt-0.5">Rejected</span>
+          </div>
         </div>
       </div>
 
-      {/* Spacer to push footer to bottom */}
-      <div className="flex-1" />
+      {/* Main Checklist / Details View */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+        {/* Checklist Section */}
+        {taskPlan && taskPlan.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-widest flex items-center gap-1.5 text-left">
+              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" /> 
+              Tailoring Roadmap
+            </h3>
+            <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
+              {taskPlan.map((task) => (
+                <div 
+                  key={task.id} 
+                  className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-surface)]/20 hover:scale-[1.01] transition-all duration-200 flex items-start justify-between gap-3"
+                >
+                  <div className="flex gap-2.5 items-start min-w-0">
+                    <span className="mt-0.5 shrink-0">{getSeverityIcon(task.severity)}</span>
+                    <div className="min-w-0 text-left">
+                      <p className="text-[11px] font-bold text-[var(--text-heading)] leading-tight line-clamp-2" title={task.title}>
+                        {task.title}
+                      </p>
+                      <span className="text-[8px] uppercase tracking-wider text-[var(--text-muted)] mt-1 inline-block font-mono bg-[var(--bg-main)] px-1.5 py-0.5 rounded border border-[var(--border)]">
+                        {task.section}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="shrink-0 mt-0.5">
+                    {getStatusIcon(task.status)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-      {/* Footer controls */}
-      <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-card)]">
+        {/* Collapsible Blockers and Quick Wins */}
+        <div className="space-y-2">
+          {/* Blockers Accordion */}
+          <div className="border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--bg-surface)]/10 backdrop-blur-sm">
+            <button
+              onClick={() => setBlockersOpen(!blockersOpen)}
+              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--bg-surface)]/20 transition cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${blockers.length > 0 ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}`} />
+                <span className="text-xs font-bold text-[var(--text-heading)]">Blockers ({blockers.length})</span>
+              </div>
+              {blockersOpen ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
+            </button>
+            
+            <AnimatePresence>
+              {blockersOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
+                >
+                  <div className="p-3.5 space-y-2 text-left">
+                    {blockers.length > 0 ? (
+                      blockers.map((b, i) => (
+                        <div key={i} className="text-[11px] text-[var(--text-body)] flex gap-2 leading-relaxed">
+                          <span className="text-rose-400 font-extrabold shrink-0">•</span>
+                          <span>{b}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-[11px] text-[var(--text-muted)] italic text-center py-2">
+                        No blockers found! Ready to submit.
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Quick Wins Accordion */}
+          <div className="border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--bg-surface)]/10 backdrop-blur-sm">
+            <button
+              onClick={() => setWinsOpen(!winsOpen)}
+              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--bg-surface)]/20 transition cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${quickWins.length > 0 ? 'bg-amber-500 animate-pulse' : 'bg-slate-500'}`} />
+                <span className="text-xs font-bold text-[var(--text-heading)]">Quick Wins ({quickWins.length})</span>
+              </div>
+              {winsOpen ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
+            </button>
+            
+            <AnimatePresence>
+              {winsOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
+                >
+                  <div className="p-3.5 space-y-2 text-left">
+                    {quickWins.length > 0 ? (
+                      quickWins.map((qw, i) => (
+                        <div key={i} className="text-[11px] text-[var(--text-body)] flex gap-2 leading-relaxed">
+                          <span className="text-amber-400 font-extrabold shrink-0">•</span>
+                          <span>{qw}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-[11px] text-[var(--text-muted)] italic text-center py-2">
+                        No quick wins remaining.
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Controls */}
+      <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-card)]/50 shrink-0">
         <Button 
           variant="outline" 
           size="sm" 
-          className="w-full text-xs flex items-center justify-center gap-1.5" 
+          className="w-full text-xs flex items-center justify-center gap-1.5 py-2 hover:scale-[1.01] transition-transform select-none cursor-pointer" 
           onClick={onUndoLastEdit}
           disabled={editHistoryCount === 0}
         >
