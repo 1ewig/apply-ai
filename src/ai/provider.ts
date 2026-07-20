@@ -80,10 +80,34 @@ export async function compareResume(
   }
 }
 
+const missingInfoItemSchema = z.object({
+  field: z.string(),
+  description: z.string(),
+  severity: z.enum(['critical', 'warning']),
+});
+
+export interface MissingInfoItem {
+  field: string;
+  description: string;
+  severity: 'critical' | 'warning';
+}
+
+export interface ParseResumeResult {
+  parsedResume: ResumeSection[];
+  missingInfo: MissingInfoItem[];
+  requiresInput: boolean;
+}
+
+const parseResumeResponseSchema = z.object({
+  parsedResume: z.array(resumeSectionSchema),
+  missingInfo: z.array(missingInfoItemSchema).default([]),
+  requiresInput: z.boolean().default(false),
+});
+
 async function parseResumeWithGroq(
   resumeText: string,
   model: string
-): Promise<ResumeSection[]> {
+): Promise<ParseResumeResult> {
   const groqApiKey = process.env.GROQ_API_KEY;
   if (!groqApiKey || !groqApiKey.trim()) {
     throw new Error(
@@ -98,20 +122,18 @@ async function parseResumeWithGroq(
 
   const result = await generateObject({
     model: groqProvider(model),
-    schema: z.object({
-      parsedResume: z.array(resumeSectionSchema)
-    }),
+    schema: parseResumeResponseSchema,
     system: RESUME_PARSER_SYSTEM_PROMPT,
     prompt: buildParseResumePrompt(resumeText),
   });
 
-  return result.object.parsedResume;
+  return result.object;
 }
 
 async function parseResumeWithGoogle(
   resumeText: string,
   model: string
-): Promise<ResumeSection[]> {
+): Promise<ParseResumeResult> {
   const googleApiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
   if (!googleApiKey || !googleApiKey.trim()) {
     throw new Error(
@@ -124,19 +146,17 @@ async function parseResumeWithGoogle(
 
   const result = await generateObject({
     model: google(model),
-    schema: z.object({
-      parsedResume: z.array(resumeSectionSchema)
-    }),
+    schema: parseResumeResponseSchema,
     system: RESUME_PARSER_SYSTEM_PROMPT,
     prompt: buildParseResumePrompt(resumeText),
   });
 
-  return result.object.parsedResume;
+  return result.object;
 }
 
 export async function parseResume(
   resumeText: string
-): Promise<ResumeSection[]> {
+): Promise<ParseResumeResult> {
   const config = getAiConfig();
 
   switch (config.provider) {

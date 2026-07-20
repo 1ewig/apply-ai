@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, User, Send, Compass, Loader2, RotateCcw } from 'lucide-react';
+import { Sparkles, User, Send, Compass, Loader2, RotateCcw, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import type { JobApplication, Resume } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import Button from '@/components/ui/Button';
@@ -17,6 +17,83 @@ interface MatchAnalysisDetailProps {
   onBackClick: () => void;
   onReRunAnalysis: (jobId: string, resumeContent: string, jobDesc: string) => void;
   onSaveChanges: (id: string, data: Partial<JobApplication>) => Promise<unknown>;
+}
+
+interface MissingInfoCardProps {
+  items: Array<{ field: string; description: string; severity: 'critical' | 'warning' }>;
+  onSubmitInfo: (providedValues: Record<string, string>) => void;
+  onSkipInfo: () => void;
+}
+
+function MissingInfoCard({ items, onSubmitInfo, onSkipInfo }: MissingInfoCardProps) {
+  const [formValues, setFormValues] = useState<Record<string, string>>({});
+  const [isDone, setIsDone] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsDone(true);
+    onSubmitInfo(formValues);
+  };
+
+  const handleSkip = () => {
+    setIsDone(true);
+    onSkipInfo();
+  };
+
+  if (isDone) {
+    return (
+      <div className="p-3 rounded-xl bg-[var(--bg-card)]/50 border border-[var(--border)] text-xs text-[var(--text-muted)] italic">
+        Response submitted.
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] space-y-3 max-w-md text-left">
+      <div className="flex items-center gap-2 text-[var(--accent-yellow)] text-xs font-semibold">
+        <AlertTriangle className="w-4 h-4 shrink-0" />
+        <span>Missing Resume Details Detected</span>
+      </div>
+
+      <div className="space-y-3">
+        {items.map((item, i) => (
+          <div key={i} className="space-y-1">
+            <div className="flex justify-between items-center text-[11px] font-medium text-[var(--text-heading)]">
+              <span>{item.field}</span>
+              {item.severity === 'critical' && <span className="text-[10px] text-red-400 font-bold uppercase">Required</span>}
+            </div>
+            <p className="text-[10px] text-[var(--text-muted)]">{item.description}</p>
+            <input
+              type="text"
+              placeholder={`Enter your ${item.field.toLowerCase()}...`}
+              className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-body)] focus:outline-none focus:border-[var(--accent)] transition"
+              value={formValues[item.field] || ''}
+              onChange={(e) => setFormValues({ ...formValues, [item.field]: e.target.value })}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+        <Button
+          size="sm"
+          className="bg-[var(--accent)] hover:bg-[var(--accent-cyan)] font-semibold text-xs rounded-lg select-none"
+          onClick={handleSubmit}
+        >
+          <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+          Save & Proceed
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-xs text-[var(--text-muted)] hover:text-white rounded-lg select-none"
+          onClick={handleSkip}
+        >
+          Skip for Now
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export default function MatchAnalysisDetail({
@@ -50,7 +127,7 @@ export default function MatchAnalysisDetail({
     // Clear previous error messages if we are retrying
     const currentMessages = useAnalysisStore.getState().chatMessages;
     const filteredMessages = currentMessages.filter(
-      (m) => !m.id.startsWith('parse-error-') && !m.id.startsWith('parse-progress-') && !m.id.startsWith('parse-success-')
+      (m) => !m.id.startsWith('parse-error-') && !m.id.startsWith('parse-progress-') && !m.id.startsWith('parse-success-') && !m.id.startsWith('parse-missing-')
     );
 
     useAnalysisStore.setState({
@@ -59,7 +136,7 @@ export default function MatchAnalysisDetail({
         {
           id: `parse-progress-${Date.now()}`,
           role: 'assistant',
-          content: `🔄 **Parsing your resume...**`,
+          content: `🔄 **Parsing resume into flexible categories...**`,
           type: 'agent-text',
         }
       ]
@@ -79,6 +156,8 @@ export default function MatchAnalysisDetail({
 
       const data = await response.json();
       const newParsedResume = data.parsedResume || [];
+      const missingInfo = data.missingInfo || [];
+      const requiresInput = data.requiresInput || false;
 
       // Update client Zustand store
       useAnalysisStore.setState({
@@ -87,16 +166,37 @@ export default function MatchAnalysisDetail({
           acc[sec.heading.toUpperCase()] = sec.content;
           return acc;
         }, {} as Record<string, string>),
-        chatMessages: [
-          ...useAnalysisStore.getState().chatMessages.filter(m => !m.id.startsWith('parse-progress-')),
-          {
-            id: `parse-success-${Date.now()}`,
-            role: 'assistant',
-            content: `🎉 **Step 1 Complete!** I have successfully parsed your resume into structured sections. You can view the output under the **Resume** tab in the right panel.`,
-            type: 'agent-text',
-          }
-        ]
       });
+
+      if (requiresInput && missingInfo.length > 0) {
+        useAnalysisStore.setState({
+          chatMessages: [
+            ...useAnalysisStore.getState().chatMessages.filter(m => !m.id.startsWith('parse-progress-')),
+            {
+              id: `parse-missing-${Date.now()}`,
+              role: 'assistant',
+              content: `📋 **Step 1 Parsed!** I've organized your resume into flexible sections in the right panel. However, I noticed some missing details that will improve tailoring:`,
+              type: 'agent-text',
+              meta: {
+                missingInfoCard: true,
+                items: missingInfo,
+              }
+            }
+          ]
+        });
+      } else {
+        useAnalysisStore.setState({
+          chatMessages: [
+            ...useAnalysisStore.getState().chatMessages.filter(m => !m.id.startsWith('parse-progress-')),
+            {
+              id: `parse-success-${Date.now()}`,
+              role: 'assistant',
+              content: `🎉 **Step 1 Complete!** I have parsed your resume into flexible sections. All core information looks complete! View the **Resume** tab in the right panel to check your structured sections.`,
+              type: 'agent-text',
+            }
+          ]
+        });
+      }
 
       // Persist the parsed resume in Convex database under analysisResult
       await onSaveChanges(job.id, {
@@ -127,6 +227,70 @@ export default function MatchAnalysisDetail({
     } finally {
       setIsParsing(false);
     }
+  };
+
+  const handleResolveMissingInfo = async (values: Record<string, string>) => {
+    const currentParsed = useAnalysisStore.getState().parsedResume;
+    const entries = Object.entries(values).filter(([_, v]) => v.trim() !== '');
+
+    if (entries.length > 0) {
+      const addedText = entries.map(([field, val]) => `${field}: ${val}`).join('\n');
+
+      let updatedResume = [...currentParsed];
+      const headerIndex = updatedResume.findIndex(s => 
+        s.heading.toUpperCase().includes('HEADER') || s.heading.toUpperCase().includes('CONTACT')
+      );
+
+      if (headerIndex !== -1) {
+        updatedResume[headerIndex] = {
+          ...updatedResume[headerIndex],
+          content: `${updatedResume[headerIndex].content}\n${addedText}`
+        };
+      } else {
+        updatedResume.unshift({
+          heading: 'CONTACT INFORMATION',
+          content: addedText
+        });
+      }
+
+      useAnalysisStore.setState({
+        parsedResume: updatedResume,
+        resumeSections: updatedResume.reduce((acc: Record<string, string>, sec: any) => {
+          acc[sec.heading.toUpperCase()] = sec.content;
+          return acc;
+        }, {} as Record<string, string>),
+        chatMessages: [
+          ...useAnalysisStore.getState().chatMessages,
+          {
+            id: `missing-resolved-${Date.now()}`,
+            role: 'assistant',
+            content: `✅ **Missing information added!** Updated your structured resume in the reference panel. Step 1 is complete!`,
+            type: 'agent-text',
+          }
+        ]
+      });
+
+      await onSaveChanges(job.id, {
+        analysisResult: {
+          overallScore: 0,
+          readinessTier: 'poor',
+          tasks: [],
+          parsedResume: updatedResume,
+          quickWins: [],
+          blockers: [],
+        }
+      });
+    } else {
+      handleSkipMissingInfo();
+    }
+  };
+
+  const handleSkipMissingInfo = () => {
+    addChatMessage({
+      role: 'assistant',
+      content: `⏭️ **Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
+      type: 'agent-text',
+    });
   };
 
   useEffect(() => {
@@ -284,12 +448,23 @@ export default function MatchAnalysisDetail({
                 }`}>
                   <p className="whitespace-pre-wrap">{renderMessageContent(msg.content, msg.role === 'user')}</p>
                 </div>
+
+                {/* Interactive Missing Info Card */}
+                {msg.meta?.missingInfoCard && (
+                  <MissingInfoCard
+                    items={msg.meta.items || []}
+                    onSubmitInfo={handleResolveMissingInfo}
+                    onSkipInfo={handleSkipMissingInfo}
+                  />
+                )}
+
+                {/* Retry Button */}
                 {msg.meta?.retryable && (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={runParseStep}
-                    className="text-xs flex items-center gap-1.5 cursor-pointer mt-1 bg-[var(--bg-card)] border-[var(--border)] text-[var(--accent)] hover:text-white"
+                    className="text-xs flex items-center gap-1.5 cursor-pointer mt-1 bg-[var(--bg-card)] border-[var(--border)] text-[var(--accent)] hover:text-white select-none"
                   >
                     <RotateCcw className="w-3 h-3" />
                     Retry Parsing
@@ -310,7 +485,7 @@ export default function MatchAnalysisDetail({
               </div>
               <div className="p-4 rounded-2xl text-xs leading-relaxed bg-[var(--bg-card)] border border-[var(--border)] rounded-tl-none text-[var(--text-body)] flex items-center gap-2 max-w-max">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--accent)]" />
-                <span className="animate-pulse">Parsing your resume...</span>
+                <span className="animate-pulse">Parsing resume into flexible categories...</span>
               </div>
             </motion.div>
           )}

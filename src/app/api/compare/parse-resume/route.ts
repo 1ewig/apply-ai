@@ -32,8 +32,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedResume = await parseResume(resumeText);
-    return NextResponse.json({ parsedResume });
+    const result = await parseResume(resumeText);
+    return NextResponse.json(result);
   } catch (err: any) {
     console.error("Parse resume route error:", err);
     return NextResponse.json(
