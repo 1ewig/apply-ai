@@ -44,10 +44,10 @@ export const jdExtractSchema = z.object({
   mustHaveKeywords: z.array(z.string()).max(10),
   niceToHaveKeywords: z.array(z.string()).max(10),
   seniorityLevel: z.enum(['entry', 'mid', 'senior', 'lead', 'executive']),
-  coreResponsibilities: z.array(z.string()).max(5),
+  coreResponsibilities: z.array(z.string()).max(6),
   companyContext: z.string(),
-  requiredQualifications: z.array(z.string()).max(8),
-  preferredQualifications: z.array(z.string()).max(5),
+  requiredQualifications: z.array(z.string()).max(10),
+  preferredQualifications: z.array(z.string()).max(10),
 });
 export type JdExtract = z.infer<typeof jdExtractSchema>;
 

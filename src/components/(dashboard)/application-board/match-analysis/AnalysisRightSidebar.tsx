@@ -120,32 +120,28 @@ export default function AnalysisRightSidebar({
           </div>
         ) : jdExtract ? (
           <div className="space-y-6 text-left">
-            {/* Role Title */}
-            <div className="space-y-2">
-              <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Role</h3>
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30">
-                <p className="text-sm font-bold text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
-                <span className="inline-block mt-1 text-[10px] bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded border border-[var(--accent)]/20 capitalize">
-                  {jdExtract.seniorityLevel}
-                </span>
-              </div>
+            {/* Role & Seniority */}
+            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+              <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Role</h4>
+              <p className="text-sm font-bold text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
+              <span className="inline-block text-[10px] bg-[var(--accent)]/10 text-[var(--accent)] px-2 py-0.5 rounded border border-[var(--accent)]/20 capitalize">
+                {jdExtract.seniorityLevel}
+              </span>
             </div>
 
             {/* Company Context */}
             {jdExtract.companyContext && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Company</h3>
-                <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30">
-                  <p className="text-xs text-[var(--text-body)] leading-relaxed">{jdExtract.companyContext}</p>
-                </div>
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Company</h4>
+                <p className="text-xs text-[var(--text-body)] leading-relaxed">{jdExtract.companyContext}</p>
               </div>
             )}
 
             {/* Must-have Keywords */}
             {jdExtract.mustHaveKeywords.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Must-have Keywords</h3>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Must-have Keywords</h4>
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {jdExtract.mustHaveKeywords.map((kw) => (
                     <span key={kw} className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/25">
                       {kw}
@@ -157,9 +153,9 @@ export default function AnalysisRightSidebar({
 
             {/* Nice-to-have Keywords */}
             {jdExtract.niceToHaveKeywords.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Nice-to-have</h3>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Nice-to-have</h4>
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {jdExtract.niceToHaveKeywords.map((kw) => (
                     <span key={kw} className="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded border border-yellow-500/25">
                       {kw}
@@ -171,9 +167,9 @@ export default function AnalysisRightSidebar({
 
             {/* Core Responsibilities */}
             {jdExtract.coreResponsibilities.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Core Responsibilities</h3>
-                <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-1.5">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Core Responsibilities</h4>
+                <div className="space-y-1.5 pt-1">
                   {jdExtract.coreResponsibilities.map((r, i) => (
                     <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-[var(--accent)] shrink-0">•</span>
@@ -186,9 +182,9 @@ export default function AnalysisRightSidebar({
 
             {/* Required Qualifications */}
             {jdExtract.requiredQualifications.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Required Qualifications</h3>
-                <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-1.5">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Required Qualifications</h4>
+                <div className="space-y-1.5 pt-1">
                   {jdExtract.requiredQualifications.map((q, i) => (
                     <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-red-400 shrink-0">•</span>
@@ -201,9 +197,9 @@ export default function AnalysisRightSidebar({
 
             {/* Preferred Qualifications */}
             {jdExtract.preferredQualifications.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-[var(--text-muted)] tracking-wider uppercase">Preferred Qualifications</h3>
-                <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-1.5">
+              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-main)]/30 space-y-2 text-left">
+                <h4 className="text-xs font-bold text-[var(--text-heading)] tracking-wide border-b border-[var(--border)] pb-1.5 uppercase">Preferred Qualifications</h4>
+                <div className="space-y-1.5 pt-1">
                   {jdExtract.preferredQualifications.map((q, i) => (
                     <p key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-[var(--accent-yellow)] shrink-0">•</span>
