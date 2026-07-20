@@ -16,11 +16,21 @@ const resumeSection = v.object({
   content: v.string(),
 });
 
+const jdExtractValidator = v.object({
+  roleTitle: v.string(),
+  mustHaveKeywords: v.array(v.string()),
+  niceToHaveKeywords: v.array(v.string()),
+  seniorityLevel: v.string(),
+  coreResponsibilities: v.array(v.string()),
+  companyContext: v.string(),
+  requiredQualifications: v.array(v.string()),
+  preferredQualifications: v.array(v.string()),
+});
+
 const comparisonResult = v.object({
   overallScore: v.number(),
   readinessTier: v.string(),
   tasks: v.array(agentTask),
-  parsedResume: v.array(resumeSection),
   quickWins: v.array(v.string()),
   blockers: v.array(v.string()),
 });
@@ -66,6 +76,8 @@ export const getAnalysis = query({
     return {
       currentResult: analysis.result,
       previousResult: analysis.previousResult || null,
+      parsedResume: analysis.parsedResume || [],
+      jdExtract: analysis.jdExtract || null,
     };
   },
 });
@@ -83,6 +95,8 @@ export const add = mutation({
     jobDescription: v.optional(v.string()),
     matchScore: v.optional(v.number()),
     analysisResult: v.optional(comparisonResult),
+    parsedResume: v.optional(v.array(resumeSection)),
+    jdExtract: v.optional(jdExtractValidator),
     resumeUsed: v.optional(v.string()),
     customResumeContent: v.optional(v.string()),
   },
@@ -110,6 +124,8 @@ export const add = mutation({
         applicationId: newId,
         userId: identity.subject,
         result: args.analysisResult,
+        parsedResume: args.parsedResume || [],
+        jdExtract: args.jdExtract,
         updatedAt: new Date().toISOString(),
       });
     }
@@ -132,6 +148,8 @@ export const update = mutation({
     jobDescription: v.optional(v.string()),
     matchScore: v.optional(v.number()),
     analysisResult: v.optional(comparisonResult),
+    parsedResume: v.optional(v.array(resumeSection)),
+    jdExtract: v.optional(jdExtractValidator),
     resumeUsed: v.optional(v.string()),
     customResumeContent: v.optional(v.string()),
   },
@@ -146,26 +164,29 @@ export const update = mutation({
       throw new Error("Unauthorized or application not found");
     }
 
-    const { id, analysisResult, ...updates } = args;
+    const { id, analysisResult, parsedResume, jdExtract, ...updates } = args;
     await ctx.db.patch(args.id, updates);
 
-    if (analysisResult) {
-      const existing = await ctx.db
-        .query("analyses")
-        .withIndex("by_applicationId", (q) => q.eq("applicationId", args.id))
-        .first();
+    const existing = await ctx.db
+      .query("analyses")
+      .withIndex("by_applicationId", (q) => q.eq("applicationId", args.id))
+      .first();
 
+    if (analysisResult || parsedResume !== undefined || jdExtract !== undefined) {
       if (existing) {
         await ctx.db.patch(existing._id, {
-          result: analysisResult,
-          previousResult: existing.result,
+          ...(analysisResult && { result: analysisResult, previousResult: existing.result }),
+          ...(parsedResume !== undefined && { parsedResume }),
+          ...(jdExtract !== undefined && { jdExtract }),
           updatedAt: new Date().toISOString(),
         });
       } else {
         await ctx.db.insert("analyses", {
           applicationId: args.id,
           userId: identity.subject,
-          result: analysisResult,
+          result: analysisResult || { overallScore: 0, readinessTier: 'poor', tasks: [], quickWins: [], blockers: [] },
+          parsedResume: parsedResume || [],
+          jdExtract: jdExtract,
           updatedAt: new Date().toISOString(),
         });
       }

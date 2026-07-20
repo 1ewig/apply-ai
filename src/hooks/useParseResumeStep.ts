@@ -111,11 +111,11 @@ export function useParseResumeStep({
         }
 
         await onSaveChanges(job.id, {
+          parsedResume: newParsedResume,
           analysisResult: {
             overallScore: 0,
             readinessTier: 'poor',
             tasks: [],
-            parsedResume: newParsedResume,
             quickWins: [],
             blockers: [],
           },
@@ -200,11 +200,11 @@ export function useParseResumeStep({
         });
 
         await onSaveChanges(job.id, {
+          parsedResume: updatedResume,
           analysisResult: {
             overallScore: 0,
             readinessTier: 'poor',
             tasks: [],
-            parsedResume: updatedResume,
             quickWins: [],
             blockers: [],
           },
@@ -233,20 +233,20 @@ export function useParseResumeStep({
 
     if (hasInitiatedRef.current === job.id) return;
 
-    const existingAnalysis = job.analysisResult as any;
-    const parsedResume = existingAnalysis?.parsedResume || [];
+    const existingResult = job.analysisResult as any;
+    const parsedResume = job.parsedResume || [];
 
     hasInitiatedRef.current = job.id;
 
     initializeSession(
       job.id,
       {
-        overallScore: existingAnalysis?.overallScore || 0,
-        readinessTier: existingAnalysis?.readinessTier || 'poor',
-        tasks: existingAnalysis?.tasks || [],
+        overallScore: existingResult?.overallScore || 0,
+        readinessTier: existingResult?.readinessTier || 'poor',
+        tasks: existingResult?.tasks || [],
         parsedResume,
-        quickWins: existingAnalysis?.quickWins || [],
-        blockers: existingAnalysis?.blockers || [],
+        quickWins: existingResult?.quickWins || [],
+        blockers: existingResult?.blockers || [],
       },
       job.role,
       job.company

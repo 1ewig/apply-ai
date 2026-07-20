@@ -47,6 +47,8 @@ export default function MatchAnalysisDetail({
   // Step 2: Extract JD after Step 1 approval
   const { isExtracting, runExtractJd } = useExtractJdStep({
     jobDescription: job.jobDescription || '',
+    onSaveChanges,
+    jobId: job.id,
   });
 
   const handleApproveStep1 = () => {

@@ -1,4 +1,5 @@
 import type { SessionBlueprint } from "../agent/types";
+import type { JdExtract } from "../agent/types";
 
 export type ComparisonResult = SessionBlueprint;
 
@@ -12,6 +13,8 @@ export interface JobApplication {
   jobDescription?: string;
   matchScore?: number;
   analysisResult?: ComparisonResult;
+  parsedResume?: { heading: string; content: string }[];
+  jdExtract?: JdExtract | null;
   resumeUsed?: string;
   customResumeContent?: string;
 }

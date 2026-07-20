@@ -34,7 +34,6 @@ export const sessionBlueprintSchema = z.object({
   overallScore: z.number().min(0).max(100),
   readinessTier: z.enum(['poor', 'fair', 'good', 'strong']),
   tasks: z.array(agentTaskSchema),
-  parsedResume: z.array(resumeSectionSchema),
   quickWins: z.array(z.string()),
   blockers: z.array(z.string()),
 });

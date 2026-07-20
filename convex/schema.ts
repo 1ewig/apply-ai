@@ -16,11 +16,21 @@ const resumeSection = v.object({
   content: v.string(),
 });
 
+const jdExtractValidator = v.object({
+  roleTitle: v.string(),
+  mustHaveKeywords: v.array(v.string()),
+  niceToHaveKeywords: v.array(v.string()),
+  seniorityLevel: v.string(),
+  coreResponsibilities: v.array(v.string()),
+  companyContext: v.string(),
+  requiredQualifications: v.array(v.string()),
+  preferredQualifications: v.array(v.string()),
+});
+
 const comparisonResult = v.object({
   overallScore: v.number(),
   readinessTier: v.string(),
   tasks: v.array(agentTask),
-  parsedResume: v.array(resumeSection),
   quickWins: v.array(v.string()),
   blockers: v.array(v.string()),
 });
@@ -51,6 +61,8 @@ export default defineSchema({
     userId: v.string(), // Maps to the user's Clerk user ID
     result: comparisonResult,
     previousResult: v.optional(comparisonResult),
+    parsedResume: v.array(resumeSection),
+    jdExtract: v.optional(jdExtractValidator),
     updatedAt: v.string(),
   }).index("by_applicationId", ["applicationId"])
     .index("by_userId", ["userId"]),

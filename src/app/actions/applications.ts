@@ -42,6 +42,8 @@ export async function addApplicationAction(args: {
   jobDescription?: string;
   matchScore?: number;
   analysisResult?: any;
+  parsedResume?: any;
+  jdExtract?: any;
   resumeUsed?: string;
   customResumeContent?: string;
 }) {
@@ -59,6 +61,8 @@ export async function updateApplicationAction(args: {
   jobDescription?: string;
   matchScore?: number;
   analysisResult?: any;
+  parsedResume?: any;
+  jdExtract?: any;
   resumeUsed?: string;
   customResumeContent?: string;
 }) {

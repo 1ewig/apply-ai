@@ -5,9 +5,11 @@ import { useAnalysisStore } from '@/stores/useAnalysisStore';
 
 interface UseExtractJdStepProps {
   jobDescription: string;
+  onSaveChanges: (id: string, data: any) => Promise<unknown>;
+  jobId: string;
 }
 
-export function useExtractJdStep({ jobDescription }: UseExtractJdStepProps) {
+export function useExtractJdStep({ jobDescription, onSaveChanges, jobId }: UseExtractJdStepProps) {
   const [isExtracting, setIsExtracting] = useState(false);
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
 
@@ -36,6 +38,7 @@ export function useExtractJdStep({ jobDescription }: UseExtractJdStepProps) {
       const data = await response.json();
 
       useAnalysisStore.setState({ jdExtract: data });
+      await onSaveChanges(jobId, { jdExtract: data });
 
       addChatMessage({
         role: 'assistant',
@@ -53,7 +56,7 @@ export function useExtractJdStep({ jobDescription }: UseExtractJdStepProps) {
     } finally {
       setIsExtracting(false);
     }
-  }, [isExtracting, jobDescription, addChatMessage]);
+  }, [isExtracting, jobDescription, addChatMessage, onSaveChanges, jobId]);
 
   return { isExtracting, runExtractJd };
 }

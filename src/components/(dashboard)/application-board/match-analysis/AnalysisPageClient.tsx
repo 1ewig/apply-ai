@@ -15,6 +15,8 @@ import MatchAnalysisDetail from './MatchAnalysisDetail';
 interface AnalysisQueryResult {
   currentResult: ComparisonResult;
   previousResult: ComparisonResult | null;
+  parsedResume: { heading: string; content: string }[];
+  jdExtract: any | null;
 }
 
 export default function AnalysisPageClient({ id }: { id: string }) {
@@ -62,7 +64,12 @@ export default function AnalysisPageClient({ id }: { id: string }) {
 
   return (
     <MatchAnalysisDetail
-      job={{ ...job, analysisResult: analysisData?.currentResult ?? undefined }}
+      job={{
+        ...job,
+        analysisResult: analysisData?.currentResult ?? undefined,
+        parsedResume: analysisData?.parsedResume ?? [],
+        jdExtract: analysisData?.jdExtract ?? null,
+      }}
       resumeForReRun={resumeForReRun}
       onSaveChanges={updateJob}
     />
