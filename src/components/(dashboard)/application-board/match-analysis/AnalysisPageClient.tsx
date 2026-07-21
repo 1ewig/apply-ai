@@ -17,6 +17,7 @@ interface AnalysisQueryResult {
   previousResult: ComparisonResult | null;
   parsedResume: { heading: string; content: string }[];
   jdExtract: any | null;
+  chatMessages?: any[];
 }
 
 export default function AnalysisPageClient({ id }: { id: string }) {
@@ -62,6 +63,15 @@ export default function AnalysisPageClient({ id }: { id: string }) {
 
   const resumeForReRun = resumes.find(r => r.id === job.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
 
+  const dbMessages = analysisData?.chatMessages ?? [];
+  const chatMessages = dbMessages.map((m: any) => ({
+    id: m.id,
+    role: m.role,
+    content: m.content,
+    type: m.type,
+    meta: m.metaJson ? JSON.parse(m.metaJson) : undefined,
+  }));
+
   return (
     <MatchAnalysisDetail
       job={{
@@ -69,6 +79,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
         analysisResult: analysisData?.currentResult ?? undefined,
         parsedResume: analysisData?.parsedResume ?? [],
         jdExtract: analysisData?.jdExtract ?? null,
+        chatMessages,
       }}
       resumeForReRun={resumeForReRun}
       onSaveChanges={updateJob}

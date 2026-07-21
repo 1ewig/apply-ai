@@ -35,6 +35,14 @@ const comparisonResult = v.object({
   blockers: v.array(v.string()),
 });
 
+const chatMessageValidator = v.object({
+  id: v.string(),
+  role: v.string(),
+  content: v.string(),
+  type: v.optional(v.string()),
+  metaJson: v.optional(v.string()),
+});
+
 /**
  * Retrieve all job applications for the currently authenticated user.
  */
@@ -78,6 +86,7 @@ export const getAnalysis = query({
       previousResult: analysis.previousResult || null,
       parsedResume: analysis.parsedResume || [],
       jdExtract: analysis.jdExtract || null,
+      chatMessages: analysis.chatMessages || [],
     };
   },
 });
@@ -150,6 +159,7 @@ export const update = mutation({
     analysisResult: v.optional(comparisonResult),
     parsedResume: v.optional(v.array(resumeSection)),
     jdExtract: v.optional(jdExtractValidator),
+    chatMessages: v.optional(v.array(chatMessageValidator)),
     resumeUsed: v.optional(v.string()),
     customResumeContent: v.optional(v.string()),
   },
@@ -164,7 +174,7 @@ export const update = mutation({
       throw new Error("Unauthorized or application not found");
     }
 
-    const { id, analysisResult, parsedResume, jdExtract, ...updates } = args;
+    const { id, analysisResult, parsedResume, jdExtract, chatMessages, ...updates } = args;
     await ctx.db.patch(args.id, updates);
 
     const existing = await ctx.db
@@ -172,12 +182,13 @@ export const update = mutation({
       .withIndex("by_applicationId", (q) => q.eq("applicationId", args.id))
       .first();
 
-    if (analysisResult || parsedResume !== undefined || jdExtract !== undefined) {
+    if (analysisResult || parsedResume !== undefined || jdExtract !== undefined || chatMessages !== undefined) {
       if (existing) {
         await ctx.db.patch(existing._id, {
           ...(analysisResult && { result: analysisResult, previousResult: existing.result }),
           ...(parsedResume !== undefined && { parsedResume }),
           ...(jdExtract !== undefined && { jdExtract }),
+          ...(chatMessages !== undefined && { chatMessages }),
           updatedAt: new Date().toISOString(),
         });
       } else {
@@ -187,6 +198,7 @@ export const update = mutation({
           result: analysisResult || { overallScore: 0, readinessTier: 'poor', tasks: [], quickWins: [], blockers: [] },
           parsedResume: parsedResume || [],
           jdExtract: jdExtract,
+          chatMessages: chatMessages || [],
           updatedAt: new Date().toISOString(),
         });
       }

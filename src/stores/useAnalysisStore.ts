@@ -80,6 +80,7 @@ interface AnalysisStore {
       parsedResume: { heading: string; content: string }[];
       quickWins: string[];
       blockers: string[];
+      chatMessages?: ChatMessage[];
     },
     roleTitle?: string,
     companyName?: string
@@ -187,16 +188,18 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
       editHistory: [],
       rejectedEditsLog: [],
       jdExtract: null,
-      chatMessages: [
-        {
-          id: 'welcome-message',
-          role: 'assistant' as const,
-          content: roleTitle && companyName
-            ? `Hi! I've analyzed your resume against the job description for **${roleTitle}** at **${companyName}**.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`
-            : `Hi! I've analyzed your resume against the job description.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`,
-          type: 'agent-text' as const,
-        },
-      ],
+      chatMessages: blueprint.chatMessages && blueprint.chatMessages.length > 0
+        ? blueprint.chatMessages
+        : [
+            {
+              id: 'welcome-message',
+              role: 'assistant' as const,
+              content: roleTitle && companyName
+                ? `Hi! I've analyzed your resume against the job description for **${roleTitle}** at **${companyName}**.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`
+                : `Hi! I've analyzed your resume against the job description.\n\nI have created a tailored tailoring plan for you. Let's get started on the highest priority items.`,
+              type: 'agent-text' as const,
+            },
+          ],
     }),
 
   updateTaskStatus: (taskId, status) =>

@@ -5,7 +5,7 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/application-board(.*)",
   "/resume-templates(.*)",
-  "/api/parse-resume",
+  "/api/plan/parse-resume",
   "/api/plan/extract-jd"
 ]);
 

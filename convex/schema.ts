@@ -35,6 +35,14 @@ const comparisonResult = v.object({
   blockers: v.array(v.string()),
 });
 
+const chatMessageValidator = v.object({
+  id: v.string(),
+  role: v.string(), // "user" | "assistant" | "system"
+  content: v.string(),
+  type: v.optional(v.string()),
+  metaJson: v.optional(v.string()), // polymorphic meta stored as stringified JSON
+});
+
 export default defineSchema({
   users: defineTable({
     clerkId: v.string(),
@@ -63,6 +71,7 @@ export default defineSchema({
     previousResult: v.optional(comparisonResult),
     parsedResume: v.array(resumeSection),
     jdExtract: v.optional(jdExtractValidator),
+    chatMessages: v.optional(v.array(chatMessageValidator)),
     updatedAt: v.string(),
   }).index("by_applicationId", ["applicationId"])
     .index("by_userId", ["userId"]),

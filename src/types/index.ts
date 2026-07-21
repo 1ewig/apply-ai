@@ -17,6 +17,7 @@ export interface JobApplication {
   jdExtract?: JdExtract | null;
   resumeUsed?: string;
   customResumeContent?: string;
+  chatMessages?: any[];
 }
 
 export interface Resume {

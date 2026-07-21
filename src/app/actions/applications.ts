@@ -63,6 +63,7 @@ export async function updateApplicationAction(args: {
   analysisResult?: any;
   parsedResume?: any;
   jdExtract?: any;
+  chatMessages?: any;
   resumeUsed?: string;
   customResumeContent?: string;
 }) {

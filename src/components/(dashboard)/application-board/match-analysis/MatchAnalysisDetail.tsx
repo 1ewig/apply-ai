@@ -223,6 +223,43 @@ export default function MatchAnalysisDetail({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, isParsing, isExtracting]);
 
+  const lastSavedRef = useRef<string>('');
+
+  useEffect(() => {
+    if (job.chatMessages) {
+      const dbMessages = job.chatMessages.map((m) => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        type: m.type,
+        metaJson: m.meta ? JSON.stringify(m.meta) : undefined,
+      }));
+      lastSavedRef.current = JSON.stringify(dbMessages);
+    } else {
+      lastSavedRef.current = '';
+    }
+  }, [job.id]);
+
+  useEffect(() => {
+    if (chatMessages.length === 0) return;
+
+    const dbMessages = chatMessages.map((m) => ({
+      id: m.id,
+      role: m.role,
+      content: m.content,
+      type: m.type,
+      metaJson: m.meta ? JSON.stringify(m.meta) : undefined,
+    }));
+
+    const serialized = JSON.stringify(dbMessages);
+    if (lastSavedRef.current === serialized) return;
+
+    lastSavedRef.current = serialized;
+    onSaveChanges(job.id, { chatMessages: dbMessages }).catch((err) => {
+      console.error('Failed to sync chat history to Convex:', err);
+    });
+  }, [chatMessages, job.id, onSaveChanges]);
+
   const handleSendCommand = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputVal.trim()) return;
