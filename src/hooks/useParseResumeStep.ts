@@ -147,14 +147,48 @@ export function useParseResumeStep({
   );
 
   const handleApproveStep1 = useCallback(() => {
-    addChatMessage({
-      role: 'assistant',
-      content: `**Step 1 Approved!** Structured resume confirmed. Ready for Step 2 (JD Extraction).`,
-      type: 'agent-text',
+    const currentMessages = useAnalysisStore.getState().chatMessages;
+    const updatedMessages = currentMessages.map((msg) => {
+      if (msg.meta?.approvalCard) {
+        return {
+          ...msg,
+          meta: {
+            ...msg.meta,
+            approvalCard: false,
+          },
+        };
+      }
+      return msg;
     });
-  }, [addChatMessage]);
+
+    useAnalysisStore.setState({
+      chatMessages: [
+        ...updatedMessages,
+        {
+          id: `approve-step1-${Date.now()}`,
+          role: 'assistant',
+          content: `**Step 1 Approved!** Structured resume confirmed. Ready for Step 2 (JD Extraction).`,
+          type: 'agent-text',
+        },
+      ],
+    });
+  }, []);
 
   const handleReParseStep1 = useCallback(() => {
+    const currentMessages = useAnalysisStore.getState().chatMessages;
+    const updatedMessages = currentMessages.map((msg) => {
+      if (msg.meta?.approvalCard) {
+        return {
+          ...msg,
+          meta: {
+            ...msg.meta,
+            approvalCard: false,
+          },
+        };
+      }
+      return msg;
+    });
+    useAnalysisStore.setState({ chatMessages: updatedMessages });
     runParseStep(true);
   }, [runParseStep]);
 
@@ -163,6 +197,20 @@ export function useParseResumeStep({
       if (!job) return;
       const currentParsed = useAnalysisStore.getState().parsedResume;
       const entries = Object.entries(values).filter(([_, v]) => v.trim() !== '');
+
+      const currentMessages = useAnalysisStore.getState().chatMessages;
+      const updatedMessages = currentMessages.map((msg) => {
+        if (msg.meta?.missingInfoCard) {
+          return {
+            ...msg,
+            meta: {
+              ...msg.meta,
+              missingInfoCard: false,
+            },
+          };
+        }
+        return msg;
+      });
 
       if (entries.length > 0) {
         const addedText = entries.map(([field, val]) => `${field}: ${val}`).join('\n');
@@ -191,7 +239,7 @@ export function useParseResumeStep({
             return acc;
           }, {} as Record<string, string>),
           chatMessages: [
-            ...useAnalysisStore.getState().chatMessages,
+            ...updatedMessages,
             {
               id: `missing-resolved-${Date.now()}`,
               role: 'assistant',
@@ -212,23 +260,49 @@ export function useParseResumeStep({
           },
         });
       } else {
-        addChatMessage({
-          role: 'assistant',
-      content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
-          type: 'agent-text',
+        useAnalysisStore.setState({
+          chatMessages: [
+            ...updatedMessages,
+            {
+              id: `missing-skipped-${Date.now()}`,
+              role: 'assistant',
+              content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
+              type: 'agent-text',
+            },
+          ],
         });
       }
     },
-    [job, onSaveChanges, addChatMessage]
+    [job, onSaveChanges]
   );
 
   const handleSkipMissingInfo = useCallback(() => {
-    addChatMessage({
-      role: 'assistant',
-      content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
-      type: 'agent-text',
+    const currentMessages = useAnalysisStore.getState().chatMessages;
+    const updatedMessages = currentMessages.map((msg) => {
+      if (msg.meta?.missingInfoCard) {
+        return {
+          ...msg,
+          meta: {
+            ...msg.meta,
+            missingInfoCard: false,
+          },
+        };
+      }
+      return msg;
     });
-  }, [addChatMessage]);
+
+    useAnalysisStore.setState({
+      chatMessages: [
+        ...updatedMessages,
+        {
+          id: `missing-skipped-${Date.now()}`,
+          role: 'assistant',
+          content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
+          type: 'agent-text',
+        },
+      ],
+    });
+  }, []);
 
   useEffect(() => {
     if (!job) return;
