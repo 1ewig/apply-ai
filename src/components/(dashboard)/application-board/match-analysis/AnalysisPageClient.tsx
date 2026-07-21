@@ -14,7 +14,7 @@ import type { ComparisonResult } from '@/types';
 import type { ChatMessage } from '@/stores/useAnalysisStore';
 import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
-import MatchAnalysisDetail from './MatchAnalysisDetail';
+import AgentChatPanel from './AgentChatPanel';
 
 interface AnalysisQueryResult {
   currentResult: ComparisonResult;
@@ -173,7 +173,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
   }
 
   return (
-    <MatchAnalysisDetail
+    <AgentChatPanel
       chatMessages={chatMessages}
       isParsing={isParsing}
       isExtracting={isExtracting}

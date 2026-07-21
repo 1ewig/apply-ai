@@ -12,7 +12,7 @@ import MissingInfoCard from './MissingInfoCard';
 import ApprovalCard from './ApprovalCard';
 import ChatInputBar from './ChatInputBar';
 
-interface MatchAnalysisDetailProps {
+interface AgentChatPanelProps {
   chatMessages: ChatMessage[];
   isParsing: boolean;
   isExtracting: boolean;
@@ -134,6 +134,19 @@ function renderTimelineMessage(
             onReject={onRejectEdit}
             onModify={onModifyEdit}
           />
+        ) : msg.meta?.approvalCard ? (
+          <ApprovalCard
+            status={msg.meta.status}
+            onApprove={onApproveStep1}
+            onReParse={onReParseStep1}
+          />
+        ) : msg.meta?.missingInfoCard ? (
+          <MissingInfoCard
+            status={msg.meta.status}
+            items={msg.meta.items || []}
+            onSubmitInfo={onResolveMissingInfo}
+            onSkipInfo={onSkipMissingInfo}
+          />
         ) : (
           <div
             className={`p-4 rounded-2xl text-xs leading-relaxed text-left max-w-max ${
@@ -146,23 +159,6 @@ function renderTimelineMessage(
               {renderMessageContent(msg.content, isUser)}
             </p>
           </div>
-        )}
-
-        {msg.meta?.approvalCard && (
-          <ApprovalCard
-            status={msg.meta.status}
-            onApprove={onApproveStep1}
-            onReParse={onReParseStep1}
-          />
-        )}
-
-        {msg.meta?.missingInfoCard && (
-          <MissingInfoCard
-            status={msg.meta.status}
-            items={msg.meta.items || []}
-            onSubmitInfo={onResolveMissingInfo}
-            onSkipInfo={onSkipMissingInfo}
-          />
         )}
 
         {msg.meta?.retryable && msg.meta?.retryStep === 'extract-jd' && (
@@ -192,7 +188,7 @@ function renderTimelineMessage(
   );
 }
 
-export default function MatchAnalysisDetail({
+export default function AgentChatPanel({
   chatMessages,
   isParsing,
   isExtracting,
@@ -214,7 +210,7 @@ export default function MatchAnalysisDetail({
   onRetryExtract,
   onSendCommand,
   onChipClick,
-}: MatchAnalysisDetailProps) {
+}: AgentChatPanelProps) {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

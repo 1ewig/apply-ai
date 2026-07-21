@@ -32,7 +32,7 @@ export default function ApprovalCard({ status = 'pending', onApprove, onReParse 
         <span>Verify Structure</span>
       </div>
       <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-        Please review the resume categories on the right panel. Are the sections and content structured accurately?
+        Please review the resume on the right panel. Are the sections and content structured accurately?
       </p>
       <div className="pt-3.5 border-t border-[var(--border)] text-xs font-mono">
         {hasResponded ? (
