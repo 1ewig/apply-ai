@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAnalysisAction } from '@/app/actions/applications';
 
 import { useApplications } from '@/hooks/useApplications';
 import { useResumes } from '@/hooks/useResumes';
-import type { ComparisonResult } from '@/types';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import { useParseResumeStep } from '@/hooks/useParseResumeStep';
+import { useExtractJdStep } from '@/hooks/useExtractJdStep';
+import { useChatSync } from '@/hooks/useChatSync';
+import type { ComparisonResult } from '@/types';
+import type { ChatMessage } from '@/stores/useAnalysisStore';
 import { toUserFriendlyError } from '@/utils/userFriendlyErrors';
 
 import MatchAnalysisDetail from './MatchAnalysisDetail';
@@ -41,7 +45,113 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     }
   }, [isError, queryError, refetch]);
 
-  if (!job) {
+  const chatMessages = useAnalysisStore((s) => s.chatMessages);
+  const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
+  const acceptEdit = useAnalysisStore((s) => s.acceptEdit);
+  const rejectEdit = useAnalysisStore((s) => s.rejectEdit);
+  const modifyEdit = useAnalysisStore((s) => s.modifyEdit);
+  const rightSidebarOpen = useAnalysisStore((s) => s.rightSidebarOpen);
+  const setRightSidebarOpen = useAnalysisStore((s) => s.setRightSidebarOpen);
+  const setRightSidebarTab = useAnalysisStore((s) => s.setRightSidebarTab);
+
+  const [inputVal, setInputVal] = useState('');
+
+  const resumeForReRun = resumes.find(r => r.id === (job?.resumeUsed ?? '')) || resumes.find(r => r.isDefault) || resumes[0];
+
+  const dbMessages = analysisData?.chatMessages ?? [];
+  const enrichedChatMessages: ChatMessage[] = dbMessages.map((m: any) => ({
+    id: m.id,
+    role: m.role,
+    content: m.content,
+    type: m.type,
+    meta: m.metaJson ? JSON.parse(m.metaJson) : undefined,
+  }));
+
+  const enrichedJob = job ? {
+    ...job,
+    analysisResult: analysisData?.currentResult ?? undefined,
+    parsedResume: analysisData?.parsedResume ?? [],
+    jdExtract: analysisData?.jdExtract ?? null,
+    chatMessages: enrichedChatMessages,
+  } : null;
+
+  const {
+    isParsing,
+    runParseStep,
+    handleApproveStep1: originalApproveStep1,
+    handleReParseStep1,
+    handleResolveMissingInfo,
+    handleSkipMissingInfo,
+  } = useParseResumeStep({
+    job: enrichedJob!,
+    resumeForReRun,
+    onSaveChanges: updateJob,
+  });
+
+  const { isExtracting, runExtractJd } = useExtractJdStep({
+    jobDescription: job?.jobDescription || '',
+    onSaveChanges: updateJob,
+    jobId: job?.id ?? '',
+  });
+
+  const handleApproveStep1 = () => {
+    originalApproveStep1();
+    runExtractJd();
+  };
+
+  const stepText = isParsing
+    ? 'Step 1: Parsing resume sections...'
+    : isExtracting
+    ? 'Step 2: Extracting requirements...'
+    : job?.jdExtract
+    ? 'Tailoring Roadmap Active (Step 3)'
+    : 'Step 1: Parsing resume details';
+
+  useChatSync(chatMessages, job?.id, updateJob);
+
+  const handleSendCommand = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputVal.trim()) return;
+
+    const val = inputVal.trim();
+    setInputVal('');
+
+    addChatMessage({
+      role: 'user',
+      content: val,
+      type: 'user',
+    });
+
+    setTimeout(() => {
+      addChatMessage({
+        role: 'assistant',
+        content: `I received your message: "${val}". We are currently focusing on Step 1 (Parse Resume). Let me know how you would like to proceed.`,
+        type: 'agent-text',
+      });
+    }, 1000);
+  }, [inputVal, addChatMessage]);
+
+  const handleChipClick = useCallback((chipText: string) => {
+    addChatMessage({
+      role: 'user',
+      content: chipText,
+      type: 'user',
+    });
+    setTimeout(() => {
+      addChatMessage({
+        role: 'assistant',
+        content: `Checking your resume structure regarding "${chipText}". The parsed sections are visible on the right side.`,
+        type: 'agent-text',
+      });
+    }, 800);
+  }, [addChatMessage]);
+
+  const handleToggleRightSidebar = useCallback((tab: 'resume' | 'jd') => {
+    setRightSidebarTab(tab);
+    setRightSidebarOpen(true);
+  }, [setRightSidebarTab, setRightSidebarOpen]);
+
+  if (!job || !enrichedJob) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center h-full w-full bg-[var(--bg-main)]">
         <p className="text-sm text-[var(--text-muted)]">Job not found.</p>
@@ -61,28 +171,29 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     );
   }
 
-  const resumeForReRun = resumes.find(r => r.id === job.resumeUsed) || resumes.find(r => r.isDefault) || resumes[0];
-
-  const dbMessages = analysisData?.chatMessages ?? [];
-  const chatMessages = dbMessages.map((m: any) => ({
-    id: m.id,
-    role: m.role,
-    content: m.content,
-    type: m.type,
-    meta: m.metaJson ? JSON.parse(m.metaJson) : undefined,
-  }));
-
   return (
     <MatchAnalysisDetail
-      job={{
-        ...job,
-        analysisResult: analysisData?.currentResult ?? undefined,
-        parsedResume: analysisData?.parsedResume ?? [],
-        jdExtract: analysisData?.jdExtract ?? null,
-        chatMessages,
-      }}
-      resumeForReRun={resumeForReRun}
-      onSaveChanges={updateJob}
+      chatMessages={chatMessages}
+      isParsing={isParsing}
+      isExtracting={isExtracting}
+      rightSidebarOpen={rightSidebarOpen}
+      stepText={stepText}
+      role={job.role}
+      company={job.company}
+      inputVal={inputVal}
+      onInputChange={setInputVal}
+      onToggleRightSidebar={handleToggleRightSidebar}
+      onApproveStep1={handleApproveStep1}
+      onReParseStep1={handleReParseStep1}
+      onResolveMissingInfo={handleResolveMissingInfo}
+      onSkipMissingInfo={handleSkipMissingInfo}
+      onAcceptEdit={acceptEdit}
+      onRejectEdit={rejectEdit}
+      onModifyEdit={modifyEdit}
+      onRetryParse={runParseStep}
+      onRetryExtract={runExtractJd}
+      onSendCommand={handleSendCommand}
+      onChipClick={handleChipClick}
     />
   );
 }
