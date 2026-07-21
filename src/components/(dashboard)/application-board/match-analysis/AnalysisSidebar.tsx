@@ -10,8 +10,6 @@ import {
   HelpCircle,
   AlertTriangle,
   AlertOctagon,
-  ChevronDown,
-  ChevronUp,
   Sparkles,
   Info
 } from 'lucide-react';
@@ -21,13 +19,10 @@ import type { AgentTask } from '@/agent/types';
 interface AnalysisSidebarProps {
   overallScore?: number;
   editHistoryCount?: number;
-  rejectedEditsCount?: number;
   onBackClick?: () => void;
   onUndoLastEdit?: () => void;
   readinessTier?: 'poor' | 'fair' | 'good' | 'strong' | null;
   taskPlan?: AgentTask[] | null;
-  quickWins?: string[];
-  blockers?: string[];
 }
 
 const getTierStyles = (tier: string) => {
@@ -81,16 +76,11 @@ const getStatusIcon = (status: string) => {
 export default function AnalysisSidebar({
   overallScore = 0,
   editHistoryCount = 0,
-  rejectedEditsCount = 0,
   onBackClick,
   onUndoLastEdit,
   readinessTier,
   taskPlan = [],
-  quickWins = [],
-  blockers = [],
 }: AnalysisSidebarProps) {
-  const [blockersOpen, setBlockersOpen] = useState(false);
-  const [winsOpen, setWinsOpen] = useState(false);
 
   return (
     <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)]/50 backdrop-blur-sm shrink-0 h-full overflow-hidden select-none">
@@ -161,17 +151,7 @@ export default function AnalysisSidebar({
           </div>
         )}
 
-        {/* Edit History KPIs */}
-        <div className="w-full mt-2 grid grid-cols-2 gap-2 text-[10px] text-[var(--text-muted)]">
-          <div className="bg-[var(--bg-main)]/50 px-2 py-2.5 rounded-xl border border-[var(--border)] flex flex-col items-center">
-            <span className="font-extrabold text-sm text-[var(--text-heading)]">{editHistoryCount}</span>
-            <span className="text-[9px] tracking-wide mt-0.5">Edits Applied</span>
-          </div>
-          <div className="bg-[var(--bg-main)]/50 px-2 py-2.5 rounded-xl border border-[var(--border)] flex flex-col items-center">
-            <span className="font-extrabold text-sm text-[var(--text-heading)]">{rejectedEditsCount}</span>
-            <span className="text-[9px] tracking-wide mt-0.5">Rejected</span>
-          </div>
-        </div>
+
       </div>
 
       {/* Main Checklist / Details View */}
@@ -209,92 +189,7 @@ export default function AnalysisSidebar({
           </div>
         )}
 
-        {/* Collapsible Blockers and Quick Wins */}
-        <div className="space-y-2">
-          {/* Blockers Accordion */}
-          <div className="border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--bg-surface)]/10 backdrop-blur-sm">
-            <button
-              onClick={() => setBlockersOpen(!blockersOpen)}
-              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--bg-surface)]/20 transition cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${blockers.length > 0 ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}`} />
-                <span className="text-xs font-bold text-[var(--text-heading)]">Blockers ({blockers.length})</span>
-              </div>
-              {blockersOpen ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
-            </button>
-            
-            <AnimatePresence>
-              {blockersOpen && (
-                <motion.div
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  exit={{ opacity: 0, scaleY: 0 }}
-                  transition={{ duration: 0.18, ease: 'easeInOut' }}
-                  style={{ transformOrigin: 'top' }}
-                  className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
-                >
-                  <div className="p-3.5 space-y-2 text-left">
-                    {blockers.length > 0 ? (
-                      blockers.map((b, i) => (
-                        <div key={i} className="text-[11px] text-[var(--text-body)] flex gap-2 leading-relaxed">
-                          <span className="text-rose-400 font-extrabold shrink-0">•</span>
-                          <span>{b}</span>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-[11px] text-[var(--text-muted)] italic text-center py-2">
-                        No blockers found! Ready to submit.
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
 
-          {/* Quick Wins Accordion */}
-          <div className="border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--bg-surface)]/10 backdrop-blur-sm">
-            <button
-              onClick={() => setWinsOpen(!winsOpen)}
-              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--bg-surface)]/20 transition cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${quickWins.length > 0 ? 'bg-amber-500 animate-pulse' : 'bg-slate-500'}`} />
-                <span className="text-xs font-bold text-[var(--text-heading)]">Quick Wins ({quickWins.length})</span>
-              </div>
-              {winsOpen ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
-            </button>
-            
-            <AnimatePresence>
-              {winsOpen && (
-                <motion.div
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  exit={{ opacity: 0, scaleY: 0 }}
-                  transition={{ duration: 0.18, ease: 'easeInOut' }}
-                  style={{ transformOrigin: 'top' }}
-                  className="border-t border-[var(--border)] bg-black/10 overflow-hidden"
-                >
-                  <div className="p-3.5 space-y-2 text-left">
-                    {quickWins.length > 0 ? (
-                      quickWins.map((qw, i) => (
-                        <div key={i} className="text-[11px] text-[var(--text-body)] flex gap-2 leading-relaxed">
-                          <span className="text-amber-400 font-extrabold shrink-0">•</span>
-                          <span>{qw}</span>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-[11px] text-[var(--text-muted)] italic text-center py-2">
-                        No quick wins remaining.
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
       </div>
 
       {/* Footer Controls */}

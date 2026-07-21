@@ -18,14 +18,11 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
   // Use individual selectors to avoid unnecessary re-renders per coding standards
   const overallScore = useAnalysisStore((s) => s.overallScore);
   const editHistory = useAnalysisStore((s) => s.editHistory);
-  const rejectedEditsLog = useAnalysisStore((s) => s.rejectedEditsLog);
   const undoLastEdit = useAnalysisStore((s) => s.undoLastEdit);
   const parsedResume = useAnalysisStore((s) => s.parsedResume);
   const jdExtract = useAnalysisStore((s) => s.jdExtract);
   const readinessTier = useAnalysisStore((s) => s.readinessTier);
   const taskPlan = useAnalysisStore((s) => s.taskPlan);
-  const quickWins = useAnalysisStore((s) => s.quickWins);
-  const blockers = useAnalysisStore((s) => s.blockers);
   const rightSidebarOpen = useAnalysisStore((s) => s.rightSidebarOpen);
   const setRightSidebarOpen = useAnalysisStore((s) => s.setRightSidebarOpen);
 
@@ -39,13 +36,10 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
       <AnalysisSidebar
         overallScore={overallScore}
         editHistoryCount={editHistory.length}
-        rejectedEditsCount={rejectedEditsLog.length}
         onBackClick={handleBackClick}
         onUndoLastEdit={undoLastEdit}
         readinessTier={readinessTier}
         taskPlan={taskPlan}
-        quickWins={quickWins}
-        blockers={blockers}
       />
 
       {/* 2. Main content page slot */}

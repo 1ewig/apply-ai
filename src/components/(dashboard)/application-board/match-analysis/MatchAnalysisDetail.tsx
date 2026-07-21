@@ -452,15 +452,6 @@ export default function MatchAnalysisDetail({
       {/* Workspace Header */}
       <div className="h-[72px] px-6 border-b border-[var(--border)] bg-[var(--bg-surface)]/70 backdrop-blur-md flex justify-between items-center shrink-0 select-none">
         <div className="text-left flex items-center gap-3">
-          <div className="relative">
-            <Sparkles className="w-5 h-5 text-[var(--accent-cyan)]" />
-            {(isParsing || isExtracting) && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-cyan)] opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--accent-cyan)]" />
-              </span>
-            )}
-          </div>
           <div>
             <h3 className="text-xs font-black tracking-wide text-[var(--text-heading)] uppercase">
               Agent Tailoring Cockpit
