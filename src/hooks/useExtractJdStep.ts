@@ -14,7 +14,7 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId }: UseEx
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
 
   const runExtractJd = useCallback(async () => {
-    if (isExtracting || !jobDescription.trim()) return;
+    if (isExtracting || !jobId || !jobDescription.trim()) return;
     setIsExtracting(true);
 
     addChatMessage({

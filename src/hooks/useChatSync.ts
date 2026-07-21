@@ -33,14 +33,14 @@ export function useChatSync(
   }, [jobId]);
 
   useEffect(() => {
-    if (chatMessages.length === 0) return;
+    if (!jobId || chatMessages.length === 0) return;
 
     const msgs = serialize(chatMessages);
     const serialized = JSON.stringify(msgs);
     if (lastSavedRef.current === serialized) return;
 
     lastSavedRef.current = serialized;
-    onSaveChanges(jobId ?? '', { chatMessages: msgs }).catch((err) => {
+    onSaveChanges(jobId, { chatMessages: msgs }).catch((err) => {
       console.error('Failed to sync chat history to Convex:', err);
     });
   }, [chatMessages, jobId, onSaveChanges]);

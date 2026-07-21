@@ -150,6 +150,7 @@ function renderTimelineMessage(
 
         {msg.meta?.approvalCard && (
           <ApprovalCard
+            status={msg.meta.status}
             onApprove={onApproveStep1}
             onReParse={onReParseStep1}
           />
@@ -157,6 +158,7 @@ function renderTimelineMessage(
 
         {msg.meta?.missingInfoCard && (
           <MissingInfoCard
+            status={msg.meta.status}
             items={msg.meta.items || []}
             onSubmitInfo={onResolveMissingInfo}
             onSkipInfo={onSkipMissingInfo}
