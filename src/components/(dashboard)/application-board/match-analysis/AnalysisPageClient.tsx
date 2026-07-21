@@ -86,6 +86,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     job: enrichedJob!,
     resumeForReRun,
     onSaveChanges: updateJob,
+    isAnalysisReady: analysisData !== undefined,
   });
 
   const { isExtracting, runExtractJd } = useExtractJdStep({

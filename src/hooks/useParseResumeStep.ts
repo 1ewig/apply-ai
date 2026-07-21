@@ -8,12 +8,14 @@ interface UseParseResumeStepProps {
   job: JobApplication;
   resumeForReRun?: Resume;
   onSaveChanges: (id: string, data: Partial<JobApplication>) => Promise<unknown>;
+  isAnalysisReady: boolean;
 }
 
 export function useParseResumeStep({
   job,
   resumeForReRun,
   onSaveChanges,
+  isAnalysisReady,
 }: UseParseResumeStepProps) {
   const initializeSession = useAnalysisStore((s) => s.initializeSession);
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
@@ -230,6 +232,7 @@ export function useParseResumeStep({
 
   useEffect(() => {
     if (!job) return;
+    if (!isAnalysisReady) return;
 
     if (hasInitiatedRef.current === job.id) return;
 
@@ -287,7 +290,7 @@ export function useParseResumeStep({
         ],
       });
     }
-  }, [job?.id]);
+  }, [job?.id, isAnalysisReady]);
 
   return {
     isParsing,
