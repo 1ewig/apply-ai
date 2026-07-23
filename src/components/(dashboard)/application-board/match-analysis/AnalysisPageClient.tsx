@@ -93,6 +93,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     jobDescription: job?.jobDescription || '',
     onSaveChanges: updateJob,
     jobId: job?.id ?? '',
+    jobRole: job?.role,
   });
 
   const handleApproveStep1 = () => {

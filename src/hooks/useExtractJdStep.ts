@@ -7,9 +7,10 @@ interface UseExtractJdStepProps {
   jobDescription: string;
   onSaveChanges: (id: string, data: any) => Promise<unknown>;
   jobId: string;
+  jobRole?: string;
 }
 
-export function useExtractJdStep({ jobDescription, onSaveChanges, jobId }: UseExtractJdStepProps) {
+export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole }: UseExtractJdStepProps) {
   const [isExtracting, setIsExtracting] = useState(false);
   const addChatMessage = useAnalysisStore((s) => s.addChatMessage);
 
@@ -39,6 +40,9 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId }: UseEx
 
       useAnalysisStore.setState({ jdExtract: data });
       await onSaveChanges(jobId, { jdExtract: data });
+      if (!jobRole && data.roleTitle) {
+        await onSaveChanges(jobId, { role: data.roleTitle });
+      }
 
       addChatMessage({
         role: 'assistant',

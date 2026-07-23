@@ -4,7 +4,6 @@ import {
   FileText,
   ChevronRight,
   Briefcase,
-  Award,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
@@ -150,14 +149,11 @@ export default function AnalysisRightSidebar({
               <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
                 Target Role
               </h3>
-              <div>
+              <div className="flex items-center flex-wrap gap-2 pt-0.5">
                 <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <Award className="w-3.5 h-3.5 text-[var(--accent-cyan)]" />
-                  <span className="inline-block text-[9px] bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] px-2.5 py-0.5 rounded border border-[var(--accent-cyan)]/20 uppercase font-extrabold tracking-wider">
-                    {jdExtract.seniorityLevel}
-                  </span>
-                </div>
+                <span className="inline-block text-[9px] bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] px-2 py-0.5 rounded border border-[var(--accent-cyan)]/20 uppercase font-extrabold tracking-wider shrink-0">
+                  {jdExtract.seniorityLevel}
+                </span>
               </div>
             </div>
 
