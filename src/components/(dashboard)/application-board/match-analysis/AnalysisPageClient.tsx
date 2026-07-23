@@ -180,8 +180,8 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       isExtracting={isExtracting}
       rightSidebarOpen={rightSidebarOpen}
       stepText={stepText}
-      role={job.role}
-      company={job.company}
+      role={job.role || job.jdExtract?.roleTitle || 'Unnamed Role'}
+      company={job.company || 'Unnamed Company'}
       inputVal={inputVal}
       onInputChange={setInputVal}
       onToggleRightSidebar={handleToggleRightSidebar}

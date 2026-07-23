@@ -39,10 +39,14 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole
       const data = await response.json();
 
       useAnalysisStore.setState({ jdExtract: data });
-      await onSaveChanges(jobId, { jdExtract: data });
-      if (!jobRole && data.roleTitle) {
-        await onSaveChanges(jobId, { role: data.roleTitle });
+
+      const updates: Record<string, any> = { jdExtract: data };
+      const isRoleEmpty = !jobRole || !jobRole.trim() || jobRole === 'Unnamed Role';
+      if (isRoleEmpty && data.roleTitle && data.roleTitle.trim()) {
+        updates.role = data.roleTitle.trim();
       }
+
+      await onSaveChanges(jobId, updates);
 
       addChatMessage({
         role: 'assistant',
@@ -60,7 +64,7 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole
     } finally {
       setIsExtracting(false);
     }
-  }, [isExtracting, jobDescription, addChatMessage, onSaveChanges, jobId]);
+  }, [isExtracting, jobDescription, addChatMessage, onSaveChanges, jobId, jobRole]);
 
   return { isExtracting, runExtractJd };
 }

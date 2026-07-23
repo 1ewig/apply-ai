@@ -42,9 +42,24 @@ export function useApplications() {
         ...updates,
       });
     },
-    onSuccess: (data, variables) => {
+    onMutate: async ({ id, updates }) => {
+      await queryClient.cancelQueries({ queryKey: ["applications"] });
+      const previousJobs = queryClient.getQueryData<any[]>(["applications"]);
+      if (previousJobs) {
+        queryClient.setQueryData(["applications"], (old: any[] | undefined) => {
+          if (!old) return [];
+          return old.map((j) => (j._id === id || j.id === id ? { ...j, ...updates } : j));
+        });
+      }
+      return { previousJobs };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousJobs) {
+        queryClient.setQueryData(["applications"], context.previousJobs);
+      }
+    },
+    onSettled: (data, error, variables) => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
-      // Also invalidate analysis query to keep detail pages synced
       queryClient.invalidateQueries({ queryKey: ["analysis", variables.id] });
     },
   });
