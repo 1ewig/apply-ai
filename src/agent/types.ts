@@ -70,7 +70,7 @@ export type MatchAnalysis = z.infer<typeof matchAnalysisSchema>;
 export interface ResumeEdit {
   id: string;
   sessionId: string;
-  sectionKey: string; // e.g. 'summary', 'experience', etc.
+  sectionKey: string; // e.g. 'summary', 'work experience', etc.
   beforeContent: string;
   afterContent: string;
   reasoning: string;

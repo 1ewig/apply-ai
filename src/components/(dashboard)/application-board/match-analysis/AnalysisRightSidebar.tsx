@@ -1,46 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  FileText, 
-  ChevronRight, 
-  ChevronLeft,
+import {
+  FileText,
+  ChevronRight,
   Briefcase,
-  Copy,
-  Check,
-  Sparkles,
-  Award
+  Award,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
-// Copy button inline helper component
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="p-1.5 rounded-lg bg-[var(--bg-main)] hover:bg-[var(--border)] text-[var(--text-muted)] hover:text-[var(--accent-cyan)] border border-[var(--border)] transition-all cursor-pointer shrink-0 select-none"
-      title="Copy content"
-    >
-      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-    </button>
-  );
-}
 
 interface ResumeSection {
   heading: string;
@@ -125,11 +94,10 @@ export default function AnalysisRightSidebar({
             {parsedResume && parsedResume.length > 0 ? (
               parsedResume.map((section, idx) => (
                 <div key={idx} className="group space-y-2.5">
-                  <div className="flex justify-between items-center border-b border-[var(--border)] pb-1.5">
+                  <div className="border-b border-[var(--border)] pb-1.5">
                     <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono">
                       {section.heading}
                     </h3>
-                    <CopyButton text={section.content} />
                   </div>
                   <div className="text-xs text-[var(--text-body)] font-sans leading-relaxed pt-0.5">
                     <ReactMarkdown

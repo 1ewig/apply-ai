@@ -182,7 +182,7 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
       quickWins: blueprint.quickWins,
       blockers: blueprint.blockers,
       resumeSections: (blueprint.parsedResume || []).reduce((acc, sec) => {
-        acc[sec.heading.toUpperCase()] = sec.content;
+        acc[sec.heading] = sec.content;
         return acc;
       }, {} as Record<string, string>),
       editHistory: [],

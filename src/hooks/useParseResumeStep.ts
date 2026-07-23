@@ -19,7 +19,7 @@ interface UseParseResumeStepProps {
 function buildSectionsMap(sections: ParsedResumeSection[]): Record<string, string> {
   return sections.reduce<Record<string, string>>((acc, sec) => {
     if (sec?.heading) {
-      acc[sec.heading.toUpperCase()] = sec.content || '';
+      acc[sec.heading] = sec.content || '';
     }
     return acc;
   }, {});
@@ -202,8 +202,8 @@ export function useParseResumeStep({
         const updatedResume = [...currentParsed];
 
         const headerIndex = updatedResume.findIndex((s) => {
-          const heading = s.heading.toUpperCase();
-          return heading.includes('HEADER') || heading.includes('CONTACT');
+          const heading = s.heading;
+          return heading.includes('header') || heading.includes('contact');
         });
 
         if (headerIndex !== -1) {
@@ -213,7 +213,7 @@ export function useParseResumeStep({
           };
         } else {
           updatedResume.unshift({
-            heading: 'CONTACT INFORMATION',
+            heading: 'contact information',
             content: addedText,
           });
         }
