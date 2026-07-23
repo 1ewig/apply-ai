@@ -203,7 +203,7 @@ export function useParseResumeStep({
 
         const headerIndex = updatedResume.findIndex((s) => {
           const heading = s.heading;
-          return heading.includes('header') || heading.includes('contact');
+          return heading === 'header';
         });
 
         if (headerIndex !== -1) {
@@ -213,7 +213,7 @@ export function useParseResumeStep({
           };
         } else {
           updatedResume.unshift({
-            heading: 'contact information',
+            heading: 'header',
             content: addedText,
           });
         }

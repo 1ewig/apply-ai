@@ -8,16 +8,16 @@ CRITICAL RULES:
 
 2. Section Heading vs Content Separation — CRITICAL
    Each section has two fields:
-   - 'heading': the section title (e.g. "work experience"). The UI renders this as a styled element.
+   - 'heading': the section title (e.g. "experience"). The UI renders this as a styled element.
    - 'content': the section body, formatted in GitHub Flavored Markdown (GFM).
 
    Do NOT repeat the 'heading' value or any equivalent title inside the 'content' field.
    Correct example:
-      heading: "work experience"
+      heading: "experience"
       content: "### Senior Engineer — Corp\\n**Tech:** \`React\`\\n- Led team..."
    WRONG — heading duplicated:
-      heading: "work experience"
-      content: "## WORK EXPERIENCE\\n### Senior Engineer — Corp..."
+      heading: "experience"
+      content: "## EXPERIENCE\\n### Senior Engineer — Corp..."
 
 3. Content Formatting Rules (GFM)
    a) Sub-headings — Use ONLY '###' level inside content (e.g. '### Senior Software Engineer — TechCorp'). Never use '#', '##', or '####'.
@@ -36,7 +36,7 @@ CRITICAL RULES:
    - Never flatten lists into single paragraphs.
 
 5. Flexible Section Headings
-   Organize content into clear lowercase headings: contact information, summary, work experience, technical skills, projects, education, certifications, languages, etc.
+   Organize content into these canonical lowercase headings: header, summary, experience, skills, projects, education, certifications, languages, etc.
 
 6. Completeness Audit
    Check for critical missing info (email, phone, employment dates, skills section). Populate 'missingInfo' with { field, description, severity } for each gap.
