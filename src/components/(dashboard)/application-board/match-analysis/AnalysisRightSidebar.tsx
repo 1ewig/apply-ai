@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useAnalysisStore } from '@/stores/useAnalysisStore';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Copy button inline helper component
 function CopyButton({ text }: { text: string }) {
@@ -132,9 +134,41 @@ export default function AnalysisRightSidebar({
                     </h4>
                     <CopyButton text={section.content} />
                   </div>
-                  <pre className="text-xs text-[var(--text-body)] font-sans whitespace-pre-wrap leading-relaxed">
-                    {section.content}
-                  </pre>
+                  <div className="text-xs text-[var(--text-body)] font-sans leading-relaxed">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        h1: ({ children }) => <h3 className="text-xs font-black text-[var(--text-heading)] mt-3 mb-1.5 font-sans">{children}</h3>,
+                        h2: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2.5 mb-1 font-sans">{children}</h4>,
+                        h3: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2 mb-1 font-sans">{children}</h4>,
+                        p: ({ children }) => <p className="text-xs text-[var(--text-body)] leading-relaxed mb-2 last:mb-0">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc list-outside pl-4 space-y-1 text-xs text-[var(--text-body)] mb-2 last:mb-0">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-outside pl-4 space-y-1 text-xs text-[var(--text-body)] mb-2 last:mb-0">{children}</ol>,
+                        li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                        strong: ({ children }) => <strong className="font-bold text-[var(--text-heading)]">{children}</strong>,
+                        em: ({ children }) => <em className="italic text-[var(--text-muted)]">{children}</em>,
+                        code: ({ children }) => (
+                          <code className="text-[10px] font-mono bg-[var(--bg-main)] text-[var(--accent-cyan)] px-1.5 py-0.5 rounded border border-[var(--border)] font-semibold">
+                            {children}
+                          </code>
+                        ),
+                        table: ({ children }) => (
+                          <div className="overflow-x-auto my-2 rounded-lg border border-[var(--border)]">
+                            <table className="min-w-full text-xs text-left divide-y divide-[var(--border)]">{children}</table>
+                          </div>
+                        ),
+                        th: ({ children }) => <th className="px-2.5 py-1.5 bg-[var(--bg-main)] font-extrabold text-[10px] text-[var(--text-heading)] uppercase tracking-wider font-mono">{children}</th>,
+                        td: ({ children }) => <td className="px-2.5 py-1.5 text-[11px] border-t border-[var(--border)] text-[var(--text-body)]">{children}</td>,
+                        blockquote: ({ children }) => (
+                          <blockquote className="border-l-2 border-[var(--accent-cyan)] pl-3 py-1 my-2 text-[11px] text-[var(--text-muted)] italic bg-[var(--bg-main)]/50 rounded-r-lg">
+                            {children}
+                          </blockquote>
+                        ),
+                      }}
+                    >
+                      {section.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               ))
             ) : (
