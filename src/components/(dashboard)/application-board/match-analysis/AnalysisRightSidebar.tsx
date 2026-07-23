@@ -121,25 +121,22 @@ export default function AnalysisRightSidebar({
       {/* Content Area */}
       <div className="flex-1 overflow-y-auto p-5 custom-scrollbar bg-gradient-to-b from-[var(--bg-card)]/50 to-[var(--bg-main)]/30">
         {activeTab === 'resume' ? (
-          <div className="space-y-5">
+          <div className="space-y-7 p-1 text-left">
             {parsedResume && parsedResume.length > 0 ? (
               parsedResume.map((section, idx) => (
-                <div 
-                  key={idx} 
-                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 text-left hover:border-[var(--accent)]/30 transition-colors duration-200"
-                >
-                  <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
-                    <h4 className="text-[10px] font-extrabold text-[var(--text-heading)] tracking-wider uppercase font-mono">
+                <div key={idx} className="group space-y-2.5">
+                  <div className="flex justify-between items-center border-b border-[var(--border)] pb-1.5">
+                    <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono">
                       {section.heading}
-                    </h4>
+                    </h3>
                     <CopyButton text={section.content} />
                   </div>
-                  <div className="text-xs text-[var(--text-body)] font-sans leading-relaxed">
+                  <div className="text-xs text-[var(--text-body)] font-sans leading-relaxed pt-0.5">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        h1: ({ children }) => <h3 className="text-xs font-black text-[var(--text-heading)] mt-3 mb-1.5 font-sans">{children}</h3>,
-                        h2: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2.5 mb-1 font-sans">{children}</h4>,
+                        h1: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2.5 mb-1 font-sans">{children}</h4>,
+                        h2: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2 mb-1 font-sans">{children}</h4>,
                         h3: ({ children }) => <h4 className="text-[11px] font-bold text-[var(--text-heading)] mt-2 mb-1 font-sans">{children}</h4>,
                         p: ({ children }) => <p className="text-xs text-[var(--text-body)] leading-relaxed mb-2 last:mb-0">{children}</p>,
                         ul: ({ children }) => <ul className="list-disc list-outside pl-4 space-y-1 text-xs text-[var(--text-body)] mb-2 last:mb-0">{children}</ul>,
@@ -179,10 +176,12 @@ export default function AnalysisRightSidebar({
             )}
           </div>
         ) : jdExtract ? (
-          <div className="space-y-5 text-left">
+          <div className="space-y-7 p-1 text-left">
             {/* Role & Seniority */}
-            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
-              <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Target Role</h4>
+            <div className="space-y-2.5">
+              <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                Target Role
+              </h3>
               <div>
                 <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
                 <div className="flex items-center gap-1.5 mt-2">
@@ -196,17 +195,37 @@ export default function AnalysisRightSidebar({
 
             {/* Company Context */}
             {jdExtract.companyContext && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Company Context</h4>
-                <p className="text-xs text-[var(--text-body)] leading-relaxed">{jdExtract.companyContext}</p>
+              <div className="space-y-2">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Company Context
+                </h3>
+                <div className="text-xs text-[var(--text-body)] leading-relaxed">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      p: ({ children }) => <p className="text-xs text-[var(--text-body)] leading-relaxed mb-1 last:mb-0">{children}</p>,
+                      strong: ({ children }) => <strong className="font-bold text-[var(--text-heading)]">{children}</strong>,
+                      em: ({ children }) => <em className="italic text-[var(--text-muted)]">{children}</em>,
+                      code: ({ children }) => (
+                        <code className="text-[10px] font-mono bg-[var(--bg-main)] text-[var(--accent-cyan)] px-1.5 py-0.5 rounded border border-[var(--border)] font-semibold">
+                          {children}
+                        </code>
+                      ),
+                    }}
+                  >
+                    {jdExtract.companyContext}
+                  </ReactMarkdown>
+                </div>
               </div>
             )}
 
             {/* Must-have Keywords */}
             {jdExtract.mustHaveKeywords && jdExtract.mustHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Must-Have Core Skills</h4>
-                <div className="flex flex-wrap gap-1.5 pt-1.5">
+              <div className="space-y-2">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Must-Have Core Skills
+                </h3>
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {jdExtract.mustHaveKeywords.map((kw) => (
                     <span key={kw} className="text-[9px] font-bold bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded border border-emerald-500/25 tracking-wide uppercase font-mono shadow-sm">
                       {kw}
@@ -218,9 +237,11 @@ export default function AnalysisRightSidebar({
 
             {/* Nice-to-have Keywords */}
             {jdExtract.niceToHaveKeywords && jdExtract.niceToHaveKeywords.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Nice-To-Have Skills</h4>
-                <div className="flex flex-wrap gap-1.5 pt-1.5">
+              <div className="space-y-2">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Nice-To-Have Skills
+                </h3>
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {jdExtract.niceToHaveKeywords.map((kw) => (
                     <span key={kw} className="text-[9px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded border border-amber-500/25 tracking-wide uppercase font-mono shadow-sm">
                       {kw}
@@ -232,13 +253,31 @@ export default function AnalysisRightSidebar({
 
             {/* Core Responsibilities */}
             {jdExtract.coreResponsibilities && jdExtract.coreResponsibilities.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Core Responsibilities</h4>
-                <div className="space-y-2 pt-1">
+              <div className="space-y-2.5">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Core Responsibilities
+                </h3>
+                <div className="space-y-2 pt-0.5">
                   {jdExtract.coreResponsibilities.map((r, i) => (
                     <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-[var(--accent-cyan)] shrink-0 font-bold">•</span>
-                      <span>{r}</span>
+                      <div className="flex-1">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ children }) => <span>{children}</span>,
+                            strong: ({ children }) => <strong className="font-bold text-[var(--text-heading)]">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-[var(--text-muted)]">{children}</em>,
+                            code: ({ children }) => (
+                              <code className="text-[10px] font-mono bg-[var(--bg-main)] text-[var(--accent-cyan)] px-1.5 py-0.5 rounded border border-[var(--border)] font-semibold">
+                                {children}
+                              </code>
+                            ),
+                          }}
+                        >
+                          {r}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -247,13 +286,31 @@ export default function AnalysisRightSidebar({
 
             {/* Required Qualifications */}
             {jdExtract.requiredQualifications && jdExtract.requiredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Required Qualifications</h4>
-                <div className="space-y-2 pt-1">
+              <div className="space-y-2.5">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Required Qualifications
+                </h3>
+                <div className="space-y-2 pt-0.5">
                   {jdExtract.requiredQualifications.map((q, i) => (
                     <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-rose-400 shrink-0 font-bold">•</span>
-                      <span>{q}</span>
+                      <div className="flex-1">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ children }) => <span>{children}</span>,
+                            strong: ({ children }) => <strong className="font-bold text-[var(--text-heading)]">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-[var(--text-muted)]">{children}</em>,
+                            code: ({ children }) => (
+                              <code className="text-[10px] font-mono bg-[var(--bg-main)] text-[var(--accent-cyan)] px-1.5 py-0.5 rounded border border-[var(--border)] font-semibold">
+                                {children}
+                              </code>
+                            ),
+                          }}
+                        >
+                          {q}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -262,13 +319,31 @@ export default function AnalysisRightSidebar({
 
             {/* Preferred Qualifications */}
             {jdExtract.preferredQualifications && jdExtract.preferredQualifications.length > 0 && (
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/60 backdrop-blur-sm space-y-2.5 hover:border-[var(--accent)]/30 transition-colors duration-200">
-                <h4 className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-wider border-b border-[var(--border)] pb-2 uppercase font-mono">Preferred Qualifications</h4>
-                <div className="space-y-2 pt-1">
+              <div className="space-y-2.5">
+                <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
+                  Preferred Qualifications
+                </h3>
+                <div className="space-y-2 pt-0.5">
                   {jdExtract.preferredQualifications.map((q, i) => (
                     <div key={i} className="text-xs text-[var(--text-body)] leading-relaxed flex gap-2">
                       <span className="text-[var(--accent-yellow)] shrink-0 font-bold">•</span>
-                      <span>{q}</span>
+                      <div className="flex-1">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ children }) => <span>{children}</span>,
+                            strong: ({ children }) => <strong className="font-bold text-[var(--text-heading)]">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-[var(--text-muted)]">{children}</em>,
+                            code: ({ children }) => (
+                              <code className="text-[10px] font-mono bg-[var(--bg-main)] text-[var(--accent-cyan)] px-1.5 py-0.5 rounded border border-[var(--border)] font-semibold">
+                                {children}
+                              </code>
+                            ),
+                          }}
+                        >
+                          {q}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   ))}
                 </div>
