@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - **Accounts**: [Clerk](https://clerk.com) (free), [Groq](https://console.groq.com) (free), [Convex](https://convex.dev) (free), [Vercel](https://vercel.com) (free)
-- **Tools**: Node.js 18+, npm, git
+- **Tools**: Bun 1.3.14+, git
 
 ---
 
@@ -11,7 +11,10 @@
 
 | Variable | Required | Where to Get It |
 |---|---|---|
-| `GROQ_API_KEY` | Yes | [Groq Console](https://console.groq.com) → API Keys |
+| `GROQ_API_KEY` | If Groq | [Groq Console](https://console.groq.com) → API Keys |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | If Google | [Google AI Studio](https://makersuite.google.com/app/apikey) |
+| `AI_PROVIDER` | No | `"groq"` or `"google"` (default: `"groq"`) |
+| `AI_MODEL` | No | Override default model for the selected provider |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk Dashboard → API Keys |
 | `CLERK_SECRET_KEY` | Yes | Clerk Dashboard → API Keys |
 | `CLERK_FRONTEND_API_URL` | Yes | Clerk Dashboard → Integrations → Convex → **Frontend API URL** |
@@ -19,7 +22,7 @@
 | `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | `npx convex deploy` output |
 | `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | No | Default: `/sign-in` |
 | `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | No | Default: `/sign-up` |
-| `API_KEY` | No | Any random string — allows API-only access to `/api/compare` |
+| `API_KEY` | No | Any random string — allows API-only access to `/api/plan/parse-resume` and `/api/plan/extract-jd` |
 
 ---
 
@@ -30,7 +33,7 @@
 ```bash
 git clone <your-repo-url>
 cd apply-ai
-npm install
+bun install
 ```
 
 ### 2. Set Up Clerk
@@ -39,11 +42,22 @@ npm install
 2. Under **API Keys**, copy `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`
 3. Under **Integrations**, select **Convex** (or go to `https://dashboard.clerk.com/apps/setup/convex`) and click **Activate Convex integration**
 4. Copy the **Frontend API URL** — this is your `CLERK_FRONTEND_API_URL`
+5. **Create a JWT template** named `convex` (used by Server Actions):
+   - In Clerk Dashboard → Configure → **JWT Templates**
+   - Click **New Template** → select **Convex** (or create a custom one named `convex`)
+   - Claims should include `sub`, `email`, and any other claims your Convex queries reference via `ctx.auth.getUserIdentity()`
+   - Click **Save**
 
-### 3. Set Up Groq
+### 3. Set Up AI Provider
 
+**Groq (default):**
 1. Go to [Groq Console](https://console.groq.com) → API Keys
 2. Create a key and copy it as `GROQ_API_KEY`
+
+**Google Gemini (optional):**
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a key and copy it as `GOOGLE_GENERATIVE_AI_API_KEY`
+3. Set `AI_PROVIDER=google` to switch providers
 
 ### 4. Deploy Convex Backend
 
@@ -100,8 +114,9 @@ Add env vars when prompted, or set them later in the Vercel Dashboard → Projec
 
 1. Visit your Vercel URL
 2. Sign up / sign in with Clerk
-3. Upload a resume and job description to test the comparison flow
-4. Check the application board, resume templates, and dashboard pages
+3. Open an application → the analysis page auto-runs Step 1 (resume parsing) and Step 2 (JD extraction)
+4. Review the tailoring roadmap, edit proposals, and score tracking
+5. Check the application board, resume templates, and dashboard pages
 
 ---
 
@@ -122,7 +137,8 @@ Push to your GitHub repo — Vercel auto-deploys the main branch by default.
 | Problem | Likely Fix |
 |---|---|
 | Auth fails / "Invalid JWT" | Verify `CLERK_FRONTEND_API_URL` matches the Frontend API URL in Clerk's Convex integration exactly |
+| Server Actions fail with 401 | Ensure the JWT template named `convex` exists in Clerk Dashboard → JWT Templates |
 | Convex calls fail with 401 | Check `NEXT_PUBLIC_CONVEX_URL` is the correct deployment URL |
 | Clerk login redirects to localhost | Add your Vercel domain to Clerk → Redirect URLs |
-| 500 on resume comparison | Verify `GROQ_API_KEY` is set and has quota available |
+| 500 on resume parsing | Verify `GROQ_API_KEY` (or `GOOGLE_GENERATIVE_AI_API_KEY`) is set and has quota available |
 | API route returns 401 | Either sign in via Clerk, or set `API_KEY` and pass it as `x-api-key` header |
