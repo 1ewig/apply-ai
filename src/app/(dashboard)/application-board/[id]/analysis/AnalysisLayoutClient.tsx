@@ -17,8 +17,6 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
 
   // Use individual selectors to avoid unnecessary re-renders per coding standards
   const overallScore = useAnalysisStore((s) => s.overallScore);
-  const editHistory = useAnalysisStore((s) => s.editHistory);
-  const undoLastEdit = useAnalysisStore((s) => s.undoLastEdit);
   const parsedResume = useAnalysisStore((s) => s.parsedResume);
   const jdExtract = useAnalysisStore((s) => s.jdExtract);
   const readinessTier = useAnalysisStore((s) => s.readinessTier);
@@ -35,9 +33,7 @@ export default function AnalysisLayoutClient({ id, children }: AnalysisLayoutCli
       {/* 1. Renders presentational left task sidebar */}
       <AnalysisSidebar
         overallScore={overallScore}
-        editHistoryCount={editHistory.length}
         onBackClick={handleBackClick}
-        onUndoLastEdit={undoLastEdit}
         readinessTier={readinessTier}
         taskPlan={taskPlan}
       />

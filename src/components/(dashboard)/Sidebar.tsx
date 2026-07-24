@@ -61,7 +61,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="font-display font-extrabold text-base text-[var(--text-heading)] leading-none">ApplyAI</h1>
-            <span className="text-[10px] font-bold text-[var(--text-muted)] tracking-wider uppercase">Workspace</span>
+            <span className="text-[10px] font-bold text-[var(--text-muted)] tracking-wider uppercase">Dashboard</span>
           </div>
           <UserButton />
         </div>
@@ -128,7 +128,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
           className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          Exit Workspace
+          Exit Dashboard
         </button>
       </div>
     </>

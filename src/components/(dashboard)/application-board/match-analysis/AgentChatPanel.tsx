@@ -220,17 +220,13 @@ export default function AgentChatPanel({
   return (
     <section className="flex-1 flex flex-col bg-[var(--bg-main)] min-w-0 h-full overflow-hidden">
       <div className="h-[72px] px-6 border-b border-[var(--border)] bg-[var(--bg-surface)]/70 backdrop-blur-md flex justify-between items-center shrink-0 select-none">
-        <div className="text-left flex items-center gap-3">
-          <div>
-            <h3 className="text-xs font-black tracking-wide text-[var(--text-heading)] uppercase">
-              Agent Tailoring Cockpit
-            </h3>
-            <p className="text-[10px] font-mono text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5">
-              <span>{role} at {company}</span>
-              <span className="opacity-40">&bull;</span>
-              <span className="text-[var(--accent)] font-semibold">{stepText}</span>
-            </p>
-          </div>
+        <div className="text-left flex flex-col justify-center h-full">
+          <h3 className="text-sm font-black text-[var(--text-heading)] leading-tight">
+            {role} at {company}
+          </h3>
+          <p className="text-[10px] font-mono text-[var(--accent)] font-semibold mt-0.5">
+            {stepText}
+          </p>
         </div>
 
         {!rightSidebarOpen && (

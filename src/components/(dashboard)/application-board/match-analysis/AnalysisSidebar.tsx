@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft,
-  Undo,
   CheckCircle2,
   Circle,
   HelpCircle,
@@ -18,9 +17,7 @@ import type { AgentTask } from '@/agent/types';
 
 interface AnalysisSidebarProps {
   overallScore?: number;
-  editHistoryCount?: number;
   onBackClick?: () => void;
-  onUndoLastEdit?: () => void;
   readinessTier?: 'poor' | 'fair' | 'good' | 'strong' | null;
   taskPlan?: AgentTask[] | null;
 }
@@ -75,9 +72,7 @@ const getStatusIcon = (status: string) => {
 
 export default function AnalysisSidebar({
   overallScore = 0,
-  editHistoryCount = 0,
   onBackClick,
-  onUndoLastEdit,
   readinessTier,
   taskPlan = [],
 }: AnalysisSidebarProps) {
@@ -91,9 +86,9 @@ export default function AnalysisSidebar({
         </Button>
         <div className="text-left">
           <h2 className="font-extrabold text-xs tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] uppercase">
-            ApplyAI Tailoring
+            Match Overview
           </h2>
-          <p className="text-[10px] text-[var(--text-muted)] font-mono">Cockpit Session</p>
+          <p className="text-[10px] text-[var(--text-muted)] font-mono">AI recommendations for your resume</p>
         </div>
       </div>
 
@@ -194,14 +189,13 @@ export default function AnalysisSidebar({
 
       {/* Footer Controls */}
       <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-card)]/50 shrink-0">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full text-xs flex items-center justify-center gap-1.5 py-2 hover:scale-[1.01] transition-transform select-none cursor-pointer" 
-          onClick={onUndoLastEdit}
-          disabled={editHistoryCount === 0}
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full text-xs flex items-center justify-center gap-1.5 py-2 hover:scale-[1.01] transition-transform select-none cursor-pointer"
+          onClick={onBackClick}
         >
-          <Undo className="w-3.5 h-3.5" /> Undo Last Edit
+          <ArrowLeft className="w-3.5 h-3.5" /> Exit Workspace
         </Button>
       </div>
     </aside>
