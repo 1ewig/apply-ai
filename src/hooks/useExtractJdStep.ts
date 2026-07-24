@@ -19,12 +19,6 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole
     if (isExtracting || !jobId || !jobDescription.trim()) return;
     setIsExtracting(true);
 
-    addChatMessage({
-      role: 'assistant',
-      content: 'Now I\'m scanning the job description to pick out the key requirements and qualifications...',
-      type: 'agent-text',
-    });
-
     try {
       const response = await fetch('/api/plan/extract-jd', {
         method: 'POST',

@@ -95,7 +95,7 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-auto-approved',
               role: 'assistant' as const,
-              content: `I've organized your resume into sections and everything looks complete. Ready to move on!`,
+              content: `I've organized your resume into sections and everything looks complete.\n\nNow let me look at the job description...`,
               type: 'agent-text' as const,
             };
           } else if (requiresInput && missingInfo.length > 0 && currentAttempt === 1) {
