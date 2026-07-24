@@ -21,7 +21,7 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole
 
     addChatMessage({
       role: 'assistant',
-      content: '**Step 2 in progress:** Extracting key requirements and keywords from the job description...',
+      content: 'Now I\'m scanning the job description to pick out the key requirements and qualifications...',
       type: 'agent-text',
     });
 
@@ -56,14 +56,14 @@ export function useExtractJdStep({ jobDescription, onSaveChanges, jobId, jobRole
 
       addChatMessage({
         role: 'assistant',
-        content: `**Step 2 Complete: JD Extracted!** I've identified the key requirements for **${data.roleTitle}**. Check the **JD** tab in the right reference panel for details.`,
+        content: `I've analyzed the job description for **${data.roleTitle}**. You can see the full breakdown in the Job Desc tab on the right.`,
         type: 'agent-text',
       });
     } catch (err: any) {
       console.error(err);
       addChatMessage({
         role: 'assistant',
-        content: `**Step 2 Failed:** ${err.message || 'Failed to extract job description details.'}`,
+        content: `I had trouble reading the job description. ${err.message || 'Failed to extract job description details.'}`,
         type: 'agent-text',
         meta: { retryable: true, retryStep: 'extract-jd' },
       });

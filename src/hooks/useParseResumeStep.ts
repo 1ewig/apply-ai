@@ -95,14 +95,14 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-auto-approved',
               role: 'assistant' as const,
-              content: `**Step 1 Complete!** Resume parsed with **${fidelityScore}% fidelity** — all content preserved accurately. Ready for Step 2.`,
+              content: `I've organized your resume into sections and everything looks complete. Ready to move on!`,
               type: 'agent-text' as const,
             };
           } else if (requiresInput && missingInfo.length > 0 && currentAttempt === 1) {
             newChatMessage = {
               id: 'parse-step-missing',
               role: 'assistant' as const,
-              content: `**Step 1 Complete: Resume Parsed!** I've structured your resume into clean sections in the right panel. However, I noticed some missing details:`,
+              content: `I've laid out your resume in the right panel, but I noticed a few details are missing. Could you help fill these in?`,
               type: 'agent-text' as const,
               meta: { missingInfoCard: true, items: missingInfo },
             };
@@ -110,7 +110,7 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-success',
               role: 'assistant' as const,
-              content: `**Step 1 Complete: Resume Parsed!** Fidelity score: **${fidelityScore}%**. Please review the structured sections under the **Resume** tab in the right reference panel. Is the parsed structure accurate?`,
+              content: `I've structured your resume into sections. Take a quick look in the right panel to make sure everything looks right?`,
               type: 'agent-text' as const,
               meta: { approvalCard: true },
             };
@@ -118,7 +118,7 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-auto-approved',
               role: 'assistant' as const,
-              content: `**Step 1 Re-parsed & Approved!** Resume structure updated with **${fidelityScore}%** data fidelity. Ready to proceed to Step 2.`,
+              content: `Got it — I've re-parsed your resume and updated the sections. We're good to go!`,
               type: 'agent-text' as const,
             };
           }
@@ -153,7 +153,7 @@ export function useParseResumeStep({
               {
                 id: 'parse-step-error',
                 role: 'assistant',
-                content: `**Step 1 Failed:** ${errorMessage}`,
+                content: `Sorry, I couldn't read your resume properly. ${errorMessage}`,
                 type: 'agent-text',
                 meta: { retryable: true },
               },
@@ -183,7 +183,7 @@ export function useParseResumeStep({
           {
             id: `approve-step1-${Date.now()}`,
             role: 'assistant',
-            content: `**Step 1 Approved!** Structured resume confirmed. Ready for Step 2 (JD Extraction).`,
+            content: `Perfect, your resume structure is confirmed! Now let's look at the job description.`,
             type: 'agent-text',
           },
         ],
@@ -247,7 +247,7 @@ export function useParseResumeStep({
               {
                 id: `missing-resolved-${Date.now()}`,
                 role: 'assistant',
-                content: `**Missing information added!** Updated your structured resume in the reference panel. Step 1 is complete!`,
+                content: `Thanks! I've added those details to your resume structure. All set.`,
                 type: 'agent-text',
               },
             ],
@@ -273,7 +273,7 @@ export function useParseResumeStep({
               {
                 id: `missing-skipped-${Date.now()}`,
                 role: 'assistant',
-                content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
+                content: `No problem — we'll continue with what we have.`,
                 type: 'agent-text',
               },
             ],
@@ -298,7 +298,7 @@ export function useParseResumeStep({
           {
             id: `missing-skipped-${Date.now()}`,
             role: 'assistant',
-            content: `**Skipped.** Proceeding with current structured sections. Step 1 is complete!`,
+            content: `No problem — we'll continue with what we have.`,
             type: 'agent-text',
           },
         ],
@@ -346,13 +346,13 @@ export function useParseResumeStep({
           {
             id: 'init-ack',
             role: 'assistant',
-            content: `Hello! I've received your application details for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**. Let's tailor your resume to maximize your match rate.`,
+            content: `Hey! I've got your application for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**. Let's get your resume ready.`,
             type: 'agent-text',
           },
           {
             id: 'init-ongoing',
             role: 'assistant',
-            content: `**Step 1 in progress:** I am currently parsing your resume content and cleaning up formatting into structured sections...`,
+            content: `Reading through your resume now — I'm organizing everything into clean sections so we can work with them.`,
             type: 'agent-text',
           },
         ],
@@ -364,7 +364,7 @@ export function useParseResumeStep({
           {
             id: 'init-msg-parsed',
             role: 'assistant',
-            content: `Welcome back! I've loaded your structured resume for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}**.\n\nStep 1 (Parse Resume) is already complete. You can view the parsed sections in the right panel reference.`,
+            content: `Welcome back! Your resume for **${job.role || 'Unnamed Role'}** at **${job.company || 'Unnamed Company'}** is loaded and ready to go.`,
             type: 'agent-text',
           },
         ],

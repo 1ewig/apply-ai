@@ -129,7 +129,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     setTimeout(() => {
       addChatMessage({
         role: 'assistant',
-        content: `I received your message: "${val}". We are currently focusing on Step 1 (Parse Resume). Let me know how you would like to proceed.`,
+        content: `Got it! I'm still working through the resume. I'll get back to you when I'm ready.`,
         type: 'agent-text',
       });
     }, 1000);
@@ -144,7 +144,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     setTimeout(() => {
       addChatMessage({
         role: 'assistant',
-        content: `Checking your resume structure regarding "${chipText}". The parsed sections are visible on the right side.`,
+        content: `Got it — I'll keep that in mind. The parsed sections are on the right if you want to take a look.`,
         type: 'agent-text',
       });
     }, 800);
