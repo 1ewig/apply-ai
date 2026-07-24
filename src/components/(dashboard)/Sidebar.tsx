@@ -107,7 +107,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
       <div className="p-4 border-t border-[var(--border)] space-y-3">
         <button
           onClick={toggleTheme}
-          className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer h-9"
+          className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:scale-[1.01] transition-all cursor-pointer h-9"
         >
           {!mounted ? (
             <div className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
         </button>
         <button
           onClick={() => router.push('/')}
-          className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] transition-colors cursor-pointer"
+          className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:scale-[1.01] transition-all cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Exit Dashboard

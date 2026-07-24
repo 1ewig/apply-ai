@@ -84,11 +84,15 @@ export default function AnalysisSidebar({
         <Button variant="ghost" size="sm" onClick={onBackClick} className="rounded-full hover:bg-[var(--border)] transition">
           <ArrowLeft className="w-4 h-4 text-[var(--text-body)]" />
         </Button>
-        <div className="text-left">
-          <h2 className="font-extrabold text-xs tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--accent-cyan)] uppercase">
-            Match Overview
-          </h2>
-          <p className="text-[10px] text-[var(--text-muted)] font-mono">AI recommendations for your resume</p>
+        <div className="w-8 h-8 grid grid-cols-2 gap-1 shrink-0">
+          <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
+          <div className="w-3 h-3 rounded-full bg-[var(--accent-cyan)]" />
+          <div className="w-3 h-3 rounded-full bg-[var(--accent-yellow)]" />
+          <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h1 className="font-display font-extrabold text-base text-[var(--text-heading)] leading-none">ApplyAI</h1>
+          <span className="text-[10px] font-bold text-[var(--text-muted)] tracking-wider uppercase">Workspace</span>
         </div>
       </div>
 
@@ -189,14 +193,12 @@ export default function AnalysisSidebar({
 
       {/* Footer Controls */}
       <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-card)]/50 shrink-0">
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full text-xs flex items-center justify-center gap-1.5 py-2 hover:scale-[1.01] transition-transform select-none cursor-pointer"
+        <button
           onClick={onBackClick}
+          className="w-full flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--text-heading)] hover:bg-[var(--bg-page)] hover:scale-[1.01] transition-all cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Exit Workspace
-        </Button>
+        </button>
       </div>
     </aside>
   );
