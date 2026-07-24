@@ -75,6 +75,14 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     chatMessages: enrichedChatMessages,
   } : null;
 
+  const { isExtracting, runExtractJd } = useExtractJdStep({
+    jobDescription: job?.jobDescription || '',
+    onSaveChanges: updateJob,
+    jobId: job?.id ?? '',
+    jobRole: job?.role,
+    jobCompany: job?.company,
+  });
+
   const {
     isParsing,
     runParseStep,
@@ -87,14 +95,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     resumeForReRun,
     onSaveChanges: updateJob,
     isAnalysisReady: analysisData !== undefined,
-  });
-
-  const { isExtracting, runExtractJd } = useExtractJdStep({
-    jobDescription: job?.jobDescription || '',
-    onSaveChanges: updateJob,
-    jobId: job?.id ?? '',
-    jobRole: job?.role,
-    jobCompany: job?.company,
+    onStep1Complete: runExtractJd,
   });
 
   const handleApproveStep1 = () => {

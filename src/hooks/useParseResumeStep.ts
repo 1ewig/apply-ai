@@ -14,6 +14,7 @@ interface UseParseResumeStepProps {
   resumeForReRun?: Resume;
   onSaveChanges: (id: string, data: Partial<JobApplication>) => Promise<unknown>;
   isAnalysisReady: boolean;
+  onStep1Complete?: () => void;
 }
 
 function buildSectionsMap(sections: ParsedResumeSection[]): Record<string, string> {
@@ -30,6 +31,7 @@ export function useParseResumeStep({
   resumeForReRun,
   onSaveChanges,
   isAnalysisReady,
+  onStep1Complete,
 }: UseParseResumeStepProps) {
   const initializeSession = useAnalysisStore((s) => s.initializeSession);
   const [isParsing, setIsParsing] = useState(false);
@@ -80,6 +82,7 @@ export function useParseResumeStep({
         const newParsedResume: ParsedResumeSection[] = data.parsedResume || [];
         const missingInfo: string[] = data.missingInfo || [];
         const requiresInput: boolean = data.requiresInput || false;
+        const fidelityScore: number = data.fidelityScore ?? 100;
 
         // Atomic store update
         useAnalysisStore.setState((state) => {
@@ -88,7 +91,14 @@ export function useParseResumeStep({
           );
 
           let newChatMessage;
-          if (requiresInput && missingInfo.length > 0 && currentAttempt === 1) {
+          if (fidelityScore >= 90 && currentAttempt === 1) {
+            newChatMessage = {
+              id: 'parse-step-auto-approved',
+              role: 'assistant' as const,
+              content: `**Step 1 Complete!** Resume parsed with **${fidelityScore}% fidelity** — all content preserved accurately. Ready for Step 2.`,
+              type: 'agent-text' as const,
+            };
+          } else if (requiresInput && missingInfo.length > 0 && currentAttempt === 1) {
             newChatMessage = {
               id: 'parse-step-missing',
               role: 'assistant' as const,
@@ -100,7 +110,7 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-success',
               role: 'assistant' as const,
-              content: `**Step 1 Complete: Resume Parsed!** Please review the structured sections under the **Resume** tab in the right reference panel. Is the parsed structure accurate?`,
+              content: `**Step 1 Complete: Resume Parsed!** Fidelity score: **${fidelityScore}%**. Please review the structured sections under the **Resume** tab in the right reference panel. Is the parsed structure accurate?`,
               type: 'agent-text' as const,
               meta: { approvalCard: true },
             };
@@ -108,7 +118,7 @@ export function useParseResumeStep({
             newChatMessage = {
               id: 'parse-step-auto-approved',
               role: 'assistant' as const,
-              content: `**Step 1 Re-parsed & Approved!** Resume structure updated with 100% data fidelity. Ready to proceed to Step 2.`,
+              content: `**Step 1 Re-parsed & Approved!** Resume structure updated with **${fidelityScore}%** data fidelity. Ready to proceed to Step 2.`,
               type: 'agent-text' as const,
             };
           }
@@ -125,6 +135,10 @@ export function useParseResumeStep({
           parsedResume: newParsedResume,
           analysisResult: getPreservedAnalysisResult(),
         });
+
+        if (fidelityScore >= 90 && currentAttempt === 1) {
+          onStep1Complete?.();
+        }
       } catch (err: unknown) {
         console.error('Error parsing resume:', err);
         const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred.';

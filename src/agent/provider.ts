@@ -29,12 +29,14 @@ export interface ParseResumeResult {
   parsedResume: ResumeSection[];
   missingInfo: MissingInfoItem[];
   requiresInput: boolean;
+  fidelityScore: number;
 }
 
 const parseResumeResponseSchema = z.object({
   parsedResume: z.array(resumeSectionSchema),
   missingInfo: z.array(missingInfoItemSchema).default([]),
   requiresInput: z.boolean().default(false),
+  fidelityScore: z.number().min(0).max(100),
 });
 
 async function parseResumeWithGroq(

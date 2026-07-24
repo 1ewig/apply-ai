@@ -12,7 +12,6 @@ import {
   Sparkles,
   Info
 } from 'lucide-react';
-import Button from '@/components/ui/Button';
 import type { AgentTask } from '@/agent/types';
 
 interface AnalysisSidebarProps {
@@ -81,9 +80,6 @@ export default function AnalysisSidebar({
     <aside className="w-[22%] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)]/50 backdrop-blur-sm shrink-0 h-full overflow-hidden select-none">
       {/* Header */}
       <div className="h-[72px] px-4 border-b border-[var(--border)] flex items-center gap-3 bg-[var(--bg-card)]/30 shrink-0">
-        <Button variant="ghost" size="sm" onClick={onBackClick} className="rounded-full hover:bg-[var(--border)] transition">
-          <ArrowLeft className="w-4 h-4 text-[var(--text-body)]" />
-        </Button>
         <div className="w-8 h-8 grid grid-cols-2 gap-1 shrink-0">
           <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
           <div className="w-3 h-3 rounded-full bg-[var(--accent-cyan)]" />

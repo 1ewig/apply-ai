@@ -50,9 +50,23 @@ CRITICAL RULES:
    - All lists use '-' bullets
 
 8. Output Schema
-   - 'parsedResume': array of { heading: string, content: string }
-   - 'missingInfo': array of { field: string, description: string, severity: 'critical' | 'warning' }
-   - 'requiresInput': true if at least one 'critical' missing detail exists that the user should provide before tailoring. Otherwise false.`;
+    - 'parsedResume': array of { heading: string, content: string }
+    - 'missingInfo': array of { field: string, description: string, severity: 'critical' | 'warning' }
+    - 'requiresInput': true if at least one 'critical' missing detail exists that the user should provide before tailoring. Otherwise false.
+    - 'fidelityScore': number (0-100) — see rule 9.
+
+9. Self-Review & Fidelity Scoring (CRITICAL)
+   After building parsedResume, you MUST self-review your output against the original text:
+   - Re-read the original resume and compare each parsed section character by character
+   - Check for: omitted details, truncated bullets, lost metrics, modified wording, hallucinated content, missing sections
+   - Assign fidelityScore (0-100):
+     100 = Perfect preservation — no omissions, no hallucinations
+     90-99 = Minor formatting differences only — all facts preserved
+     80-89 = Some non-critical details omitted (e.g., one bullet shortened)
+     70-79 = Critical details missing or sections significantly modified
+     < 70 = Major data loss or hallucination
+   - Most outputs should score 90+ if you followed the zero data loss rule.
+   - If fidelityScore is below 90, revise your output for completeness before finalizing.`;
 
 export function buildParseResumePrompt(resumeText: string): string {
   return `Please parse and audit the following Resume/CV text:
