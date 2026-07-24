@@ -14,10 +14,10 @@ CRITICAL RULES:
    Do NOT repeat the 'heading' value or any equivalent title inside the 'content' field.
    Correct example:
       heading: "experience"
-      content: "### Senior Engineer — Corp\\n**Tech:** \`React\`\\n- Led team..."
+      content: "### Senior Engineer — Corp\n**Tech:** \`React\`\n- Led team..."
    WRONG — heading duplicated:
       heading: "experience"
-      content: "## EXPERIENCE\\n### Senior Engineer — Corp..."
+      content: "## EXPERIENCE\n### Senior Engineer — Corp..."
 
 3. Content Formatting Rules (GFM)
    a) Sub-headings — Use ONLY '###' level inside content (e.g. '### Senior Software Engineer — TechCorp'). Never use '#', '##', or '####'.
@@ -61,52 +61,48 @@ ${resumeText}
 """`;
 }
 
-export const JD_EXTRACTOR_SYSTEM_PROMPT = `You extract structured data from job descriptions with maximum precision.
+export const JD_EXTRACTOR_SYSTEM_PROMPT = `You are a world-class job description analysis and structural extraction engine.
+Absolute priority: Maximum precision, strict data fidelity, and clean Markdown formatting.
 
-CRITICAL — Data Fidelity:
-- Only extract what is explicitly stated. Never infer, guess, or invent.
-- Preserve exact numbers, years, percentages, and version numbers. Do not round or approximate.
-- Preserve exact company names, product names, and proper nouns.
-- If the JD is ambiguous about a requirement, note the ambiguity rather than assuming.
+CRITICAL RULES:
 
-FORMATTING RULES (GitHub Flavored Markdown — GFM):
+1. Zero Hallucination & Strict Data Fidelity
+   - Only extract information explicitly stated in the job description. Never infer, guess, or invent details.
+   - Preserve exact numbers, years of experience, tools, technologies, version numbers, and proper nouns.
 
-The following fields support GFM formatting (bold, code, italic):
-  - companyContext
-  - coreResponsibilities (each string)
-  - requiredQualifications (each string)
-  - preferredQualifications (each string)
+2. Plain Text vs GFM Markdown Formatting Rules
+   The following array & text fields support GitHub Flavored Markdown (GFM):
+     - companyContext (1-2 sentence summary)
+     - coreResponsibilities (array of strings, each formatted with GFM)
+     - requiredQualifications (array of strings, each formatted with GFM)
+     - preferredQualifications (array of strings, each formatted with GFM)
 
-Formatting guide for these fields:
-  - Use '**Bold**' for company names, product names, role names, key technologies, year ranges.
-  - Use '\`code\`' for technical skills, programming languages, tools, platforms, certifications.
-  - Use '*Italic*' for optional parameters, education degrees, location references.
-  - Do NOT use headings ('#', '##', '###'), lists, tables, images, or links in any field.
-  - Do NOT use any HTML tags.
+   Formatting guide for GFM fields:
+     - Use '**Bold**' for key technologies, tool names, years of experience, and role names.
+     - Use inline code ('\`skill\`') for programming languages, frameworks, developer tools, and platform names.
+     - Use '*Italic*' for degree titles, location terms, or optional parameters.
+     - Do NOT use HTML tags (no <ul>, <li>, <br>).
 
-The following fields MUST be plain text — NO markdown formatting:
-  - roleTitle: The exact job title as written, no formatting.
-  - seniorityLevel: One of 'entry', 'mid', 'senior', 'lead', 'executive'. No formatting.
-  - mustHaveKeywords: Array of raw keyword strings (e.g. "React", "TypeScript"). No formatting.
-  - niceToHaveKeywords: Same as above. No formatting.
+   The following fields MUST be plain text (NO markdown tags):
+     - roleTitle: The exact job title as written in the JD header (e.g. "Senior Software Engineer").
+     - companyName: The name of the hiring organization if explicitly stated. Otherwise "".
+     - seniorityLevel: Must be strictly one of: 'entry', 'mid', 'senior', 'lead', 'executive'.
+     - mustHaveKeywords: Array of raw keyword strings (e.g. "React", "TypeScript"). Maximum 10 items.
+     - niceToHaveKeywords: Array of raw keyword strings (e.g. "GraphQL", "Docker"). Maximum 10 items.
 
-ARRAY LENGTH LIMITS — STRICTLY OBSERVE:
-- mustHaveKeywords: maximum 10. Prioritize hard skills explicitly tagged as "required" or "must-have" over implied skills.
-- niceToHaveKeywords: maximum 10. Prioritize skills explicitly tagged as "preferred" or "nice-to-have" over implied skills.
-- coreResponsibilities: maximum 6. Pick the most specific, measurable responsibilities, not generic duties.
-- requiredQualifications: maximum 10. Prioritize explicitly quantified requirements (years, certifications) over vague ones.
-- preferredQualifications: maximum 10. Same priority rule.
+3. Array Length Limits — STRICTLY OBSERVE THESE:
+   - mustHaveKeywords: maximum 10 (pick the top essential hard skills, tools, and tech requirements).
+   - niceToHaveKeywords: maximum 10 (pick secondary/preferred skills and nice-to-have tools).
+   - coreResponsibilities: maximum 6 (pick the primary core responsibilities).
+   - requiredQualifications: maximum 10 (pick explicit mandatory requirements).
+   - preferredQualifications: maximum 10 (pick preferred/bonus qualifications).
 
-EXTRACTION RULES:
-- roleTitle: The exact job title as written in the JD header. Do not modify, abbreviate, or expand.
-- seniorityLevel: Infer from explicit level language (e.g. "Senior", "Lead", "Staff", "5+ years experience", "entry-level").
-- companyContext: A 1-2 sentence summary of the company's mission, industry, or team context, formatted in GFM.
-
-PRE-OUTPUT CONSISTENCY CHECK:
-- No field listed as "plain text" contains any markdown symbols (**, \`, *)
-- All list fields have no more items than their maximum
-- Numbers, years, and versions are exact copies from the JD
-- companyContext is 1-2 sentences, not a paragraph`;
+4. Pre-Output Consistency Check
+   Before returning JSON, verify:
+   - roleTitle, companyName, seniorityLevel, and keywords contain NO markdown symbols (no **, \`, *)
+   - All array fields observe their maximum length bounds
+   - companyName is populated if mentioned in the JD text
+   - Exact technology names and version numbers match the original text`;
 
 export function buildExtractJdPrompt(jdText: string): string {
   return `Extract structured data from this job description:

@@ -94,6 +94,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
     onSaveChanges: updateJob,
     jobId: job?.id ?? '',
     jobRole: job?.role,
+    jobCompany: job?.company,
   });
 
   const handleApproveStep1 = () => {
@@ -181,7 +182,7 @@ export default function AnalysisPageClient({ id }: { id: string }) {
       rightSidebarOpen={rightSidebarOpen}
       stepText={stepText}
       role={job.role || job.jdExtract?.roleTitle || 'Unnamed Role'}
-      company={job.company || 'Unnamed Company'}
+      company={job.company || job.jdExtract?.companyName || 'Unnamed Company'}
       inputVal={inputVal}
       onInputChange={setInputVal}
       onToggleRightSidebar={handleToggleRightSidebar}

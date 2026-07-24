@@ -18,6 +18,7 @@ const resumeSection = v.object({
 
 const jdExtractValidator = v.object({
   roleTitle: v.string(),
+  companyName: v.optional(v.string()),
   mustHaveKeywords: v.array(v.string()),
   niceToHaveKeywords: v.array(v.string()),
   seniorityLevel: v.string(),

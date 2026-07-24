@@ -41,6 +41,7 @@ export type SessionBlueprint = z.infer<typeof sessionBlueprintSchema>;
 
 export const jdExtractSchema = z.object({
   roleTitle: z.string(),
+  companyName: z.string().optional().default(''),
   mustHaveKeywords: z.array(z.string()).max(10),
   niceToHaveKeywords: z.array(z.string()).max(10),
   seniorityLevel: z.enum(['entry', 'mid', 'senior', 'lead', 'executive']),

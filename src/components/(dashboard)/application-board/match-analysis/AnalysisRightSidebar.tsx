@@ -10,20 +10,11 @@ import { useAnalysisStore } from '@/stores/useAnalysisStore';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import type { JdExtract } from '@/agent/types';
+
 interface ResumeSection {
   heading: string;
   content: string;
-}
-
-interface JdExtract {
-  roleTitle: string;
-  mustHaveKeywords: string[];
-  niceToHaveKeywords: string[];
-  seniorityLevel: string;
-  coreResponsibilities: string[];
-  companyContext: string;
-  requiredQualifications: string[];
-  preferredQualifications: string[];
 }
 
 interface AnalysisRightSidebarProps {
@@ -149,11 +140,16 @@ export default function AnalysisRightSidebar({
               <h3 className="text-xs font-black text-[var(--accent-cyan)] tracking-widest uppercase font-mono border-b border-[var(--border)] pb-1.5">
                 Target Role
               </h3>
-              <div className="flex items-center flex-wrap gap-2 pt-0.5">
-                <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
-                <span className="inline-block text-[9px] bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] px-2 py-0.5 rounded border border-[var(--accent-cyan)]/20 uppercase font-extrabold tracking-wider shrink-0">
-                  {jdExtract.seniorityLevel}
-                </span>
+              <div className="space-y-1 pt-0.5">
+                <div className="flex items-center flex-wrap gap-2">
+                  <p className="text-sm font-black text-[var(--text-heading)]">{jdExtract.roleTitle}</p>
+                  <span className="inline-block text-[9px] bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] px-2 py-0.5 rounded border border-[var(--accent-cyan)]/20 uppercase font-extrabold tracking-wider shrink-0">
+                    {jdExtract.seniorityLevel}
+                  </span>
+                </div>
+                {jdExtract.companyName && (
+                  <p className="text-xs font-semibold text-[var(--text-muted)] font-mono">at {jdExtract.companyName}</p>
+                )}
               </div>
             </div>
 
